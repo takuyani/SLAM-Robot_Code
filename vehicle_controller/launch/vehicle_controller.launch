@@ -1,0 +1,16 @@
+<!-- vehicle_controller.launch -->
+<launch>
+
+	<!-- Vehicle Controller -->
+	<node pkg="vehicle_controller" type="vehicle_controller" name="vehicle_controller" output="screen">
+		<remap from="cmd_vel" 		to="cmd_vel"/>
+		<param name="teleop/linear"		type="double"	value="40.0"/>
+		<param name="teleop/angular"	type="double"	value="10.0"/>
+		
+		<param name="wheel_radius"		type="double"	value="24.0"/>
+		<param name="tread_width"		type="double"	value="150.0"/>
+
+		<param name="debug/enable"		type="bool"		value="false"/>
+	</node> 
+</launch>
+
