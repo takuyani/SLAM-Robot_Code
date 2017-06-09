@@ -9,6 +9,9 @@ Vehicle controller package
     - 2.1.2.&nbsp;[Published Topics](#212-published-topics)  
     - 2.1.3.&nbsp;[Parameters](#213-parameters)  
   - 2.2.&nbsp;[teleope_velocity.py](#22-teleope_velocitypy)  
+    - 2.2.1.&nbsp;[Subscribed Topics](#221-subscribed-topics)  
+    - 2.2.2.&nbsp;[Published Topics](#222-published-topics)  
+    - 2.2.3.&nbsp;[Parameters](#223-parameters)  
 
         
 ## 1. Overview
@@ -56,10 +59,8 @@ __例：__  
   - angular.y: 未使用
   - angular.z: 回転速度[deg/s]（+：左, -：右）
   
-  
-
 #### 2.1.2. Published Topics
-なし
+  なし
 #### 2.1.3. Parameters
 - __~wheel_radius__(double, default: 10)  
    車輪半径[mm]
@@ -102,8 +103,6 @@ __式：__
 
 - __~angular__(double, default: 10)  
    基準回転速度[deg/s]
-
-
 
 ## <参考>
 - [並進、回転の制御について](https://hyakuren-soft.fogbugz.com/?W46)  
