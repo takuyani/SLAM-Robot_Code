@@ -30,8 +30,8 @@ Vehicle controller package
 並進、回転の速度が決まると、モータの回転速が算出される。
 
 __式：__  
-ωr = V/R + W\*T/(2\*R)  
-ωl = V/R - W\*T/(2\*R)  
+- ωr = V/R + W\*T/(2\*R)  
+- ωl = V/R - W\*T/(2\*R)  
 
 ωr : 右車輪角速度(angular velocity of right wheel)[deg/s]  
 ωl : 左車輪角速度(angular velocity of left wheel)[deg/s]  
@@ -76,8 +76,8 @@ __例：__  
 [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)のPublished Topicsを並進速度[mm/s]、回転速度[deg/s]に変換するためのインターフェース用ノード。以下の式に基づいて変換される。
 
 __式：__  
-並進速度[mm/s] = 基準並進速度[mm/s] \* 並進速度ゲイン  
-回転速度[deg/s] = 基準回転速度[deg/s] \* 回転速度ゲイン  
+- 並進速度[mm/s] = 基準並進速度[mm/s] \* 並進速度ゲイン  
+- 回転速度[deg/s] = 基準回転速度[deg/s] \* 回転速度ゲイン  
 
 #### 2.2.1. Subscribed Topics
 - __src/cmd_vel__([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))  
