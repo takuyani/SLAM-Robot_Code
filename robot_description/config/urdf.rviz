@@ -61,9 +61,18 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         base_link:
           Alpha: 1
           Show Axes: true
+          Show Trail: false
+          Value: true
+        caster_link:
+          Alpha: 1
+          Show Axes: false
           Show Trail: false
           Value: true
         left_wheel_link:
@@ -134,10 +143,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.659796119
+      Pitch: 0.459796309
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.110395312
+      Yaw: 5.95357466
     Saved: ~
 Window Geometry:
   Displays:
