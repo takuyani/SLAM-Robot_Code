@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="slam_robot">
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="WHEEL_RADIUS" value="0.1" />
+  <xacro:property name="WHEEL_LENGTH" value="0.05" />
+ 
+  <!-- Robot Body -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.400 0.200 0.100"/>
+      </geometry>
+    </visual>
+ 
+    <collision>
+      <geometry>
+        <box size="0.400 0.200 0.100"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <!-- Left Wheel -->
+  <link name="left_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder radius="${WHEEL_RADIUS}" length="${WHEEL_LENGTH}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_link"/>
+    <origin rpy="-${M_PI/2.0} 0 0" xyz="-0.100 ${WHEEL_RADIUS + 0.03} 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  
+  <!-- Right Wheel -->
+  <link name="right_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder radius="${WHEEL_RADIUS}" length="${WHEEL_LENGTH}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_link"/>
+    <origin rpy="${M_PI/2.0} 0 0" xyz="-0.100 -${WHEEL_RADIUS + 0.03} 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  
+  <!-- Depth Sensor -->
+  <link name="pico_flexx_link_optical_frame" />
+  <link name="pico_flexx_depth_frame"/>
+  <link name="pico_flexx_link">
+    <visual>
+      <geometry>
+        <box size="0.007 0.066 0.016"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1.0 0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+     <geometry>
+       <box size="0.007 0.066 0.016"/>
+     </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="1"/>
+        <inertia
+          ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <joint name="pico_flexx_base_joint" type="fixed">
+    <origin xyz="0.2 0 0.07" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="pico_flexx_link_optical_frame"/>
+  </joint>
+  
+  <joint name="pico_flexx_depth_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+    <parent link="pico_flexx_link_optical_frame" />
+    <child link="pico_flexx_depth_frame" />
+  </joint>
+  
+   <joint name="pico_flexx_joint" type="fixed">
+     <origin xyz="0 0 0" rpy="0 0 0"/>
+     <parent link="pico_flexx_link_optical_frame"/>
+     <child link="pico_flexx_link"/>
+   </joint>
+
+</robot>
+
