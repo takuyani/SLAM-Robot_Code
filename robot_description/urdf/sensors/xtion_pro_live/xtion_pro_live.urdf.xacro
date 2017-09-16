@@ -13,7 +13,7 @@
 
   <!-- Parameterised in part by the values in slambot_properties.urdf.xacro -->
   <xacro:macro name="sensor_xtion_pro_live" params="parent name">
-    <!-- base link -->
+
     <joint name="${name}_rgb_joint" type="fixed">
       <origin xyz="${cam_px} ${xtion_pro_live_cam_py} ${cam_pz}"
               rpy="${cam_or} ${cam_op} ${cam_oy}"/>

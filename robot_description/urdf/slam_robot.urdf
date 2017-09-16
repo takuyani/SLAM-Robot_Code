@@ -8,26 +8,39 @@
   <xacro:include filename="$(find robot_description)/urdf/wheel/wheel.urdf.xacro"/>
   <xacro:include filename="$(find robot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
 
+  <xacro:property name="ofs_foot" value="0.055" />
+
 
   <!-- body -->
-  <link name="base_footprint"/>
+  <link name="base_body"/>
 
-  <xacro:base parent="base_footprint">
+  <xacro:body parent="base_body">
     <origin xyz="0 0 ${body_z/2}"/>
-  </xacro:base>
+  </xacro:body>
 
   <!-- Wheel -->
-  <xacro:wheel prefix="right" parent="base_link">
-    <origin xyz="0 ${-tread_width/2} ${wheel_radius/2}" rpy="${M_PI/2} 0 0"/>
+  <xacro:wheel prefix="right" parent="base_body">
+    <origin xyz="0 ${-tread_width/2} ${wheel_radius - ofs_foot}"
+            rpy="${M_PI/2} 0 0"/>
     <axis xyz="0 0 -1"/>
   </xacro:wheel>
-  <xacro:wheel prefix="left" parent="base_link">
-    <origin xyz="0 ${tread_width/2} ${wheel_radius/2}" rpy="${-M_PI/2} 0 0"/>
+  <xacro:wheel prefix="left" parent="base_body">
+    <origin xyz="0 ${tread_width/2} ${wheel_radius - ofs_foot}"
+            rpy="${-M_PI/2} 0 0"/>
     <axis xyz="0 0 1"/>
   </xacro:wheel>
 
+  <!-- Foot Print -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 ${ofs_foot}"/>
+    <parent link="base_footprint"/>
+    <child link="base_body"/>
+  </joint>
+
+
   <!-- Sensor -->
-  <sensor_xtion_pro_live          parent="base_link" name="sensor_xtion_pro_live"/>
+  <xacro:sensor_xtion_pro_live parent="base_body" name="sensor_xtion_pro_live"/>
 
 
   <!-- ===============  Transmission =============== -->
