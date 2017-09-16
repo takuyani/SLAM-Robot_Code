@@ -11,7 +11,7 @@
   <xacro:property name="ofs_foot" value="0.055" />
 
   <!-- Sensor Position offset -->
-  <xacro:property name="xtion_ofs_x" value="0.08" />
+  <xacro:property name="xtion_ofs_x" value="0.085" />
   <xacro:property name="xtion_ofs_y" value="0" />
   <xacro:property name="xtion_ofs_z" value="0.05" />
 
