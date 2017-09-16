@@ -1,18 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <xacro:include filename="$(find robot_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/common_properties.urdf.xacro"/>
 
-	<xacro:property name="cam_px" value="-0.087" />
+  <xacro:property name="cam_px" value="-0.087" />
 
 <!--	<xacro:property name="cam_py" value="-0.0125" /> Y varies for different configurations. get sets in sensors_urdf -->
-	<xacro:property name="cam_pz" value="0.2870" />
-	<xacro:property name="cam_or" value="0" />
-	<xacro:property name="cam_op" value="0" />
-	<xacro:property name="cam_oy" value="0" />
+  <xacro:property name="cam_pz" value="0.2870" />
+  <xacro:property name="cam_or" value="0" />
+  <xacro:property name="cam_op" value="0" />
+  <xacro:property name="cam_oy" value="0" />
 
-	<!-- Wheel property -->
-    <xacro:property name="wheel_radius" value="0.0249" />
-    <xacro:property name="wheel_length" value="0.008" />
+  <!-- Wheel property -->
+  <xacro:property name="wheel_radius" value="0.0249" />
+  <xacro:property name="wheel_length" value="0.008" />
+  <xacro:property name="tread_width" value="0.1500" />
+  <property name="wheel_mass" value="0.0113"/>
 
 </robot>

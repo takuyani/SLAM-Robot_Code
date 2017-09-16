@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="slambot">
 
   <xacro:include filename="$(find robot_description)/urdf/slambot_properties.urdf.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/wheel/wheel.urdf.xacro"/>
   <xacro:include filename="$(find robot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
 
 
@@ -28,9 +29,27 @@
     </inertial>
   </link>
   
+  <!-- Wheel -->
+  <xacro:wheel prefix="right" parent="base_link">
+    <origin xyz="0 ${-tread_width/2} ${wheel_radius/2}" rpy="${M_PI/2} 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:wheel>
+  <xacro:wheel prefix="left" parent="base_link">
+    <origin xyz="0 ${tread_width/2} ${wheel_radius/2}" rpy="${-M_PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:wheel>
+
+  <!-- Sensor -->
+  <sensor_xtion_pro_live          parent="base_link" name="sensor_xtion_pro_live"/>
+
+
+  <!-- ===============  Transmission =============== -->
+  <!-- <xacro:wheel_trans prefix="right" interface="EffortJointInterface"/> -->
+  <!-- <xacro:wheel_trans prefix="left" interface="EffortJointInterface"/> -->
+  <xacro:wheel_trans prefix="right" interface="VelocityJointInterface"/>
+  <xacro:wheel_trans prefix="left" interface="VelocityJointInterface"/>
 
  
-  <sensor_xtion_pro_live          parent="base_link" name="sensor_xtion_pro_live"/>
 
 </robot>
 
