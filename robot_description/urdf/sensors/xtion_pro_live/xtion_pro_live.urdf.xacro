@@ -7,16 +7,15 @@
 
   <!-- Xacro properties -->
   <xacro:property name="M_SCALE" value="0.001"/>
-  <xacro:property name="xtion_pro_live_cam_py" value="0.0205"/>
   <xacro:property name="xtion_pro_live_ir_rel_rgb_py" value="0.0270" />
   <xacro:property name="xtion_pro_live_cam_rel_rgb_py"   value="-0.0220" />
 
   <!-- Parameterised in part by the values in slambot_properties.urdf.xacro -->
-  <xacro:macro name="sensor_xtion_pro_live" params="prefix parent">
+  <xacro:macro name="sensor_xtion_pro_live" params="prefix parent *joint_origin *joint_axis">
 
     <joint name="${prefix}_rgb_joint" type="fixed">
-      <origin xyz="${cam_px} ${xtion_pro_live_cam_py} ${cam_pz}"
-              rpy="${cam_or} ${cam_op} ${cam_oy}"/>
+      <insert_block name="joint_origin"/>
+      <insert_block name="joint_axis"/>
       <parent link="${parent}"/>
       <child link="${prefix}_rgb_frame" />
     </joint>
@@ -24,7 +23,8 @@
 
     <link name="${prefix}_link">
       <visual>
-        <origin xyz="-0.015 0.0035 0.004"
+<!--         <origin xyz="-0.015 0.0035 0.004" -->
+        <origin xyz="0 0 0"
                 rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://robot_description/urdf/sensors/xtion_pro_live/meshes/xtion_pro_camera.dae"/>
