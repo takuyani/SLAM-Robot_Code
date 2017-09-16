@@ -2,11 +2,15 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find robot_description)/urdf/wheel/wheel.transmission.xacro"/>
   <xacro:include filename="$(find robot_description)/urdf/wheel/wheel.gazebo.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/common_properties.urdf.xacro"/>
 
-    <xacro:include filename="$(find robot_description)/urdf/slambot_properties.urdf.xacro"/>
+  <xacro:property name="wheel_radius" value="0.0249" />
+  <xacro:property name="wheel_length" value="0.008" />
+  <xacro:property name="wheel_mass" value="0.0113"/>
 
   <!-- <property name="wheel_radius" value="0.0239"/> -->
   <xacro:macro name="wheel" params="prefix parent *joint_origin *joint_axis">
+
   <joint name="${prefix}_wheel_joint" type="continuous">
     <insert_block name="joint_origin"/>
     <insert_block name="joint_axis"/>
@@ -16,6 +20,7 @@
     <safety_controller  k_velocity="10" />
     <dynamics damping="1.0" friction="1.0" />
   </joint>
+
   <link name="${prefix}_wheel">
     <visual>
       <geometry>
@@ -35,5 +40,6 @@
         <inertia ixx="0.000002208187" ixy="0.000000000001" iyy="0.00000218412" ixz="0.000000004787" iyz="0.000000000003" izz="0.000004078299"/>
       </inertial>
   </link>
+
   </xacro:macro>
 </robot>
