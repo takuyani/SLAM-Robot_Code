@@ -12,17 +12,17 @@
   <xacro:property name="xtion_pro_live_cam_rel_rgb_py"   value="-0.0220" />
 
   <!-- Parameterised in part by the values in slambot_properties.urdf.xacro -->
-  <xacro:macro name="sensor_xtion_pro_live" params="parent name">
+  <xacro:macro name="sensor_xtion_pro_live" params="prefix parent">
 
-    <joint name="${name}_rgb_joint" type="fixed">
+    <joint name="${prefix}_rgb_joint" type="fixed">
       <origin xyz="${cam_px} ${xtion_pro_live_cam_py} ${cam_pz}"
               rpy="${cam_or} ${cam_op} ${cam_oy}"/>
       <parent link="${parent}"/>
-      <child link="${name}_rgb_frame" />
+      <child link="${prefix}_rgb_frame" />
     </joint>
-    <link name="${name}_rgb_frame"/>
+    <link name="${prefix}_rgb_frame"/>
 
-    <link name="${name}_link">
+    <link name="${prefix}_link">
       <visual>
         <origin xyz="-0.015 0.0035 0.004"
                 rpy="0 0 0"/>
@@ -47,39 +47,39 @@
     </link>
 
     <!-- Xtion RGB sensor physical attachment -->
-    <joint name="${name}_joint" type="fixed">
+    <joint name="${prefix}_joint" type="fixed">
       <origin xyz="0 ${xtion_pro_live_cam_rel_rgb_py} 0" 
               rpy="0 0 0"/>
-      <parent link="${name}_rgb_frame"/>
-      <child link="${name}_link"/>
+      <parent link="${prefix}_rgb_frame"/>
+      <child link="${prefix}_link"/>
     </joint>
 
     <!-- Xtion RGB sensor frame -->
-    <joint name="${name}_rgb_optical_joint" type="fixed">
+    <joint name="${prefix}_rgb_optical_joint" type="fixed">
       <origin xyz="0 0 0"
               rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-      <parent link="${name}_rgb_frame" />
-      <child link="${name}_rgb_optical_frame" />
+      <parent link="${prefix}_rgb_frame" />
+      <child link="${prefix}_rgb_optical_frame" />
     </joint>
-    <link name="${name}_rgb_optical_frame"/>
+    <link name="${prefix}_rgb_optical_frame"/>
 
     <!-- Xtion IR sensor physical attachment -->
-    <joint name="${name}_ir_joint" type="fixed">
+    <joint name="${prefix}_ir_joint" type="fixed">
       <origin xyz="0 ${xtion_pro_live_ir_rel_rgb_py} 0"
               rpy="0 0 0" />
-      <parent link="${name}_rgb_frame" />
-      <child link="${name}_ir_frame" />
+      <parent link="${prefix}_rgb_frame" />
+      <child link="${prefix}_ir_frame" />
     </joint>
-    <link name="${name}_ir_frame"/>
+    <link name="${prefix}_ir_frame"/>
 
     <!-- Xtion IR sensor frame -->
-    <joint name="${name}_ir_optical_joint" type="fixed">
+    <joint name="${prefix}_ir_optical_joint" type="fixed">
       <origin xyz="0 0 0"
               rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-      <parent link="${name}_ir_frame" />
-      <child link="${name}_ir_optical_frame" />
+      <parent link="${prefix}_ir_frame" />
+      <child link="${prefix}_ir_optical_frame" />
     </joint>
-    <link name="${name}_ir_optical_frame"/>
+    <link name="${prefix}_ir_optical_frame"/>
 
     <!-- RGBD sensor for simulation, same as Kinect -->
     <slambot_sim_3dsensor/>

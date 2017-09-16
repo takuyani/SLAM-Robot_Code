@@ -40,7 +40,7 @@
 
 
   <!-- Sensor -->
-  <xacro:sensor_xtion_pro_live parent="base_body" name="sensor_xtion_pro_live"/>
+  <xacro:sensor_xtion_pro_live prefix="sensor_xtion_pro_live" parent="base_body"/>
 
 
   <!-- ===============  Transmission =============== -->
