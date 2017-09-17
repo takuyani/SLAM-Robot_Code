@@ -19,15 +19,6 @@
   <!-- =============== Link & Joint =============== -->
   <link name="base_footprint"/>
 
-  <!-- Foot Print -->
- <!--  <link name="base_footprint"/>
-  <joint name="base_footprint_joint" type="fixed">
-    <origin xyz="0 0 ${ofs_foot}"/>
-    <parent link="base_footprint"/>
-    <child link="base_body"/>
-  </joint>
--->
-
   <!-- Base body -->
   <xacro:body parent="base_footprint">
     <origin xyz="0 0 ${ofs_foot}"/>

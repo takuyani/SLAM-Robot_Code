@@ -33,13 +33,11 @@
         <color rgba="1 1 1 1"/>
       </material>
     </visual>
- 
     <collision>
       <geometry>
         <box size="${caster_board_x} ${caster_board_y} ${caster_board_z}"/>
       </geometry>
     </collision>
-
     <inertial>
       <origin xyz="0 0 0"/>
       <mass value="0.001"/>
@@ -65,6 +63,19 @@
         <color rgba="0 1 0 1"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0 0 -${caster_board_z/2}"
+              rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${sphere_radius}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 -${caster_board_z/2}"
+              rpy="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.0020833333" ixy="0" ixz="0" iyy="0.0070833333" iyz="0" izz="0.0083333333"/>
+    </inertial>
   </link>
  
   <!-- Spacer_1 -->
