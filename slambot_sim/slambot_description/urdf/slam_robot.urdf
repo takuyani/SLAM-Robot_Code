@@ -9,18 +9,28 @@
   <xacro:include filename="$(find slambot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
 
   <xacro:property name="ofs_foot" value="0.055" />
+  <xacro:property name="mass" value="0.055" />
 
   <!-- Sensor Position offset -->
   <xacro:property name="xtion_ofs_x" value="0.085" />
   <xacro:property name="xtion_ofs_y" value="0" />
   <xacro:property name="xtion_ofs_z" value="0.05" />
 
+  <!-- =============== Link & Joint =============== -->
+  <link name="base_footprint"/>
 
-  <!-- body -->
-  <link name="base_body"/>
+  <!-- Foot Print -->
+ <!--  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 ${ofs_foot}"/>
+    <parent link="base_footprint"/>
+    <child link="base_body"/>
+  </joint>
+-->
 
-  <xacro:body parent="base_body">
-    <origin xyz="0 0 ${body_z/2}"/>
+  <!-- Base body -->
+  <xacro:body parent="base_footprint">
+    <origin xyz="0 0 ${ofs_foot}"/>
   </xacro:body>
 
   <!-- Wheel -->
@@ -34,14 +44,6 @@
             rpy="${-M_PI/2} 0 0"/>
     <axis xyz="0 0 1"/>
   </xacro:wheel>
-
-  <!-- Foot Print -->
-  <link name="base_footprint"/>
-  <joint name="base_footprint_joint" type="fixed">
-    <origin xyz="0 0 ${ofs_foot}"/>
-    <parent link="base_footprint"/>
-    <child link="base_body"/>
-  </joint>
 
   <!-- Sensor -->
   <xacro:sensor_xtion_pro_live prefix="sensor_xtion_pro_live" parent="base_body">

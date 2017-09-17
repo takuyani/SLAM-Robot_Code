@@ -21,14 +21,15 @@
   <joint name="base_joint" type="fixed">
     <insert_block name="joint_origin"/>
     <parent link="${parent}"/>
-    <child link="base_link"/>
+    <child link="base_body"/>
   </joint>
 
 
   <!-- Robot Body -->
   <!-- Base Board -->
-  <link name="base_link">
+  <link name="base_body">
     <visual>
+      <origin xyz="0 0 ${body_z/2}"/>
       <geometry>
         <box size="${body_x} ${body_y} ${body_z}"/>
       </geometry>
@@ -38,13 +39,14 @@
     </visual>
  
     <collision>
+      <origin xyz="0 0 ${body_z/2}"/>
       <geometry>
         <box size="${body_x} ${body_y} ${body_z}"/>
       </geometry>
     </collision>
 
     <inertial>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 ${body_z/2}"/>
       <mass value="0.500"/>
       <inertia ixx="0.0020833333" ixy="0" ixz="0" iyy="0.0070833333" iyz="0" izz="0.0083333333"/>
     </inertial>
@@ -52,9 +54,9 @@
 
   <!-- Upper Board -->
   <joint name="upper_board_joint" type="fixed">
-    <parent link="base_link"/>
+    <parent link="base_body"/>
     <child link="upper_board"/>
-    <origin xyz="0 0 ${body_z/2 + spacer_len40 + body_z/2}"
+    <origin xyz="0 0 ${body_z + spacer_len40 + body_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </joint>
@@ -83,31 +85,31 @@
   </link>
 
   <!-- Front caster_board -->
-  <xacro:caster_board prefix="front" parent="base_link">
-    <origin xyz="${body_x/2 - caster_board_x/2} 0 -${body_z/2 + spacer_len27 + body_z/2 }"
+  <xacro:caster_board prefix="front" parent="base_body">
+    <origin xyz="${body_x/2 - caster_board_x/2} 0 -${spacer_len27}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:caster_board>
 
   <!-- Rear caster_board -->
-  <xacro:caster_board prefix="rear" parent="base_link">
-    <origin xyz="-${body_x/2 - caster_board_x/2} 0 -${body_z/2 + spacer_len27 + body_z/2 }"
+  <xacro:caster_board prefix="rear" parent="base_body">
+    <origin xyz="-${body_x/2 - caster_board_x/2} 0 -${spacer_len27}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:caster_board>
 
   <!-- Spacer_1 -->
-  <joint name="base_link_spacer_joint_1" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_link_spacer_1"/>
-    <origin xyz="${body_x/2} ${body_y/2} 0"
+  <joint name="base_body_spacer_joint_1" type="fixed">
+    <parent link="base_body"/>
+    <child link="base_body_spacer_1"/>
+    <origin xyz="${body_x/2} ${body_y/2} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </joint>
 
-  <link name="base_link_spacer_1">
+  <link name="base_body_spacer_1">
     <visual>
-      <origin xyz="-${spacer_rud40} -${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="-${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
@@ -117,31 +119,32 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="-${spacer_rud40} -${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="-${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <origin xyz="-${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
+              rpy="0 0 0"/>
       <mass value="0.1"/>
       <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
     </inertial>
   </link>
 
   <!-- Spacer_2 -->
-  <joint name="base_link_spacer_joint_2" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_link_spacer_2"/>
-    <origin xyz="${body_x/2} -${body_y/2} 0"
+  <joint name="base_body_spacer_joint_2" type="fixed">
+    <parent link="base_body"/>
+    <child link="base_body_spacer_2"/>
+    <origin xyz="${body_x/2} -${body_y/2} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </joint>
 
-  <link name="base_link_spacer_2">
+  <link name="base_body_spacer_2">
     <visual>
-      <origin xyz="-${spacer_rud40} ${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="-${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
@@ -151,31 +154,32 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="-${spacer_rud40} ${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="-${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <origin xyz="-${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
+              rpy="0 0 0"/>
       <mass value="0.1"/>
       <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
     </inertial>
   </link>
 
   <!-- Spacer_3 -->
-  <joint name="base_link_spacer_joint_3" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_link_spacer_3"/>
-    <origin xyz="-${body_x/2} ${body_y/2} 0"
+  <joint name="base_body_spacer_joint_3" type="fixed">
+    <parent link="base_body"/>
+    <child link="base_body_spacer_3"/>
+    <origin xyz="-${body_x/2} ${body_y/2} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </joint>
 
-  <link name="base_link_spacer_3">
+  <link name="base_body_spacer_3">
     <visual>
-      <origin xyz="${spacer_rud40} -${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
@@ -185,31 +189,32 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="${spacer_rud40} -${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <origin xyz="${spacer_rud40} -${spacer_rud40} ${spacer_len40/2}"
+              rpy="0 0 0"/>
       <mass value="0.1"/>
       <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
     </inertial>
   </link>
 
   <!-- Spacer_4 -->
-  <joint name="base_link_spacer_joint_4" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_link_spacer_4"/>
-    <origin xyz="-${body_x/2} -${body_y/2} 0"
+  <joint name="base_body_spacer_joint_4" type="fixed">
+    <parent link="base_body"/>
+    <child link="base_body_spacer_4"/>
+    <origin xyz="-${body_x/2} -${body_y/2} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </joint>
 
-  <link name="base_link_spacer_4">
+  <link name="base_body_spacer_4">
     <visual>
-      <origin xyz="${spacer_rud40} ${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
@@ -219,14 +224,15 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="${spacer_rud40} ${spacer_rud40} ${spacer_len40/2 + body_z/2}"
+      <origin xyz="${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
               rpy="0 0 0"/>
       <geometry>
         <cylinder length="${spacer_len40}" radius="${spacer_rud40}"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <origin xyz="${spacer_rud40} ${spacer_rud40} ${spacer_len40/2}"
+              rpy="0 0 0"/>
       <mass value="0.1"/>
       <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
     </inertial>
