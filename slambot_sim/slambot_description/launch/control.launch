@@ -1,7 +1,7 @@
 <launch>
  
 	<!-- Load joint controller configurations from YAML file to parameter server -->
-	<rosparam file="$(find robot_description)/config/controller.yaml" command="load"/>
+	<rosparam file="$(find slambot_description)/config/controller.yaml" command="load"/>
 
 	<!-- load the controllers -->
 	<node name="controller_spawner" pkg="controller_manager"

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- 
-  <xacro:include filename="$(find robot_description)/urdf/slambot_gazebo.urdf.xacro"/>
+  <xacro:include filename="$(find slabot_description)/urdf/slambot_gazebo.urdf.xacro"/>
   -->
-  <xacro:include filename="$(find robot_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/common_properties.urdf.xacro"/>
 
   <!-- Xacro properties -->
   <xacro:property name="M_SCALE" value="0.001"/>
@@ -27,7 +27,7 @@
         <origin xyz="0 0 0"
                 rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_description/urdf/sensors/xtion_pro_live/meshes/xtion_pro_camera.dae"/>
+          <mesh filename="package://slambot_description/urdf/sensors/xtion_pro_live/meshes/xtion_pro_camera.dae"/>
         </geometry>
       </visual>
       <collision>
@@ -96,7 +96,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://robot_description/meshes/sensors/xtion_pro_stack.dae"/>
+          <mesh filename="package://slabot_description/meshes/sensors/xtion_pro_stack.dae"/>
         </geometry>
       </visual>  
       <collision>

@@ -1,8 +1,8 @@
 <launch>
 
-	<arg name="model" default="$(find robot_description)/urdf/slam_robot.urdf"/>
+	<arg name="model" default="$(find slambot_description)/urdf/slam_robot.urdf"/>
 	<arg name="gui" default="True"/>
-	<arg name="rvizconfig" default="$(find robot_description)/config/urdf.rviz"/>
+	<arg name="rvizconfig" default="$(find slambot_description)/config/urdf.rviz"/>
 
 	<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 	<param name="use_gui" value="$(arg gui)"/>

@@ -3,10 +3,10 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="slambot">
 
-  <xacro:include filename="$(find robot_description)/urdf/slambot_properties.urdf.xacro"/>
-  <xacro:include filename="$(find robot_description)/urdf/body/body.urdf.xacro" />
-  <xacro:include filename="$(find robot_description)/urdf/wheel/wheel.urdf.xacro"/>
-  <xacro:include filename="$(find robot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/slambot_properties.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/body/body.urdf.xacro" />
+  <xacro:include filename="$(find slambot_description)/urdf/wheel/wheel.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
 
   <xacro:property name="ofs_foot" value="0.055" />
 
