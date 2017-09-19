@@ -50,8 +50,8 @@
   <!-- ===============  Transmission =============== -->
   <!-- <xacro:wheel_trans prefix="right" interface="EffortJointInterface"/> -->
   <!-- <xacro:wheel_trans prefix="left" interface="EffortJointInterface"/> -->
-  <xacro:wheel_trans prefix="right" interface="VelocityJointInterface" reduction="1.0"/>
-  <xacro:wheel_trans prefix="left" interface="VelocityJointInterface" reduction="1.0"/>
+  <xacro:wheel_trans prefix="right" interface="hardware_interface/VelocityJointInterface" reduction="1.0"/>
+  <xacro:wheel_trans prefix="left" interface="hardware_interface/VelocityJointInterface" reduction="1.0"/>
 
   <!-- =============== Gazebo =============== -->
   <gazebo>

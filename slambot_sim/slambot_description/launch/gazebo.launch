@@ -15,12 +15,12 @@
 		<arg name="headless" value="$(arg headless)"/>
 	</include>
 
-	<param name="slambot_description" command="$(find xacro)/xacro.py $(arg model)"/>
+	<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
 	<include file="$(find slambot_description)/launch/control.launch"/>
 
 	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-		args="-urdf -model slambot -param slambot_description"/>
+		args="-urdf -model slambot -param robot_description"/>
   
 </launch>
 
