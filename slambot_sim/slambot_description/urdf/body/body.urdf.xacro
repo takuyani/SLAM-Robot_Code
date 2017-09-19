@@ -3,6 +3,7 @@
 
   <xacro:include filename="$(find slambot_description)/urdf/common_properties.urdf.xacro"/>
   <xacro:include filename="$(find slambot_description)/urdf/body/caster_board.urdf.xacro" />
+  <xacro:include filename="$(find slambot_description)/urdf/body/body.gazebo.xacro" />
 
   <xacro:property name="tread_width" value="0.1500" />
   <!-- Base Body -->
@@ -19,7 +20,7 @@
   <xacro:macro name="body" params="parent *joint_origin">
 
   <joint name="base_joint" type="fixed">
-    <insert_block name="joint_origin"/>
+    <xacro:insert_block name="joint_origin"/>
     <parent link="${parent}"/>
     <child link="base_body"/>
   </joint>

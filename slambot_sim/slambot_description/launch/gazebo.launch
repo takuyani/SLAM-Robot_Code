@@ -1,5 +1,5 @@
 <launch>
-	<arg name="model" default="$(find robot_description)/urdf/slam_robot.urdf"/>
+	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
 
 	<arg name="paused" default="false"/>
 	<arg name="use_sim_time" default="true"/>
@@ -15,12 +15,12 @@
 		<arg name="headless" value="$(arg headless)"/>
 	</include>
 
-	<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
+	<param name="slambot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
-	<include file="$(find robot_description)/launch/control.launch"/>
+	<include file="$(find slambot_description)/launch/control.launch"/>
 
 	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-		args="-urdf -model slam_robot -param robot_description"/>
+		args="-urdf -model slambot -param slambot_description"/>
   
 </launch>
 

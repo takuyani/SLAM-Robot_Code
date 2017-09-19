@@ -15,8 +15,8 @@
 
   <!-- Front caster_board -->
   <joint name="${prefix}_caster_board_joint" type="fixed">
-    <insert_block name="joint_origin"/>
-    <insert_block name="joint_axis"/>
+    <xacro:insert_block name="joint_origin"/>
+    <xacro:insert_block name="joint_axis"/>
     <parent link="${parent}"/>
     <child link="${prefix}_caster_board"/>
     <origin xyz="0 0 0"

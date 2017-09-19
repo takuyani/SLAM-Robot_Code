@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">  
+  <xacro:include filename="$(find slambot_description)/urdf/body/caster_board.gazebo.xacro" />
+  <xacro:macro name="body_gazebo">
+    <gazebo reference="base_body">
+      <!-- <selfCollide>true</selfCollide> -->
+      <!-- <mu1 value="0.05" /> -->
+      <!-- <mu2 value="0.05" /> -->
+      <mu1>0.05</mu1>
+      <mu2>0.05</mu2>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Caster -->
+  <xacro:caster_board_gazebo prefix="left"/>
+  <xacro:caster_board_gazebo prefix="right"/>
+
+</robot>
