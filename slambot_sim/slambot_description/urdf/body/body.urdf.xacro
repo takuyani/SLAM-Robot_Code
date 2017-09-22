@@ -12,11 +12,9 @@
   <xacro:property name="body_y" value="0.160" />
   <xacro:property name="body_z" value="0.003" />
 
-  <xacro:property name="spacer_len27" value="0.027" />
   <xacro:property name="spacer_rud27" value="0.003" />
   <xacro:property name="spacer_len40" value="0.040" />
   <xacro:property name="spacer_rud40" value="0.003" />
-  <xacro:property name="spacer_radius" value="0.003" />
 
 
   <xacro:property name="velocity_scale_factor" value="1.0"/>
@@ -103,28 +101,28 @@
   </xacro:caster_board>
 
   <!-- Spacer_1 -->
-  <xacro:spacer prefix="base_body" suffix="1" len="0.040" rad="${spacer_radius}" parent="base_body">
+  <xacro:spacer prefix="base_body" suffix="1" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
     <origin xyz="${body_x/2 - spacer_radius} ${body_y/2 - spacer_radius} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
   <!-- Spacer_2 -->
-  <xacro:spacer prefix="base_body" suffix="2" len="0.040" rad="${spacer_radius}" parent="base_body">
+  <xacro:spacer prefix="base_body" suffix="2" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
     <origin xyz="${body_x/2 - spacer_radius} -${body_y/2 - spacer_radius} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
   <!-- Spacer_3 -->
-  <xacro:spacer prefix="base_body" suffix="3" len="0.040" rad="${spacer_radius}" parent="base_body">
+  <xacro:spacer prefix="base_body" suffix="3" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
     <origin xyz="-${body_x/2 - spacer_radius} ${body_y/2 - spacer_radius} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
   <!-- Spacer_4 -->
-  <xacro:spacer prefix="base_body" suffix="4" len="0.040" rad="${spacer_radius}" parent="base_body">
+  <xacro:spacer prefix="base_body" suffix="4" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
     <origin xyz="-${body_x/2 - spacer_radius} -${body_y/2 - spacer_radius} ${body_z}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>

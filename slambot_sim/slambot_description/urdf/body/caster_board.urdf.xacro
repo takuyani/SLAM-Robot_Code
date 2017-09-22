@@ -8,6 +8,7 @@
   <xacro:property name="caster_board_y" value="${body_y}" />
   <xacro:property name="caster_board_z" value="0.003" />
 
+  <xacro:property name="spacer_len27" value="0.027" />
   <xacro:property name="sphere_radius" value="0.012" />
 
   <xacro:property name="velocity_scale_factor" value="1.0"/>
@@ -79,141 +80,33 @@
   </link>
  
   <!-- Spacer_1 -->
-  <joint name="${prefix}_spacer_joint_1" type="fixed">
-    <parent link="${prefix}_caster_board"/>
-    <child link="${prefix}_spacer_1"/>
-    <origin xyz="${caster_board_x/2} ${caster_board_y/2} 0"
+  <xacro:spacer prefix="${prefix}" suffix="1" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
+    <origin xyz="${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} 0"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
-  </joint>
+  </xacro:spacer>
 
-  <link name="${prefix}_spacer_1">
-    <visual>
-      <origin xyz="-${spacer_rud27} -${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-      <material name="white">
-        <color rgba="1 1 1 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-${spacer_rud27} -${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-    </inertial>
-  </link>
 
   <!-- Spacer_2 -->
-  <joint name="${prefix}_spacer_joint_2" type="fixed">
-    <parent link="${prefix}_caster_board"/>
-    <child link="${prefix}_spacer_2"/>
-    <origin xyz="${caster_board_x/2} -${caster_board_y/2} 0"
+  <xacro:spacer prefix="${prefix}" suffix="2" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
+    <origin xyz="${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} 0"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
-  </joint>
-
-  <link name="${prefix}_spacer_2">
-    <visual>
-      <origin xyz="-${spacer_rud27} ${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-      <material name="white">
-        <color rgba="1 1 1 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-${spacer_rud27} ${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-    </inertial>
-  </link>
+  </xacro:spacer>
 
   <!-- Spacer_3 -->
-  <joint name="${prefix}_spacer_joint_3" type="fixed">
-    <parent link="${prefix}_caster_board"/>
-    <child link="${prefix}_spacer_3"/>
-    <origin xyz="-${caster_board_x/2} ${caster_board_y/2} 0"
+  <xacro:spacer prefix="${prefix}" suffix="3" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
+    <origin xyz="-${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} 0"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
-  </joint>
-
-  <link name="${prefix}_spacer_3">
-    <visual>
-      <origin xyz="${spacer_rud27} -${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-      <material name="white">
-        <color rgba="1 1 1 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="${spacer_rud27} -${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-    </inertial>
-  </link>
+  </xacro:spacer>
 
   <!-- Spacer_4 -->
-  <joint name="${prefix}_spacer_joint_4" type="fixed">
-    <parent link="${prefix}_caster_board"/>
-    <child link="${prefix}_spacer_4"/>
-    <origin xyz="-${caster_board_x/2} -${caster_board_y/2} 0"
+  <xacro:spacer prefix="${prefix}" suffix="4" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
+    <origin xyz="-${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} 0"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
-  </joint>
-
-  <link name="${prefix}_spacer_4">
-    <visual>
-      <origin xyz="${spacer_rud27} ${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-      <material name="white">
-        <color rgba="1 1 1 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="${spacer_rud27} ${spacer_rud27} ${spacer_len27/2 + caster_board_z/2}"
-              rpy="0 0 0"/>
-      <geometry>
-        <cylinder length="${spacer_len27}" radius="${spacer_rud27}"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.5"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-    </inertial>
-  </link>
-
+  </xacro:spacer>
 
   </xacro:macro> 
 </robot>
