@@ -12,11 +12,6 @@
   <xacro:property name="body_y" value="0.160" />
   <xacro:property name="body_z" value="0.003" />
 
-  <xacro:property name="spacer_rud27" value="0.003" />
-  <xacro:property name="spacer_len40" value="0.040" />
-  <xacro:property name="spacer_rud40" value="0.003" />
-
-
   <xacro:property name="velocity_scale_factor" value="1.0"/>
   <xacro:macro name="body" params="parent *joint_origin">
 

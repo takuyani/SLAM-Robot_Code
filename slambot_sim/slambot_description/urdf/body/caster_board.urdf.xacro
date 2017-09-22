@@ -8,7 +8,6 @@
   <xacro:property name="caster_board_y" value="${body_y}" />
   <xacro:property name="caster_board_z" value="0.003" />
 
-  <xacro:property name="spacer_len27" value="0.027" />
   <xacro:property name="sphere_radius" value="0.012" />
 
   <xacro:property name="velocity_scale_factor" value="1.0"/>

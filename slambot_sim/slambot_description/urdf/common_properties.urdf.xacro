@@ -5,6 +5,8 @@
 <robot name="xacro_properties" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" /> 
   <xacro:property name="spacer_radius" value="0.003" />
+  <xacro:property name="spacer_len27" value="0.027" />
+  <xacro:property name="spacer_len40" value="0.040" />
 
   <xacro:property name="material_white">
     <material name="white">
