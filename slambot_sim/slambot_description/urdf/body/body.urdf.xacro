@@ -83,14 +83,14 @@
 
   <!-- Front caster_board -->
   <xacro:caster_board prefix="front" parent="base_body">
-    <origin xyz="${body_x/2 - caster_board_x/2} 0 -${spacer_len27}"
+    <origin xyz="${body_x/2 - caster_board_x/2} 0 -${spacer_len27 + body_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:caster_board>
 
   <!-- Rear caster_board -->
   <xacro:caster_board prefix="rear" parent="base_body">
-    <origin xyz="-${body_x/2 - caster_board_x/2} 0 -${spacer_len27}"
+    <origin xyz="-${body_x/2 - caster_board_x/2} 0 -${spacer_len27 + body_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:caster_board>

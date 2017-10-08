@@ -6,22 +6,19 @@
   <!-- Caster board -->
   <xacro:property name="caster_board_x" value="0.060" />
   <xacro:property name="caster_board_y" value="${body_y}" />
-  <xacro:property name="caster_board_z" value="0.003" />
+  <xacro:property name="caster_board_z" value="${body_z}" />
 
   <xacro:property name="sphere_radius" value="0.012" />
 
   <xacro:property name="velocity_scale_factor" value="1.0"/>
   <xacro:macro name="caster_board" params="prefix parent *joint_origin *joint_axis">
 
-  <!-- Front caster_board -->
+  <!-- caster_board -->
   <joint name="${prefix}_caster_board_joint" type="fixed">
     <xacro:insert_block name="joint_origin"/>
     <xacro:insert_block name="joint_axis"/>
     <parent link="${parent}"/>
     <child link="${prefix}_caster_board"/>
-    <origin xyz="0 0 0"
-            rpy="0 0 0"/>
-    <axis xyz="0 0 0"/>
   </joint>
 
   <link name="${prefix}_caster_board">
@@ -49,12 +46,12 @@
   <joint name="${prefix}_caster_joint" type="fixed">
     <parent link="${prefix}_caster_board"/>
     <child link="${prefix}_caster"/>
-    <origin xyz="0 0 -${sphere_radius}"/>
+    <origin xyz="0 0 -${sphere_radius + caster_board_z/2}"/>
   </joint>
 
   <link name="${prefix}_caster">
     <visual>
-      <origin xyz="0 0 -${caster_board_z/2}"
+      <origin xyz="0 0 0"
               rpy="0 0 0"/>
       <geometry>
         <sphere radius="${sphere_radius}"/>
@@ -64,14 +61,14 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="0 0 -${caster_board_z/2}"
+      <origin xyz="0 0 0"
               rpy="0 0 0"/>
       <geometry>
         <sphere radius="${sphere_radius}"/>
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 -${caster_board_z/2}"
+      <origin xyz="0 0 0"
               rpy="0 0 0"/>
       <mass value="0.001"/>
       <inertia ixx="0.0020833333" ixy="0" ixz="0" iyy="0.0070833333" iyz="0" izz="0.0083333333"/>
@@ -80,7 +77,7 @@
  
   <!-- Spacer_1 -->
   <xacro:spacer prefix="${prefix}" suffix="1" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
-    <origin xyz="${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} 0"
+    <origin xyz="${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} ${caster_board_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
@@ -88,21 +85,21 @@
 
   <!-- Spacer_2 -->
   <xacro:spacer prefix="${prefix}" suffix="2" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
-    <origin xyz="${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} 0"
+    <origin xyz="${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} ${caster_board_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
   <!-- Spacer_3 -->
   <xacro:spacer prefix="${prefix}" suffix="3" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
-    <origin xyz="-${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} 0"
+    <origin xyz="-${caster_board_x/2 - spacer_radius} ${caster_board_y/2 - spacer_radius} ${caster_board_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
   <!-- Spacer_4 -->
   <xacro:spacer prefix="${prefix}" suffix="4" len="${spacer_len27}" rad="${spacer_radius}" parent="${prefix}_caster_board">
-    <origin xyz="-${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} 0"
+    <origin xyz="-${caster_board_x/2 - spacer_radius} -${caster_board_y/2 - spacer_radius} ${caster_board_z/2}"
             rpy="0 0 0"/>
     <axis xyz="0 0 0"/>
   </xacro:spacer>
