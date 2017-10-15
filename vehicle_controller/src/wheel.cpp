@@ -11,8 +11,8 @@
 //C Standard Library
 //Add Install Library
 //My Library
-#include "SM-42BYG011-25.h"
-#include "wheel.hpp"
+#include "vehicle_controller/SM-42BYG011-25.h"
+#include "vehicle_controller/wheel.hpp"
 
 const Wheel::RegConfS Wheel::ABS_POS    = { 0x01, 0x003FFFFF, 4 };	//!< ABS_POS
 const Wheel::RegConfS Wheel::EL_POS     = { 0x02, 0x000001FF, 3 };	//!< EL_POS

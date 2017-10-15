@@ -14,7 +14,7 @@
 //Add Install Library
 #include <ros/ros.h>
 //My Library
-#include "vehicle_controller.hpp"
+#include "vehicle_controller/vehicle_controller.hpp"
 
 const std::string NODE_NAME = "vehicle_controller";
 const uint32_t LOOP_RATE_HZ = 10;
