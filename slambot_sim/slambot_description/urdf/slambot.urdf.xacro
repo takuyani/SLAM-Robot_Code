@@ -57,6 +57,7 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>slambot</robotNamespace>
+	  <robotParam>slambot_description</robotParam>
     </plugin>
   </gazebo>
 
@@ -71,4 +72,3 @@
   <xacro:xtion_pro_live_gazebo camera_name="sensor_xtion_pro_live"/>
 
 </robot>
-
