@@ -347,7 +347,7 @@ void VehicleController::move(const double aLinear_mmps,
 			/ (2 * wheelRadius_mm);
 	spdVec[1] *= -1;
 
-	bool isRet;
+	bool isRet = false;
 	if (mIsActive == true) {
 		if ((abs(spdVec[0]) < SPEED_RESOL_DPS)
 				&& (abs(spdVec[1]) < SPEED_RESOL_DPS)) {
