@@ -56,8 +56,8 @@ int main(int argc, char **argv) {
 	}
 
 	while (ros::ok()) {
-		procLoop(vc);
 		ros::spinOnce();
+		procLoop(vc);
 		loopRate.sleep();
 	}
 
@@ -138,6 +138,7 @@ void activeMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
 
 	if (aVhclCtrl.checkStatus(aIsUvLo) == true) {
 		if (aVhclCtrl.activeSeq() == true) {
+			aVhclCtrl.checkHostAlive();
 			aIsUvLo = true;
 		} else {
 			aState = RECOVERY_STS;
