@@ -375,35 +375,17 @@ bool Wheel::transferSetData() {
 
 	bool isVerify = false;
 
-	for (int32_t i = 0; i < RETRY_CNT && isVerify == false; i++) {
+	for (int32_t i = 0; (i < RETRY_CNT) && (isVerify == false); i++) {
 
 		// transmit Data
-		transmitData(transDataVec2.begin());
-
-/////////////////////////////////////////////////////////////////////
-//		uint8_t DBG_transData[2][4];
-//		for (uint32_t j = 0; j < WHEEL_NUM; j++) {
-//			for (int32_t k = 0; k < CMD_BYTE_SIZE_MAX; k++) {
-//				DBG_transData[j][k] = transData2d_vec[j][k];
-//			}
-//		}
-/////////////////////////////////////////////////////////////////////
-
-		// receive Data
-		uint8Vec2T rxVec2(WHEEL_NUM, uint8VecT(CMD_BYTE_SIZE_MAX - 1, 0));
-		receiveData(transDataVec2.begin(), rxVec2.begin());
-
-/////////////////////////////////////////////////////////////////////
-//		uint8_t DBG_RcvData[2][3];
-//		for (uint32_t j = 0; j < WHEEL_NUM; j++) {
-//			for (int32_t k = 0; k < CMD_BYTE_SIZE_MAX-1; k++) {
-//				DBG_RcvData[j][k] = DBG_transData[j][k+1];
-//			}
-//		}
-/////////////////////////////////////////////////////////////////////
-
-		// verify Data
-		isVerify = verifyData(rxVec2.begin());
+		if (transmitData(transDataVec2.begin()) == true) {
+			// receive Data
+			uint8Vec2T rxVec2(WHEEL_NUM, uint8VecT(CMD_BYTE_SIZE_MAX - 1, 0));
+			if (receiveData(transDataVec2.begin(), rxVec2.begin()) == true) {
+				// verify Data
+				isVerify = verifyData(rxVec2.begin());
+			}
+		}
 	}
 
 	for (uint32_t i = 0; i < WHEEL_NUM; i++) {
@@ -722,18 +704,22 @@ void Wheel::constructTransData(uint8Vec2IterT aDataVec2_iter) {
  * @brief			transmit Data.
  *
  * @param[in]		aTxVec2_citer		Transfer data iterator.
- * @return			none
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
  * @exception		none
  */
-void Wheel::transmitData(const uint8Vec2CIterT aTxVec2_citer) {
+bool Wheel::transmitData(const uint8Vec2CIterT aTxVec2_citer) {
 
-	for (int32_t i = 0; i < CMD_BYTE_SIZE_MAX; i++) {
+	bool isRet = true;
+	for (int32_t i = 0; (i < CMD_BYTE_SIZE_MAX) && (isRet = true); i++) {
 		uint8_t tx[WHEEL_NUM];
 		for (uint32_t j = 0; j < WHEEL_NUM; j++) {
 			tx[j] = aTxVec2_citer[j][i];
 		}
-		mSpi.transfer(WHEEL_NUM, tx);
+		isRet = mSpi.transfer(WHEEL_NUM, tx);
 	}
+	return (isRet);
 }
 
 /**
@@ -741,13 +727,16 @@ void Wheel::transmitData(const uint8Vec2CIterT aTxVec2_citer) {
  *
  * @param[in]		aTxVec2_citer	Transmit data iterator.
  * @param[out]		aRxVec2_iter	Receive data iterator.
- * @return			none
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
  * @exception		none
  */
-void Wheel::receiveData(const uint8Vec2CIterT aTxVec2_citer,
+bool Wheel::receiveData(const uint8Vec2CIterT aTxVec2_citer,
 		uint8Vec2IterT aRxVec2_iter) {
 
-	for (int32_t i = 0; i < CMD_BYTE_SIZE_MAX; i++) {
+	bool isRet = true;
+	for (int32_t i = 0; (i < CMD_BYTE_SIZE_MAX) && (isRet = true); i++) {
 		uint8_t tx[WHEEL_NUM];
 		for (uint32_t j = 0; j < WHEEL_NUM; j++) {
 			if (i == 0) {
@@ -756,13 +745,14 @@ void Wheel::receiveData(const uint8Vec2CIterT aTxVec2_citer,
 				tx[j] = CMD_NOP;
 			}
 		}
-		mSpi.transfer(WHEEL_NUM, tx);
-		if (0 < i) {
+		isRet = mSpi.transfer(WHEEL_NUM, tx);
+		if ((isRet == true) && (0 < i)) {
 			for (uint32_t j = 0; j < WHEEL_NUM; j++) {
 				aRxVec2_iter[j][i - 1] = tx[j];
 			}
 		}
 	}
+	return (isRet);
 }
 
 /**

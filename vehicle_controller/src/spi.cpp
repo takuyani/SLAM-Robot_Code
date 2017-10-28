@@ -17,7 +17,9 @@
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 #include <linux/types.h>
+#include <errno.h>
 //Add Install Library
+#include <ros/ros.h>
 //My Library
 #include "vehicle_controller/spi.hpp"
 
@@ -137,42 +139,66 @@ bool Spi::initSpi() {
 	int ret = 0;
 	// spi mode
 	ret = ioctl(mFd, SPI_IOC_WR_MODE32, &mMode);
-	if (ret == -1) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_WR_MODE32 [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
 
 	uint32_t mode = 0;
 	ret = ioctl(mFd, SPI_IOC_RD_MODE32, &mode);
-	if ((ret == -1) || (mMode != mode)) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_MODE32 [errno = "<< errno_sv <<"]");
+		close(mFd);
+		return (false);
+	} else if (mMode != mode) {
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_MODE32 [Not match mode]");
 		close(mFd);
 		return (false);
 	}
 
 	// bits per word
 	ret = ioctl(mFd, SPI_IOC_WR_BITS_PER_WORD, &mBits);
-	if (ret == -1) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_WR_BITS_PER_WORD [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
 
 	uint8_t bits = 0;
 	ret = ioctl(mFd, SPI_IOC_RD_BITS_PER_WORD, &bits);
-	if ((ret == -1) || (mBits != bits)) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_BITS_PER_WORD [errno = "<< errno_sv <<"]");
+		close(mFd);
+		return (false);
+	} else if (mBits != bits) {
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_BITS_PER_WORD [Not match bits]");
 		close(mFd);
 		return (false);
 	}
 
 	// set max speed hz
-	uint32_t speed_hz = 0;
 	ret = ioctl(mFd, SPI_IOC_WR_MAX_SPEED_HZ, &mSpeed_hz);
-	if (ret == -1) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_WR_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
 
+	uint32_t speed_hz = 0;
 	ret = ioctl(mFd, SPI_IOC_RD_MAX_SPEED_HZ, &speed_hz);
-	if ((ret == -1) || (mSpeed_hz != speed_hz)) {
+	if (ret < 0) {
+		int errno_sv = errno;
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
+		close(mFd);
+		return (false);
+	} else if (mSpeed_hz != speed_hz) {
+		ROS_ERROR_STREAM("error:SPI_IOC_RD_MAX_SPEED_HZ [Not match speed_hz]");
 		close(mFd);
 		return (false);
 	}
@@ -193,9 +219,7 @@ bool Spi::initSpi() {
 bool Spi::transfer(const uint32_t aSize, uint8_t* aTxRx_ptr) {
 
 	static spi_ioc_transfer tr;
-
-	int ret = 0;
-	bool isRet = true;
+	bool isRet = false;
 
 	if (aTxRx_ptr != nullptr) {
 		uint8_t *tx_ptr = new uint8_t[aSize];
@@ -213,12 +237,12 @@ bool Spi::transfer(const uint32_t aSize, uint8_t* aTxRx_ptr) {
 		tr.tx_nbits = 0;
 		tr.rx_nbits = 0;
 
-		ret = ioctl(mFd, SPI_IOC_MESSAGE(1), &tr);
-		if (ret < 1) {
-			isRet = false;
+		if (ioctl(mFd, SPI_IOC_MESSAGE(1), &tr) < 0) {
+			int errno_sv = errno;
+			ROS_ERROR_STREAM("error:SPI_IOC_MESSAGE [errno = "<< errno_sv <<"]");
+		} else {
+			isRet = true;
 		}
-	} else {
-		isRet = false;
 	}
 
 	return (isRet);

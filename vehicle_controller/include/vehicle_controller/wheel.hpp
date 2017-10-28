@@ -277,8 +277,8 @@ private:
 
 	//***** Method *****
 	void constructTransData(uint8Vec2IterT);
-	void transmitData(const uint8Vec2CIterT);
-	void receiveData(const uint8Vec2CIterT, uint8Vec2IterT);
+	bool transmitData(const uint8Vec2CIterT);
+	bool receiveData(const uint8Vec2CIterT, uint8Vec2IterT);
 	bool verifyData(const uint8Vec2CIterT);
 	int32_t setKval(HoldConfDataS&, const RegConfS&, const int32_t);
 
