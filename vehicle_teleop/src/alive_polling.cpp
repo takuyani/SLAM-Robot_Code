@@ -16,7 +16,6 @@
 #include <std_msgs/Bool.h>
 //My Library
 
-const std::string NODE_NAME = "alive_polling_node";
 const uint32_t LOOP_RATE_HZ = 20;
 
 /**
@@ -24,7 +23,7 @@ const uint32_t LOOP_RATE_HZ = 20;
  */
 int main(int argc, char **argv) {
 
-	ros::init(argc, argv, NODE_NAME);
+	ros::init(argc, argv, "alive_polling_node");
 
 	ros::NodeHandle nh("~");
 
@@ -32,8 +31,11 @@ int main(int argc, char **argv) {
 
 	ros::Rate loopRate(LOOP_RATE_HZ);
 
+	std_msgs::Bool isAlv;
+	isAlv.data = true;
+
 	while (ros::ok()) {
-		pubHstAlv.publish(true);
+		pubHstAlv.publish(isAlv);
 		ros::spinOnce();
 		loopRate.sleep();
 	}
