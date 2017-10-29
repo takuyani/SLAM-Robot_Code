@@ -99,6 +99,7 @@ private:
 	ros::NodeHandle mNh;				//!< ROS node handle
 	ros::Publisher mPubTest;			//!< ROS Publisher
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
+	ros::Subscriber mSubHstAlv;			//!< ROS Subscriber "HST_ALIVE"
 	ros::Subscriber mSubTeleOp;			//!< ROS Subscriber "CMD_VEL" for Teleop Twist
 
 	Wheel mWheel;	//!< Wheel Class

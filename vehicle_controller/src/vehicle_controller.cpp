@@ -56,7 +56,7 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t 
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
-	mSubCmdVel = mNh.subscribe(TOPIC_NAME_HST_ALIVE, 1, &VehicleController::callbackHstAlv, this);
+	mSubHstAlv = mNh.subscribe(TOPIC_NAME_HST_ALIVE, 1, &VehicleController::callbackHstAlv, this);
 	mSubTeleOp = mNh.subscribe(TOPIC_NAME_TELEOP_CMD_VEL, 1, &VehicleController::callbackTeleOp, this);
 	mPubTest = mNh.advertise<std_msgs::String>("string_test", 1);
 
