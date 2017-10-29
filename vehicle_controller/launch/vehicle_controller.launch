@@ -2,7 +2,7 @@
 <launch>
 
 	<!-- Vehicle Controller -->
-	<node pkg="vehicle_controller" type="vehicle_controller" name="vehicle_controller" output="screen">
+	<node pkg="vehicle_controller" type="vehicle_controller_node" name="vehicle_controller_node" output="screen">
 		<remap from="cmd_vel" 		to="cmd_vel"/>
 		<param name="teleop/linear"		type="double"	value="40.0"/>
 		<param name="teleop/angular"	type="double"	value="10.0"/>
