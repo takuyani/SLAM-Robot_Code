@@ -24,7 +24,7 @@
 #include "vehicle_controller/spi.hpp"
 
 /**
- * @brief		Constructor
+ * @brief		Constructor.
  *
  * @param[in]	*aDevice_ptr	Device file path.
  */
@@ -48,7 +48,7 @@ Spi::Spi(const char* aDevice_ptr) :
 }
 
 /**
- * @brief	Destructor
+ * @brief	Destructor.
  *
  */
 Spi::~Spi() {
@@ -56,7 +56,7 @@ Spi::~Spi() {
 }
 
 /**
- * @brief set Bit per Word
+ * @brief set Bit per Word.
  *
  * @param[in]	aBits		Device file path.
  * @return		none
@@ -67,7 +67,7 @@ void Spi::setBits(const uint8_t aBits) {
 }
 
 /**
- * @brief		set max speed Hz
+ * @brief		set max speed Hz.
  *
  * @param[in]	aSpeed_hz	Max speed[Hz].
  * @return		none
@@ -78,7 +78,7 @@ void Spi::setMaxSpeedHz(const uint32_t aSpeed_hz) {
 }
 
 /**
- * @brief		set clock polarity
+ * @brief		set clock polarity.
  *
  * @param[in]	aClockPolarity	Clock polarity(CPOL).
  * 	 	 	 	- 0 Active High
@@ -91,7 +91,7 @@ void Spi::setClockPolarity(const uint32_t aClockPolarity) {
 }
 
 /**
- * @brief		set clock phase
+ * @brief		set clock phase.
  *
  * @param[in]	aClockPhase	Clock phase(CPHA).
  * 				- At CPOL=0
@@ -108,7 +108,7 @@ void Spi::setClockPhase(const uint32_t aClockPhase) {
 }
 
 /**
- * @brief		initialize SPI Driver
+ * @brief		initialize SPI Driver.
  *
  * @return		bool
  * 				- true: success
@@ -207,7 +207,7 @@ bool Spi::initSpi() {
 }
 
 /**
- * @brief			transfer data
+ * @brief			transfer data.
  *
  * @param[in]		aSize		Transfer data size
  * @param[in,out]	*aTxRx_ptr	Transfer data pointer.

@@ -7,8 +7,8 @@
 		<param name="teleop/linear"		type="double"	value="40.0"/>
 		<param name="teleop/angular"	type="double"	value="10.0"/>
 		
-		<param name="wheel_radius"		type="double"	value="24.0"/>
-		<param name="tread_width"		type="double"	value="150.0"/>
+		<param name="wheel_radius"		type="double"	value="0.024"/>
+		<param name="tread_width"		type="double"	value="0.150"/>
 
 		<param name="debug/enable"		type="bool"		value="false"/>
 	</node> 

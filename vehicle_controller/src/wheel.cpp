@@ -1,5 +1,5 @@
 /**
- * @brief		For wheel information management
+ * @brief		For wheel information management.
  *
  * @file		wheel.cpp
  * @author		Takuya Niibori
@@ -14,37 +14,37 @@
 #include "vehicle_controller/SM-42BYG011-25.h"
 #include "vehicle_controller/wheel.hpp"
 
-const Wheel::RegConfS Wheel::ABS_POS    = { 0x01, 0x003FFFFF, 4 };	//!< ABS_POS
-const Wheel::RegConfS Wheel::EL_POS     = { 0x02, 0x000001FF, 3 };	//!< EL_POS
-const Wheel::RegConfS Wheel::MARK       = { 0x03, 0x003FFFFF, 4 };	//!< MARK
-const Wheel::RegConfS Wheel::SPEED      = { 0x04, 0x000FFFFF, 4 };	//!< SPEED
-const Wheel::RegConfS Wheel::ACC        = { 0x05, 0x00000FFF, 3 };	//!< ACC
-const Wheel::RegConfS Wheel::DEC        = { 0x06, 0x00000FFF, 3 };	//!< DEC
-const Wheel::RegConfS Wheel::MAX_SPEED  = { 0x07, 0x000003FF, 3 };	//!< MAX_SPEED
-const Wheel::RegConfS Wheel::MIN_SPEED  = { 0x08, 0x00001FFF, 3 };	//!< MIN_SPEED
-const Wheel::RegConfS Wheel::KVAL_HOLD  = { 0x09, 0x000000FF, 2 };	//!< KVAL_HOLD
-const Wheel::RegConfS Wheel::KVAL_RUN   = { 0x0A, 0x000000FF, 2 };	//!< KVAL_RUN
-const Wheel::RegConfS Wheel::KVAL_ACC   = { 0x0B, 0x000000FF, 2 };	//!< KVAL_ACC
-const Wheel::RegConfS Wheel::KVAL_DEC   = { 0x0C, 0x000000FF, 2 };	//!< KVAL_DEC
-const Wheel::RegConfS Wheel::INT_SPD    = { 0x0D, 0x00003FFF, 3 };	//!< INT_SPD
-const Wheel::RegConfS Wheel::ST_SLP     = { 0x0E, 0x000000FF, 2 };	//!< ST_SLP
+const Wheel::RegConfS Wheel::ABS_POS = { 0x01, 0x003FFFFF, 4 };		//!< ABS_POS
+const Wheel::RegConfS Wheel::EL_POS = { 0x02, 0x000001FF, 3 };		//!< EL_POS
+const Wheel::RegConfS Wheel::MARK = { 0x03, 0x003FFFFF, 4 };		//!< MARK
+const Wheel::RegConfS Wheel::SPEED = { 0x04, 0x000FFFFF, 4 };		//!< SPEED
+const Wheel::RegConfS Wheel::ACC = { 0x05, 0x00000FFF, 3 };			//!< ACC
+const Wheel::RegConfS Wheel::DEC = { 0x06, 0x00000FFF, 3 };			//!< DEC
+const Wheel::RegConfS Wheel::MAX_SPEED = { 0x07, 0x000003FF, 3 };	//!< MAX_SPEED
+const Wheel::RegConfS Wheel::MIN_SPEED = { 0x08, 0x00001FFF, 3 };	//!< MIN_SPEED
+const Wheel::RegConfS Wheel::KVAL_HOLD = { 0x09, 0x000000FF, 2 };	//!< KVAL_HOLD
+const Wheel::RegConfS Wheel::KVAL_RUN = { 0x0A, 0x000000FF, 2 };	//!< KVAL_RUN
+const Wheel::RegConfS Wheel::KVAL_ACC = { 0x0B, 0x000000FF, 2 };	//!< KVAL_ACC
+const Wheel::RegConfS Wheel::KVAL_DEC = { 0x0C, 0x000000FF, 2 };	//!< KVAL_DEC
+const Wheel::RegConfS Wheel::INT_SPD = { 0x0D, 0x00003FFF, 3 };		//!< INT_SPD
+const Wheel::RegConfS Wheel::ST_SLP = { 0x0E, 0x000000FF, 2 };		//!< ST_SLP
 const Wheel::RegConfS Wheel::FN_SLP_ACC = { 0x0F, 0x000000FF, 2 };	//!< FN_SLP_ACC
 const Wheel::RegConfS Wheel::FN_SLP_DEC = { 0x10, 0x000000FF, 2 };	//!< FN_SLP_DEC
-const Wheel::RegConfS Wheel::K_THERM    = { 0x11, 0x0000000F, 2 };	//!< K_THERM
-const Wheel::RegConfS Wheel::ADC_OUT    = { 0x12, 0x0000001F, 2 };	//!< ADC_OUT
-const Wheel::RegConfS Wheel::OCD_TH     = { 0x13, 0x0000000F, 2 };	//!< OCD_TH
-const Wheel::RegConfS Wheel::STALL_TH   = { 0x14, 0x0000007F, 2 };	//!< STALL_TH
-const Wheel::RegConfS Wheel::FS_SPD     = { 0x15, 0x000003FF, 3 };	//!< FS_SPD
-const Wheel::RegConfS Wheel::STEP_MODE  = { 0x16, 0x000000FF, 3 };	//!< STEP_MODE
-const Wheel::RegConfS Wheel::ALARM_EN   = { 0x17, 0x000000FF, 3 };	//!< ALARM_EN
-const Wheel::RegConfS Wheel::CONFIG     = { 0x18, 0x0000FFFF, 3 };	//!< CONFIG
-const Wheel::RegConfS Wheel::STATUS     = { 0x19, 0x0000FFFF, 3 };	//!< STATUS
+const Wheel::RegConfS Wheel::K_THERM = { 0x11, 0x0000000F, 2 };		//!< K_THERM
+const Wheel::RegConfS Wheel::ADC_OUT = { 0x12, 0x0000001F, 2 };		//!< ADC_OUT
+const Wheel::RegConfS Wheel::OCD_TH = { 0x13, 0x0000000F, 2 };		//!< OCD_TH
+const Wheel::RegConfS Wheel::STALL_TH = { 0x14, 0x0000007F, 2 };	//!< STALL_TH
+const Wheel::RegConfS Wheel::FS_SPD = { 0x15, 0x000003FF, 3 };		//!< FS_SPD
+const Wheel::RegConfS Wheel::STEP_MODE = { 0x16, 0x000000FF, 3 };	//!< STEP_MODE
+const Wheel::RegConfS Wheel::ALARM_EN = { 0x17, 0x000000FF, 3 };	//!< ALARM_EN
+const Wheel::RegConfS Wheel::CONFIG = { 0x18, 0x0000FFFF, 3 };		//!< CONFIG
+const Wheel::RegConfS Wheel::STATUS = { 0x19, 0x0000FFFF, 3 };		//!< STATUS
 
 using namespace std;
 using namespace sm_42byg011_25;
 
 /**
- * @brief		Constructor
+ * @brief		Constructor.
  *
  * @param[in]	aWheelNum	Number of wheels.
  */
@@ -62,13 +62,13 @@ Wheel::Wheel(uint32_t aWheelNum) :
 }
 
 /**
- * @brief		Destructor
+ * @brief		Destructor.
  */
 Wheel::~Wheel() {
 }
 
 /**
- * @brief		initialize wheel
+ * @brief		initialize wheel.
  *
  * @return		bool
  * 				- true: success
@@ -92,23 +92,23 @@ bool Wheel::initWheel() {
 }
 
 /**
- * @brief			set Max Speed
+ * @brief			set Max Speed.
  *
  * @param[in]		aIdx			Wheel index number.
- * @param[in]		aMaxSpd_dps		Max Speed Value[deg/s].
+ * @param[in]		aMaxSpd_rps		Max Speed Value[rad/s].
  * @return			The actual physical value set.
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-double Wheel::setMaxSpeed(const uint32_t aIdx, const double aMaxSpd_dps) {
+double Wheel::setMaxSpeed(const uint32_t aIdx, const double aMaxSpd_rps) {
 
-	constexpr double UNIT2RES_GAIN = TICK * pow(2, MAX_SPEED_LSB) / DEG_P_STEP;	// Convert Unit To Resister Value.
+	constexpr double UNIT2RES_GAIN = TICK * pow(2, MAX_SPEED_LSB) / RAD_P_STEP;	// Convert Unit To Resister Value.
 
 	double actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
-		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aMaxSpd_dps));
+		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aMaxSpd_rps));
 		confData.mRegConfS_uptr.reset(&MAX_SPEED);
 
 		if (data > confData.mRegConfS_uptr->MAX_VALUE) {
@@ -122,23 +122,23 @@ double Wheel::setMaxSpeed(const uint32_t aIdx, const double aMaxSpd_dps) {
 }
 
 /**
- * @brief			set Min Speed
+ * @brief			set Min Speed.
  *
  * @param[in]		aIdx			Wheel index number.
- * @param[in]		aMinSpd_dps		Min Speed Value[deg/s].
+ * @param[in]		aMinSpd_rps		Min Speed Value[rad/s].
  * @return			The actual physical value set.
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-double Wheel::setMinSpeed(const uint32_t aIdx, const double aMinSpd_dps) {
+double Wheel::setMinSpeed(const uint32_t aIdx, const double aMinSpd_rps) {
 
-	constexpr double UNIT2RES_GAIN = TICK * pow(2, MIN_SPEED_LSB) / DEG_P_STEP;	// Convert Unit To Resister Value.
+	constexpr double UNIT2RES_GAIN = TICK * pow(2, MIN_SPEED_LSB) / RAD_P_STEP;	// Convert Unit To Resister Value.
 
 	double actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
-		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aMinSpd_dps));
+		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aMinSpd_rps));
 		confData.mRegConfS_uptr.reset(&MIN_SPEED);
 
 		if (data > confData.mRegConfS_uptr->MAX_VALUE) {
@@ -152,24 +152,23 @@ double Wheel::setMinSpeed(const uint32_t aIdx, const double aMinSpd_dps) {
 }
 
 /**
- * @brief			set Acceleration
+ * @brief			set Acceleration.
  *
  * @param[in]		aIdx			Wheel index number.
- * @param[in]		aAcc_dpss		Acceleration Value[deg/s^2].
+ * @param[in]		aAcc_rpss		Acceleration Value[rad/s^2].
  * @return			The actual physical value set.
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-double Wheel::setAcc(const uint32_t aIdx, const double aAcc_dpss) {
+double Wheel::setAcc(const uint32_t aIdx, const double aAcc_rpss) {
 
-	constexpr double UNIT2RES_GAIN = pow(TICK, 2) * pow(2, ACC_LSB)
-			/ DEG_P_STEP;	// Convert Unit To Resister Value.
+	constexpr double UNIT2RES_GAIN = pow(TICK, 2) * pow(2, ACC_LSB) / RAD_P_STEP;	// Convert Unit To Resister Value.
 
 	double actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
-		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aAcc_dpss));
+		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aAcc_rpss));
 		confData.mRegConfS_uptr.reset(&ACC);
 
 		if (data > confData.mRegConfS_uptr->MAX_VALUE) {
@@ -183,24 +182,23 @@ double Wheel::setAcc(const uint32_t aIdx, const double aAcc_dpss) {
 }
 
 /**
- * @brief			set Deceleration
+ * @brief			set Deceleration.
  *
  * @param[in]		aIdx			Wheel index number.
- * @param[in]		aDec_dpss		Deceleration Value[deg/s^2].
+ * @param[in]		aDec_rpss		Deceleration Value[rad/s^2].
  * @return			The actual physical value set.
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-double Wheel::setDec(const uint32_t aIdx, const double aDec_dpss) {
+double Wheel::setDec(const uint32_t aIdx, const double aDec_rpss) {
 
-	constexpr double UNIT2RES_GAIN = pow(TICK, 2) * pow(2, DEC_LSB)
-			/ DEG_P_STEP;	// Convert Unit To Resister Value.
+	constexpr double UNIT2RES_GAIN = pow(TICK, 2) * pow(2, DEC_LSB) / RAD_P_STEP;	// Convert Unit To Resister Value.
 
 	double actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
-		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aDec_dpss));
+		int32_t data = abs(static_cast<int32_t>(UNIT2RES_GAIN * aDec_rpss));
 		confData.mRegConfS_uptr.reset(&DEC);
 
 		if (data > confData.mRegConfS_uptr->MAX_VALUE) {
@@ -214,7 +212,7 @@ double Wheel::setDec(const uint32_t aIdx, const double aDec_dpss) {
 }
 
 /**
- * @brief			set Kval Hold
+ * @brief			set Kval Hold.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		Kval.
@@ -234,7 +232,7 @@ int32_t Wheel::setKvalHold(const uint32_t aIdx, const int32_t aVal) {
 }
 
 /**
- * @brief			set Kval Run
+ * @brief			set Kval Run.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		Kval.
@@ -254,7 +252,7 @@ int32_t Wheel::setKvalRun(const uint32_t aIdx, const uint32_t aVal) {
 }
 
 /**
- * @brief			set Kval Acc
+ * @brief			set Kval Acc.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		Kval.
@@ -274,7 +272,7 @@ int32_t Wheel::setKvalAcc(const uint32_t aIdx, const uint32_t aVal) {
 }
 
 /**
- * @brief			set Kval Dec
+ * @brief			set Kval Dec.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		Kval.
@@ -294,7 +292,7 @@ int32_t Wheel::setKvalDec(const uint32_t aIdx, const uint32_t aVal) {
 }
 
 /**
- * @brief			set Over Current Detection Threshold
+ * @brief			set Over Current Detection Threshold.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		OCD_TH value.
@@ -326,7 +324,7 @@ int32_t Wheel::setOvrCurrDtctTh(const uint32_t aIdx, const int32_t aVal) {
 }
 
 /**
- * @brief			set Stall Detection Threshold
+ * @brief			set Stall Detection Threshold.
  *
  * @param[in]		aIdx		Wheel index number.
  * @param[in]		aVal		STALL_TH value.
@@ -358,7 +356,7 @@ double Wheel::setStallDtctTh(const uint32_t aIdx, const int32_t aVal) {
 }
 
 /**
- * @brief			transfer Set Data
+ * @brief			transfer Set Data.
  *
  * @return			bool
  * 					- true: success
@@ -396,7 +394,7 @@ bool Wheel::transferSetData() {
 }
 
 /**
- * @brief			produces a motion
+ * @brief			produces a motion.
  *
  * @param[in]		aSpdVec			Speed parameter.
  * @return			bool
@@ -406,7 +404,7 @@ bool Wheel::transferSetData() {
  */
 bool Wheel::run(vector<double> &aSpdVec) {
 
-	constexpr double UNIT2RES_GAIN = TICK * pow(2, SPEED_LSB) / DEG_P_STEP;	// Convert Unit To Resister Value.
+	constexpr double UNIT2RES_GAIN = TICK * pow(2, SPEED_LSB) / RAD_P_STEP;	// Convert Unit To Resister Value.
 	constexpr uint32_t RUN_SIZE_MAX = 4;
 
 	bool isRet = false;
@@ -415,23 +413,22 @@ bool Wheel::run(vector<double> &aSpdVec) {
 	if (WHEEL_NUM <= aSpdVec.size()) {
 
 		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
-			double spd_dps = aSpdVec.at(i);
+			double spd_rps = aSpdVec.at(i);
 			uint8_t dir = 0;
-			if (0 < spd_dps) {
+			if (0 < spd_rps) {
 				dir = DIR_FORWARD;
 			} else {
 				dir = DIR_REVERSE;
 			}
 
-			int32_t spdAbs = abs(static_cast<int32_t>(UNIT2RES_GAIN * spd_dps));
+			int32_t spdAbs = abs(static_cast<int32_t>(UNIT2RES_GAIN * spd_rps));
 			if (SPEED.MAX_VALUE < spdAbs) {
 				spdAbs = SPEED.MAX_VALUE;
 			}
 
 			data[i][0] = CMD_RUN | dir;
 			for (uint32_t j = 1; j < RUN_SIZE_MAX; j++) {
-				data[i][j] = static_cast<uint8_t>(spdAbs
-						>> (BITS * (RUN_SIZE_MAX - 1 - j)));
+				data[i][j] = static_cast<uint8_t>(spdAbs >> (BITS * (RUN_SIZE_MAX - 1 - j)));
 			}
 		}
 
@@ -559,8 +556,7 @@ bool Wheel::getStatus(vector<StatusS> &aStatusVec) {
 		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
 			uint32_t status = 0;
 			for (int32_t j = 1; j < STATUS.BYTE_SIZE; j++) {
-				status |= tx[j][i]
-						<< ((STATUS.BYTE_SIZE - j - 1) * BYTE_SIZE_8);
+				status |= tx[j][i] << ((STATUS.BYTE_SIZE - j - 1) * BYTE_SIZE_8);
 			}
 			StatusS statusS;
 			if (0 != (status & STATUS_HIZ)) {
@@ -593,8 +589,7 @@ bool Wheel::getStatus(vector<StatusS> &aStatusVec) {
 				statusS.mIsDir = false;
 			}
 
-			statusS.mMotStatus =
-					static_cast<uint8_t>((status & STATUS_MOT) >> 5);
+			statusS.mMotStatus = static_cast<uint8_t>((status & STATUS_MOT) >> 5);
 
 			if (0 != (status & STATUS_NOT_PERF_CMD)) {
 				statusS.mIsNotPerfCmd = true;
@@ -690,8 +685,7 @@ void Wheel::constructTransData(uint8Vec2IterT aDataVec2_iter) {
 			for (int32_t j = 1; j < CMD_BYTE_SIZE_MAX; j++) {
 				if (j < regConf_ptr->BYTE_SIZE) {
 					int32_t shift = regConf_ptr->BYTE_SIZE - j - 1;
-					transData_itr[j] = static_cast<uint8_t>(data
-							>> (BYTE_SIZE_8 * shift));
+					transData_itr[j] = static_cast<uint8_t>(data >> (BYTE_SIZE_8 * shift));
 				} else {
 					transData_itr[j] = CMD_NOP;
 				}
@@ -732,8 +726,7 @@ bool Wheel::transmitData(const uint8Vec2CIterT aTxVec2_citer) {
  * 					- false: failure
  * @exception		none
  */
-bool Wheel::receiveData(const uint8Vec2CIterT aTxVec2_citer,
-		uint8Vec2IterT aRxVec2_iter) {
+bool Wheel::receiveData(const uint8Vec2CIterT aTxVec2_citer, uint8Vec2IterT aRxVec2_iter) {
 
 	bool isRet = true;
 	for (int32_t i = 0; (i < CMD_BYTE_SIZE_MAX) && (isRet = true); i++) {
@@ -772,8 +765,7 @@ bool Wheel::verifyData(const uint8Vec2CIterT aRxVec2_citer) {
 		const HoldConfDataS &holdConfData = mHoldConfDataVec[i];
 		int32_t rxDataSize = holdConfData.mRegConfS_uptr->BYTE_SIZE - 1;
 		for (int32_t j = 0; j < rxDataSize; j++) {
-			rxData |= aRxVec2_citer[i][j]
-					<< ((rxDataSize - j - 1) * BYTE_SIZE_8);
+			rxData |= aRxVec2_citer[i][j] << ((rxDataSize - j - 1) * BYTE_SIZE_8);
 		}
 
 		int32_t txData = holdConfData.mData;
@@ -790,7 +782,7 @@ bool Wheel::verifyData(const uint8Vec2CIterT aRxVec2_citer) {
 }
 
 /**
- * @brief			set Kval
+ * @brief			set Kval.
  *
  * @param[in,out]	aConfData		Hold Config Data.
  * @param[in]		aRegConf		L6470 Resisters Config.
@@ -800,8 +792,7 @@ bool Wheel::verifyData(const uint8Vec2CIterT aRxVec2_citer) {
  * @exception		none
  */
 
-int32_t Wheel::setKval(HoldConfDataS &aConfData, const RegConfS &aRegConf,
-		const int32_t aVal) {
+int32_t Wheel::setKval(HoldConfDataS &aConfData, const RegConfS &aRegConf, const int32_t aVal) {
 
 	int32_t data = -1;
 

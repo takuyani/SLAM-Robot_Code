@@ -36,7 +36,7 @@ void activeMode(VehicleController&, StateT&, bool&);
 void recoveryMode(VehicleController&, StateT&, bool&);
 
 /**
- * @brief	main function
+ * @brief	main function.
  */
 int main(int argc, char **argv) {
 
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 }
 
 /**
- * @brief	loop proccess
+ * @brief	loop proccess.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @return			none
@@ -96,7 +96,7 @@ void procLoop(VehicleController &aVhclCtrl) {
 }
 
 /**
- * @brief	initial mode process
+ * @brief	initial mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.
@@ -124,7 +124,7 @@ void initialMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
 }
 
 /**
- * @brief	active mode process
+ * @brief	active mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.
@@ -151,7 +151,7 @@ void activeMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
 }
 
 /**
- * @brief	recovery mode process
+ * @brief	recovery mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.
