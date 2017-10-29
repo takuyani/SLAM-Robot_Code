@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('teleop_twist_keyboard')
 import rospy
 
 from geometry_msgs.msg import Twist
 
 import sys, select, termios, tty
+import numpy as np
 
 msg = """
 Reading from the keyboard  and Publishing to Twist!
@@ -49,12 +49,12 @@ moveBindings = {
 	       }
 
 speedBindings={
-		'q':(1.1,1.1),
-		'z':(.9,.9),
-		'w':(1.1,1),
-		'x':(.9,1),
-		'e':(1,1.1),
-		'c':(1,.9),
+		'q':( 0.01,  1.0),
+		'z':(-0.01, -1.0),
+		'w':( 0.01,  0.0),
+		'x':(-0.01,  0.0),
+		'e':( 0.00,  1.0),
+		'c':( 0.0, -1.0),
 	      }
 
 def getKey():
@@ -66,16 +66,17 @@ def getKey():
 
 
 def vels(speed,turn):
-	return "currently:\tspeed %s\tturn %s " % (speed,turn)
+	return "currently:\tspeed %.3f[m/s]\tturn %.3f[deg/s] " % (speed, turn*180.0/np.pi)
 
 if __name__=="__main__":
+
     	settings = termios.tcgetattr(sys.stdin)
 	
+	rospy.init_node('slambot_teleop_twist_keyboard')
 	pub = rospy.Publisher('cmd_vel', Twist, queue_size = 1)
-	rospy.init_node('teleop_twist_keyboard')
 
-	speed = rospy.get_param("~speed", 0.5)
-	turn = rospy.get_param("~turn", 1.0)
+	speed = rospy.get_param("~speed", 0.1)
+	turn = rospy.get_param("~turn", 10.0 * np.pi/180.0 )
 	x = 0
 	y = 0
 	z = 0
@@ -93,8 +94,12 @@ if __name__=="__main__":
 				z = moveBindings[key][2]
 				th = moveBindings[key][3]
 			elif key in speedBindings.keys():
-				speed = speed * speedBindings[key][0]
-				turn = turn * speedBindings[key][1]
+				speed = speed + speedBindings[key][0]
+				turn = turn + speedBindings[key][1] *np.pi/180.0
+				if (speed < 0.0):
+					speed = 0.0
+				if (turn < 0.0):
+					turn = 0.0
 
 				print vels(speed,turn)
 				if (status == 14):

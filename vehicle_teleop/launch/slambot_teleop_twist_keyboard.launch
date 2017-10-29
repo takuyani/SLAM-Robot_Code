@@ -1,10 +1,12 @@
 <!-- slambot_teleop_twist_keyboard.launch -->
 <launch>
 
-	<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" />
+	<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" >
+		<remap from="host_alive" 		to="~host_alive"/>
+	</node>
 
 	<node pkg="vehicle_teleop" type="slambot_teleop_twist_keyboard.py" name="slambot_teleop_twist_keyboard" output="screen">
-		<remap from="cmd_vel" 		to="cmd_vel"/>
+		<remap from="cmd_vel" 		to="~cmd_vel"/>
 	</node>
  
 </launch>
