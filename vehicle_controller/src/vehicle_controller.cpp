@@ -250,7 +250,10 @@ bool VehicleController::recoverySeq() {
  */
 void VehicleController::checkHostAlive() {
 	if (mIsHostAlive == false) {
-		mWheel.stopSoft(true);
+		if (mDoDebug == false) {
+			mWheel.stopSoft(true);
+		}
+		ROS_INFO_STREAM_THROTTLE(1.0, "Alive Signal from Host is Not recieved.");
 	}
 	mIsHostAlive = false;
 }
