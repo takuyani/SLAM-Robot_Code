@@ -38,7 +38,6 @@ public:
 
 	//***** Method *****
 	bool initVehicleController();
-	void publishTest();
 	bool checkStatus(bool);
 	bool initialSeq();
 	bool activeSeq();
@@ -49,15 +48,12 @@ private:
 	//***** User Define *****
 
 	//***** Const Value *****
-	const std::string TOPIC_NAME_TELEOP_CMD_VEL = "/cmd_vel";
-	const std::string PARAM_NAME_TELEOP_LINEAR = "teleop/linear";
-	const std::string PARAM_NAME_TELEOP_ANGULAR = "teleop/angular";
-
 	const std::string TOPIC_NAME_CMD_VEL = "cmd_vel";
 	const std::string TOPIC_NAME_HST_ALIVE = "host_alive";
+	const std::string TOPIC_NAME_ALIVE_RSP = "alive_resp";
+
 	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
 	const std::string PARAM_NAME_TRE_WID = "tread_width";
-
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
 
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain
@@ -68,7 +64,7 @@ private:
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
 	void callbackHstAlv(const std_msgs::Bool &);
-	void callbackTeleOp(const geometry_msgs::Twist &);
+	void publishAliveResponse();
 
 	void move(const double, const double);
 	bool setMaxSpeed(const double);
@@ -97,10 +93,9 @@ private:
 
 	//***** Member Variable *****
 	ros::NodeHandle mNh;				//!< ROS node handle
-	ros::Publisher mPubTest;			//!< ROS Publisher
+	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
 	ros::Subscriber mSubHstAlv;			//!< ROS Subscriber "HST_ALIVE"
-	ros::Subscriber mSubTeleOp;			//!< ROS Subscriber "CMD_VEL" for Teleop Twist
 
 	Wheel mWheel;	//!< Wheel Class
 

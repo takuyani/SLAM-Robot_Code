@@ -90,9 +90,6 @@ void procLoop(VehicleController &aVhclCtrl) {
 		state = RECOVERY_STS;
 		break;
 	}
-
-	aVhclCtrl.publishTest();
-
 }
 
 /**

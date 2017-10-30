@@ -27,8 +27,6 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t 
 
 	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius: 0.01[m]
 	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width: 0.01[m]
-	constexpr double TELEOP_LINEAR_DEF = 0.01;		// Vehicle base linear: 0.01[m/s]
-	constexpr double TELEOP_ANGULAR_DEF = 10.0;		// Vehicle base angular: 10.0[deg/s]
 
 	mMotStsVec.resize(WHEEL_NUM);
 
@@ -40,14 +38,6 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t 
 		mNh.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
 	}
 
-	if (mNh.hasParam(PARAM_NAME_TELEOP_LINEAR) == false) {
-		mNh.setParam(PARAM_NAME_TELEOP_LINEAR, TELEOP_LINEAR_DEF);
-	}
-
-	if (mNh.hasParam(PARAM_NAME_TELEOP_ANGULAR) == false) {
-		mNh.setParam(PARAM_NAME_TELEOP_ANGULAR, TELEOP_ANGULAR_DEF * DEG2RAD);
-	}
-
 	mDoDebug = false;
 	if (mNh.hasParam(PARAM_NAME_DEBUG) == false) {
 		mNh.setParam(PARAM_NAME_DEBUG, mDoDebug);
@@ -57,8 +47,7 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t 
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
 	mSubHstAlv = mNh.subscribe(TOPIC_NAME_HST_ALIVE, 1, &VehicleController::callbackHstAlv, this);
-	mSubTeleOp = mNh.subscribe(TOPIC_NAME_TELEOP_CMD_VEL, 1, &VehicleController::callbackTeleOp, this);
-	mPubTest = mNh.advertise<std_msgs::String>("string_test", 1);
+	mPubAlvRsp = mNh.advertise<std_msgs::Bool>(TOPIC_NAME_ALIVE_RSP, 1);
 
 	if (mDoDebug == true) {
 		ROS_WARN_STREAM("Node \"Vehicle Controller\":Debug Mode Running!");
@@ -93,26 +82,6 @@ bool VehicleController::initVehicleController() {
  * @brief	Destructor
  */
 VehicleController::~VehicleController() {
-}
-
-/**
- * @brief			callback function of CMD_VEL.
- *
- * @param[in]		aTwistMsg		ROS topic type "Twist".
- * @return			none
- * @exception		none
- */
-void VehicleController::publishTest() {
-
-	std_msgs::String str;
-
-	if (mIsActive == true) {
-		str.data = "OK";
-	} else {
-		str.data = "NG";
-	}
-
-	mPubTest.publish(str);
 }
 
 /**
@@ -307,27 +276,26 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
  */
 void VehicleController::callbackHstAlv(const std_msgs::Bool &aBoolMsg) {
 	mIsHostAlive = aBoolMsg.data;
+	publishAliveResponse();
 }
 
 /**
- * @brief			callback function of CMD_VEL(for Teleop Twist).
+ * @brief			publish Alive Response.
  *
- * @param[in]		aTwistMsg		ROS topic type "Twist".
  * @return			none
  * @exception		none
  */
-void VehicleController::callbackTeleOp(const geometry_msgs::Twist &aTwistMsg) {
+void VehicleController::publishAliveResponse() {
 
-	double linear_mmps = 0;
-	double angular_dps = 0;
+	std_msgs::Bool isSts;
 
-	mNh.getParam(PARAM_NAME_TELEOP_LINEAR, linear_mmps);
-	mNh.getParam(PARAM_NAME_TELEOP_ANGULAR, angular_dps);
+	if (mIsActive == true) {
+		isSts.data = true;
+	} else {
+		isSts.data = false;
+	}
 
-	linear_mmps *= aTwistMsg.linear.x;
-	angular_dps *= aTwistMsg.angular.z;
-
-	move(linear_mmps, angular_dps);
+	mPubAlvRsp.publish(isSts);
 }
 
 /**
