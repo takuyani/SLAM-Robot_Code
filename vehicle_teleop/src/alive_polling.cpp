@@ -16,7 +16,7 @@
 #include <std_msgs/Bool.h>
 //My Library
 
-const uint32_t LOOP_RATE_HZ = 1;
+const uint32_t LOOP_RATE_HZ = 2;	//<!500[ms]
 
 /**
  * @brief	main function
