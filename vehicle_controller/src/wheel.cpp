@@ -309,7 +309,7 @@ int32_t Wheel::setOvrCurrDtctTh(const uint32_t aIdx, const int32_t aVal) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
 		int32_t data = abs(aVal);
 
-		confData.mRegConfS_uptr.reset(&KVAL_DEC);
+		confData.mRegConfS_uptr.reset(&OCD_TH);
 
 		if (data > confData.mRegConfS_uptr->MAX_VALUE) {
 			data = confData.mRegConfS_uptr->MAX_VALUE;

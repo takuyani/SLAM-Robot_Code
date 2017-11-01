@@ -253,7 +253,7 @@ void VehicleController::checkHostAlive() {
 		if (mDoDebug == false) {
 			mWheel.stopSoft(true);
 		}
-		ROS_INFO_STREAM_THROTTLE(1.0, "Alive Signal from Host is Not recieved.");
+		ROS_WARN_STREAM_THROTTLE(1.0, "Alive Signal from Host is Not recieved.");
 	}
 	mIsHostAlive = false;
 }
