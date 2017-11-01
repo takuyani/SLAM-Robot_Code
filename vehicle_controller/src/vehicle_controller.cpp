@@ -1,5 +1,5 @@
 /**
- * @brief		Vehicle Controller for SLAM Robot
+ * @brief		Vehicle Controller for SLAM Robot.
  *
  * @file		vehicle_controller.cpp
  * @author		Takuya Niibori
@@ -10,26 +10,23 @@
 //C Standard Library
 //Add Install Library
 //My Library
-#include "vehicle_controller.hpp"
-#include "SM-42BYG011-25.h"
+#include "vehicle_controller/vehicle_controller.hpp"
+#include "vehicle_controller/SM-42BYG011-25.h"
 
 using namespace std;
 using namespace ros;
 using namespace sm_42byg011_25;
 
 /**
- * @brief	Constructor
+ * @brief	Constructor.
  *
  * @param[in]		aNh			Ros node handle.
  */
-VehicleController::VehicleController(const ros::NodeHandle &aNh,
-		const uint32_t aWheelNum) :
+VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t aWheelNum) :
 		WHEEL_NUM(aWheelNum), mNh(aNh), mWheel(aWheelNum) {
 
-	constexpr double WHEEL_RADIUS_DEF = 10.0; 		// Wheel radius: 10.0[mm]
-	constexpr double TREAD_WIDTH_DEF = 10.0; 		// Tread width: 10.0[mm]
-	constexpr double TELEOP_LINEAR_DEF = 10.0; 		// Vehicle base linear: 10.0[mm/s]
-	constexpr double TELEOP_ANGULAR_DEF = 10.0; 	// Vehicle base angular: 10.0[deg/s]
+	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius: 0.01[m]
+	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width: 0.01[m]
 
 	mMotStsVec.resize(WHEEL_NUM);
 
@@ -41,14 +38,6 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh,
 		mNh.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
 	}
 
-	if (mNh.hasParam(PARAM_NAME_TELEOP_LINEAR) == false) {
-		mNh.setParam(PARAM_NAME_TELEOP_LINEAR, TELEOP_LINEAR_DEF);
-	}
-
-	if (mNh.hasParam(PARAM_NAME_TELEOP_ANGULAR) == false) {
-		mNh.setParam(PARAM_NAME_TELEOP_ANGULAR, TELEOP_ANGULAR_DEF);
-	}
-
 	mDoDebug = false;
 	if (mNh.hasParam(PARAM_NAME_DEBUG) == false) {
 		mNh.setParam(PARAM_NAME_DEBUG, mDoDebug);
@@ -56,11 +45,9 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh,
 		mNh.getParam(PARAM_NAME_DEBUG, mDoDebug);
 	}
 
-	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1,
-			&VehicleController::callbackCmdVel, this);
-	mSubTeleOp = mNh.subscribe(TOPIC_NAME_TELEOP_CMD_VEL, 1,
-			&VehicleController::callbackTeleOp, this);
-	mPubTest = mNh.advertise<std_msgs::String>("string_test", 1);
+	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
+	mSubHstAlv = mNh.subscribe(TOPIC_NAME_HST_ALIVE, 1, &VehicleController::callbackHstAlv, this);
+	mPubAlvRsp = mNh.advertise<std_msgs::Bool>(TOPIC_NAME_ALIVE_RSP, 1);
 
 	if (mDoDebug == true) {
 		ROS_WARN_STREAM("Node \"Vehicle Controller\":Debug Mode Running!");
@@ -68,10 +55,12 @@ VehicleController::VehicleController(const ros::NodeHandle &aNh,
 	} else {
 		mIsActive = false;
 	}
+
+	mIsHostAlive = false;
 }
 
 /**
- * @brief	initialize Vehicle Controller
+ * @brief	initialize Vehicle Controller.
  *
  * @return		bool
  * 				- true: success
@@ -96,27 +85,7 @@ VehicleController::~VehicleController() {
 }
 
 /**
- * @brief			callback function of CMD_VEL
- *
- * @param[in]		aTwistMsg		ROS topic type "Twist".
- * @return			none
- * @exception		none
- */
-void VehicleController::publishTest() {
-
-	std_msgs::String str;
-
-	if (mIsActive == true) {
-		str.data = "OK";
-	} else {
-		str.data = "NG";
-	}
-
-	mPubTest.publish(str);
-}
-
-/**
- * @brief			check vehicle device status
+ * @brief			check vehicle device status.
  *
  * @param[in]		aIsUvLo		check UVLO flag.
  * 					- true: check UVLO
@@ -153,23 +122,17 @@ bool VehicleController::checkStatus(bool aIsUvLo) {
 					if (sts.mIsHiz == true) {
 						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridges high Z");
 					} else if ((aIsUvLo == true) && (sts.mIsUvLo == true)) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Under Voltage lock-out");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Under Voltage lock-out");
 					} else if (sts.mIsThWrn == true) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Thermal Warning detection");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Thermal Warning detection");
 					} else if (sts.mIsThSd == true) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Thermal Shutdown detection");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Thermal Shutdown detection");
 					} else if (sts.mIsOcd == true) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Over Current detection");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Over Current detection");
 					} else if (sts.mIsStepLossA == true) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Bridge A Stall detection");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridge A Stall detection");
 					} else if (sts.mIsStepLossB == true) {
-						ROS_WARN_STREAM(
-								"L6740 Device["<<i<<"]:Bridge B Stall detection");
+						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridge B Stall detection");
 					} else {
 						isAct = true;
 					}
@@ -187,14 +150,13 @@ bool VehicleController::checkStatus(bool aIsUvLo) {
 }
 
 /**
- * @brief			initial sequence
+ * @brief			initial sequence.
  *
  * @return			bool
  * 					- true: success
  * 					- false: failure
  * @exception		none
  */
-
 bool VehicleController::initialSeq() {
 
 	constexpr double MAX_SPEED_DPS = 360;	// Max Speed[deg/s]
@@ -209,16 +171,16 @@ bool VehicleController::initialSeq() {
 	constexpr int32_t STALL_DTCT_TH = 0x7F;	// (STALL_DTCT_TH+1) * 375[mA]
 
 	if (mDoDebug == false) {
-		if (setMaxSpeed(MAX_SPEED_DPS) == false) {
+		if (setMaxSpeed(MAX_SPEED_DPS * DEG2RAD) == false) {
 			return (false);
 		}
-		if (setMinSpeed(MIN_SPEED_DPS) == false) {
+		if (setMinSpeed(MIN_SPEED_DPS * DEG2RAD) == false) {
 			return (false);
 		}
-		if (setAcc(ACC_DPSS) == false) {
+		if (setAcc(ACC_DPSS * DEG2RAD) == false) {
 			return (false);
 		}
-		if (setDec(DEC_DPSS) == false) {
+		if (setDec(DEC_DPSS * DEG2RAD) == false) {
 			return (false);
 		}
 		if (setKvalHold(KVAL_HOLD) == false) {
@@ -245,7 +207,7 @@ bool VehicleController::initialSeq() {
 }
 
 /**
- * @brief			vehicle controller active sequence
+ * @brief			vehicle controller active sequence.
  *
  * @return			bool
  * 					- true: success
@@ -257,7 +219,7 @@ bool VehicleController::activeSeq() {
 }
 
 /**
- * @brief			recovery sequence
+ * @brief			recovery sequence.
  *
  * @return			bool
  * 					- true: success
@@ -278,7 +240,26 @@ bool VehicleController::recoverySeq() {
 }
 
 /**
- * @brief			callback function of CMD_VEL
+ * @brief			check host machine alive.
+ *                  If Host Machine is dead, stop vehicle.
+ *
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
+ * @exception		none
+ */
+void VehicleController::checkHostAlive() {
+	if (mIsHostAlive == false) {
+		if (mDoDebug == false) {
+			mWheel.stopSoft(true);
+		}
+		ROS_WARN_STREAM_THROTTLE(1.0, "Alive Signal from Host is Not recieved.");
+	}
+	mIsHostAlive = false;
+}
+
+/**
+ * @brief			callback function of CMD_VEL.
  *
  * @param[in]		aTwistMsg		ROS topic type "Twist".
  * @return			none
@@ -286,49 +267,57 @@ bool VehicleController::recoverySeq() {
  */
 void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
 	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
+	mIsHostAlive = true;
 }
 
 /**
- * @brief			callback function of CMD_VEL(for Teleop Twist)
+ * @brief			callback function of HST_ALIVE.
  *
- * @param[in]		aTwistMsg		ROS topic type "Twist".
+ * @param[in]		aBoolMsg		ROS topic type "Bool".
  * @return			none
  * @exception		none
  */
-void VehicleController::callbackTeleOp(const geometry_msgs::Twist &aTwistMsg) {
-
-	double linear_mmps = 0;
-	double angular_dps = 0;
-
-	mNh.getParam(PARAM_NAME_TELEOP_LINEAR, linear_mmps);
-	mNh.getParam(PARAM_NAME_TELEOP_ANGULAR, angular_dps);
-
-	linear_mmps *= aTwistMsg.linear.x;
-	angular_dps *= aTwistMsg.angular.z;
-
-	move(linear_mmps, angular_dps);
+void VehicleController::callbackHstAlv(const std_msgs::Bool &aBoolMsg) {
+	mIsHostAlive = aBoolMsg.data;
+	publishAliveResponse();
 }
 
 /**
- * @brief			move vehicle
+ * @brief			publish Alive Response.
  *
- * @param[in]		aLinear_mmps	Vehicle linear[mm/s].
- * @param[in]		aAngular_dps	Vehicle angular[deg/s].
  * @return			none
  * @exception		none
  */
-void VehicleController::move(const double aLinear_mmps,
-		const double aAngular_dps) {
+void VehicleController::publishAliveResponse() {
+
+	std_msgs::Bool isSts;
+
+	if (mIsActive == true) {
+		isSts.data = true;
+	} else {
+		isSts.data = false;
+	}
+
+	mPubAlvRsp.publish(isSts);
+}
+
+/**
+ * @brief			move vehicle.
+ *
+ * @param[in]		aLinear_mps	Vehicle linear[m/s].
+ * @param[in]		aAngular_rps	Vehicle angular[rad/s].
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::move(const double aLinear_mps, const double aAngular_rps) {
 
 	constexpr double SPEED_RESOL_SPS = 0.015;		// SPEED resolution[step/s]
-	constexpr double SPEED_RESOL_DPS = SPEED_RESOL_SPS * DEG_P_STEP;//  SPEED resolution[deg/s]
+	constexpr double SPEED_RESOL_RPS = SPEED_RESOL_SPS * RAD_P_STEP;		//  SPEED resolution[rad/s]
 
-	double angular_rps = DEG2RAD * aAngular_dps;	// Vehicle Angular[rad/s]
-
-	double wheelRadius_mm = 0;
-	double treadWidth_mm = 0;
-	mNh.getParam(PARAM_NAME_WHE_RAD, wheelRadius_mm);
-	mNh.getParam(PARAM_NAME_TRE_WID, treadWidth_mm);
+	double wheelRadius_m = 0;
+	double treadWidth_m = 0;
+	mNh.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
+	mNh.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
 
 	//	| ωr | = | 1/R  T/(2*R) || V |
 	//	| ωl |   | 1/R -T/(2*R) || W |
@@ -341,16 +330,13 @@ void VehicleController::move(const double aLinear_mmps,
 	//  W  : vehicle angular velocity
 
 	vector<double> spdVec(WHEEL_NUM);	//[0]:right, [1]:left
-	spdVec[0] = RAD2DEG * (2 * aLinear_mmps + treadWidth_mm * angular_rps)
-			/ (2 * wheelRadius_mm);
-	spdVec[1] = RAD2DEG * (2 * aLinear_mmps - treadWidth_mm * angular_rps)
-			/ (2 * wheelRadius_mm);
+	spdVec[0] = (2 * aLinear_mps + treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
+	spdVec[1] = (2 * aLinear_mps - treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
 	spdVec[1] *= -1;
 
-	bool isRet;
+	bool isRet = false;
 	if (mIsActive == true) {
-		if ((abs(spdVec[0]) < SPEED_RESOL_DPS)
-				&& (abs(spdVec[1]) < SPEED_RESOL_DPS)) {
+		if ((abs(spdVec[0]) < SPEED_RESOL_RPS) && (abs(spdVec[1]) < SPEED_RESOL_RPS)) {
 			if (mDoDebug == true) {
 				isRet = true;
 			} else {
@@ -364,9 +350,10 @@ void VehicleController::move(const double aLinear_mmps,
 			} else {
 				isRet = mWheel.run(spdVec);
 			}
+			ROS_DEBUG_STREAM("Run:");
+			ROS_DEBUG_STREAM(" <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]>");
 			ROS_DEBUG_STREAM(
-					"Run: <Linear = " << aLinear_mmps << "[mm/s], Angular = " << aAngular_dps
-					<< "[deg/s]> <Left Angle = " << spdVec[1] << "[deg/s], Right Angle = " << spdVec[0] << "[deg/s]>");
+					" <Left Angle = " << spdVec[1]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[0]*RAD2DEG << "[deg/s]>");
 		}
 	}
 
@@ -378,101 +365,99 @@ void VehicleController::move(const double aLinear_mmps,
 }
 
 /**
- * @brief			set Max Speed
+ * @brief			set Max Speed.
  *
- * @param[in]		aMaxSpd_dps		Max speed[deg/s].
+ * @param[in]		aMaxSpd_rps		Max speed[rad/s].
  * @return			bool
  * 					- true: success
  * 					- false: failure
  * @exception		none
  */
-bool VehicleController::setMaxSpeed(const double aMaxSpd_dps) {
+bool VehicleController::setMaxSpeed(const double aMaxSpd_rps) {
 
 	double actMaxSpdAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actMaxSpdAry[idx] = mWheel.setMaxSpeed(idx, aMaxSpd_dps);
+		actMaxSpdAry[idx] = mWheel.setMaxSpeed(idx, aMaxSpd_rps);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aMaxSpd_dps, actMaxSpdAry[0], isRet, "set Max Speed",
-			"deg/s");
+	displayRosInfo(aMaxSpd_rps * RAD2DEG, actMaxSpdAry[0] * RAD2DEG, isRet, "set Max Speed", "deg/s");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Min Speed
+ * @brief			set Min Speed.
  *
- * @param[in]		aMinSpd_dps		Min speed[deg/s].
+ * @param[in]		aMinSpd_rps		Min speed[rad/s].
  * @return			bool
  * 					- true: success
  * 					- false: failure
  * @exception		none
  */
-bool VehicleController::setMinSpeed(const double aMinSpd_dps) {
+bool VehicleController::setMinSpeed(const double aMinSpd_rps) {
 
 	double actMinSpdAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actMinSpdAry[idx] = mWheel.setMinSpeed(idx, aMinSpd_dps);
+		actMinSpdAry[idx] = mWheel.setMinSpeed(idx, aMinSpd_rps);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aMinSpd_dps, actMinSpdAry[0], isRet, "set Min Speed",
-			"deg/s");
+	displayRosInfo(aMinSpd_rps * RAD2DEG, actMinSpdAry[0] * RAD2DEG, isRet, "set Min Speed", "deg/s");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Acceleration
+ * @brief			set Acceleration.
  *
- * @param[in]		aAcc_dpss		Acceleration[deg/s^2].
+ * @param[in]		aAcc_rpss		Acceleration[rad/s^2].
  * @return			bool
  * 					- true: success
  * 					- false: failure
  * @exception		none
  */
-bool VehicleController::setAcc(const double aAcc_dpss) {
+bool VehicleController::setAcc(const double aAcc_rpss) {
 
 	double actAccAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actAccAry[idx] = mWheel.setAcc(idx, aAcc_dpss);
+		actAccAry[idx] = mWheel.setAcc(idx, aAcc_rpss);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aAcc_dpss, actAccAry[0], isRet, "set Acc", "deg/s^2");
+	displayRosInfo(aAcc_rpss * RAD2DEG, actAccAry[0] * RAD2DEG, isRet, "set Acc", "deg/s^2");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Deceleration
+ * @brief			set Deceleration.
  *
- * @param[in]		aDec_dpss		Deceleration[deg/s^2].
+ * @param[in]		aDec_rpss		Deceleration[rad/s^2].
  * @return			bool
  * 					- true: success
  * 					- false: failure
  * @exception		none
  */
-bool VehicleController::setDec(const double aDec_dpss) {
+bool VehicleController::setDec(const double aDec_rpss) {
 
 	double actDecAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actDecAry[idx] = mWheel.setDec(idx, aDec_dpss);
+		actDecAry[idx] = mWheel.setDec(idx, aDec_rpss);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aDec_dpss, actDecAry[0], isRet, "set Dec", "deg/s^2");
+	displayRosInfo(aDec_rpss * RAD2DEG, actDecAry[0] * RAD2DEG, isRet, "set Dec", "deg/s^2");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Kval Hold
+ * @brief			set Kval Hold.
  *
  * @param[in]		aKval		Kval hold.
  * @return			bool
@@ -495,7 +480,7 @@ bool VehicleController::setKvalHold(const int32_t aKval) {
 }
 
 /**
- * @brief			set Kval Run
+ * @brief			set Kval Run.
  *
  * @param[in]		aKval		Kval run.
  * @return			bool
@@ -518,7 +503,7 @@ bool VehicleController::setKvalRun(const int32_t aKval) {
 }
 
 /**
- * @brief			set Kval Acceleration
+ * @brief			set Kval Acceleration.
  *
  * @param[in]		aKval		Kval acceleration.
  * @return			bool
@@ -541,7 +526,7 @@ bool VehicleController::setKvalAcc(const int32_t aKval) {
 }
 
 /**
- * @brief			set Kval Deceleration
+ * @brief			set Kval Deceleration.
  *
  * @param[in]		aKval		Kval deceleration.
  * @return			bool
@@ -564,7 +549,7 @@ bool VehicleController::setKvalDec(const int32_t aKval) {
 }
 
 /**
- * @brief			set Over Current Detection Threshold
+ * @brief			set Over Current Detection Threshold.
  *
  * @param[in]		aOcdTh		OCD_TH value.
  * 								- (aVal+1) * 375[mA]
@@ -575,6 +560,7 @@ bool VehicleController::setKvalDec(const int32_t aKval) {
  */
 bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 
+	constexpr int32_t RESOLUTION_MA = 375;	// resolution 375[mA]
 	int32_t actOcdThAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
@@ -582,13 +568,15 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 	}
 	bool isRet = mWheel.transferSetData();
 
+	int32_t idealVal = (aOcdTh + 1) * RESOLUTION_MA;
+	int32_t actualVal = (actOcdThAry[0] + 1) * RESOLUTION_MA;
 	displayRosInfo(aOcdTh, actOcdThAry[0], isRet, "set OCD Th", "mA");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Over Current Detection Threshold
+ * @brief			set Over Current Detection Threshold.
  *
  * @param[in]		aStallDtctTh	OCD_TH value.
  * 									- (aVal+1) * 375[mA]
@@ -599,15 +587,17 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
  */
 bool VehicleController::setStallDtctTh(const int32_t aStallDtctTh) {
 
+	constexpr double RESOLUTION_MA = 31.25;	// resolution 31.25[mA]
 	int32_t actStallDtctThAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actStallDtctThAry[idx] = mWheel.setOvrCurrDtctTh(idx, aStallDtctTh);
+		actStallDtctThAry[idx] = mWheel.setStallDtctTh(idx, aStallDtctTh);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aStallDtctTh, actStallDtctThAry[0], isRet,
-			"set Stall Detection Th", "mA");
+	double idealVal = (aStallDtctTh + 1) * RESOLUTION_MA;
+	double actualVal = (actStallDtctThAry[0] + 1) * RESOLUTION_MA;
+	displayRosInfo(idealVal, actualVal, isRet, "set Stall Detection Th", "mA");
 
 	return (isRet);
 }

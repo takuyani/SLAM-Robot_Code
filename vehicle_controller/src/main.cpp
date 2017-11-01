@@ -14,11 +14,12 @@
 //Add Install Library
 #include <ros/ros.h>
 //My Library
-#include "vehicle_controller.hpp"
+#include "vehicle_controller/vehicle_controller.hpp"
 
-const std::string NODE_NAME = "vehicle_controller";
+const std::string NODE_NAME = "vehicle_controller_node";
 const uint32_t LOOP_RATE_HZ = 10;
 const int32_t WHEEL_NUM = 2;	//<! Number of Wheel
+const uint32_t ALIVE_CHECK_HZ = 1;	//<! 1[s]
 
 /**
  * @enum	StateT
@@ -36,7 +37,7 @@ void activeMode(VehicleController&, StateT&, bool&);
 void recoveryMode(VehicleController&, StateT&, bool&);
 
 /**
- * @brief	main function
+ * @brief	main function.
  */
 int main(int argc, char **argv) {
 
@@ -56,8 +57,8 @@ int main(int argc, char **argv) {
 	}
 
 	while (ros::ok()) {
-		procLoop(vc);
 		ros::spinOnce();
+		procLoop(vc);
 		loopRate.sleep();
 	}
 
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
 }
 
 /**
- * @brief	loop proccess
+ * @brief	loop proccess.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @return			none
@@ -90,13 +91,10 @@ void procLoop(VehicleController &aVhclCtrl) {
 		state = RECOVERY_STS;
 		break;
 	}
-
-	aVhclCtrl.publishTest();
-
 }
 
 /**
- * @brief	initial mode process
+ * @brief	initial mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.
@@ -124,7 +122,7 @@ void initialMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
 }
 
 /**
- * @brief	active mode process
+ * @brief	active mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.
@@ -136,21 +134,31 @@ void initialMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
  */
 void activeMode(VehicleController &aVhclCtrl, StateT &aState, bool &aIsUvLo) {
 
+	constexpr uint32_t ALV_LOOP_CNT = LOOP_RATE_HZ / ALIVE_CHECK_HZ;
+	static uint32_t cnt = 0;
+
 	if (aVhclCtrl.checkStatus(aIsUvLo) == true) {
 		if (aVhclCtrl.activeSeq() == true) {
+			cnt++;
+			if (ALV_LOOP_CNT <= cnt) {
+				aVhclCtrl.checkHostAlive();
+				cnt = 0;
+			}
 			aIsUvLo = true;
 		} else {
+			cnt = 0;
 			aState = RECOVERY_STS;
 			ROS_DEBUG_STREAM("RECOVERY STATE");
 		}
 	} else {
+		cnt = 0;
 		aState = RECOVERY_STS;
 		ROS_DEBUG_STREAM("RECOVERY STATE");
 	}
 }
 
 /**
- * @brief	recovery mode process
+ * @brief	recovery mode process.
  *
  * @param[in]		aVhclCtrl		VehicleController instance.
  * @param[in,out]	aState			enum StateT instance.

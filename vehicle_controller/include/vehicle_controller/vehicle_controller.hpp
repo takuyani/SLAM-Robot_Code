@@ -16,6 +16,7 @@
 //Add Install Library
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Bool.h>
 #include <ros/ros.h>
 //My Library
 #include "wheel.hpp"
@@ -37,24 +38,22 @@ public:
 
 	//***** Method *****
 	bool initVehicleController();
-	void publishTest();
 	bool checkStatus(bool);
 	bool initialSeq();
 	bool activeSeq();
 	bool recoverySeq();
+	void checkHostAlive();
 
 private:
 	//***** User Define *****
 
 	//***** Const Value *****
-	const std::string TOPIC_NAME_TELEOP_CMD_VEL = "/cmd_vel";
-	const std::string PARAM_NAME_TELEOP_LINEAR = "teleop/linear";
-	const std::string PARAM_NAME_TELEOP_ANGULAR = "teleop/angular";
-
 	const std::string TOPIC_NAME_CMD_VEL = "cmd_vel";
+	const std::string TOPIC_NAME_HST_ALIVE = "host_alive";
+	const std::string TOPIC_NAME_ALIVE_RSP = "alive_resp";
+
 	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
 	const std::string PARAM_NAME_TRE_WID = "tread_width";
-
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
 
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain
@@ -64,7 +63,8 @@ private:
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
-	void callbackTeleOp(const geometry_msgs::Twist &);
+	void callbackHstAlv(const std_msgs::Bool &);
+	void publishAliveResponse();
 
 	void move(const double, const double);
 	bool setMaxSpeed(const double);
@@ -79,16 +79,13 @@ private:
 	bool setStallDtctTh(const int32_t);
 
 	template<typename T>
-	void displayRosInfo(const T aIdealVal, const T aActualVal,
-			const bool aIsRet, const std::string aSeqTypeName,
+	void displayRosInfo(const T aIdealVal, const T aActualVal, const bool aIsRet, const std::string aSeqTypeName,
 			const std::string aUnit) {
 
 		if (aIsRet == true) {
 			ROS_INFO_STREAM("Sequence["<< aSeqTypeName <<"]");
-			ROS_INFO_STREAM(
-					"   Ideal  value = " << aIdealVal << "["<< aUnit <<"]");
-			ROS_INFO_STREAM(
-					"   Actual value = " << aActualVal << "["<< aUnit <<"]");
+			ROS_INFO_STREAM("   Ideal  value = " << aIdealVal << "["<< aUnit <<"]");
+			ROS_INFO_STREAM("   Actual value = " << aActualVal << "["<< aUnit <<"]");
 		} else {
 			ROS_ERROR_STREAM("Sequence["<< aSeqTypeName <<"]:Failure!");
 		}
@@ -96,9 +93,9 @@ private:
 
 	//***** Member Variable *****
 	ros::NodeHandle mNh;				//!< ROS node handle
-	ros::Publisher mPubTest;			//!< ROS Publisher
+	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
-	ros::Subscriber mSubTeleOp;			//!< ROS Subscriber "CMD_VEL" for Teleop Twist
+	ros::Subscriber mSubHstAlv;			//!< ROS Subscriber "HST_ALIVE"
 
 	Wheel mWheel;	//!< Wheel Class
 
@@ -117,6 +114,13 @@ private:
 	 * - false: deactive
 	 */
 	bool mIsActive;
+
+	/**
+	 *  Host Alive flag
+	 * - true: alive
+	 * - false: dead
+	 */
+	bool mIsHostAlive;
 
 	/**
 	 *  Debug Mode active flag

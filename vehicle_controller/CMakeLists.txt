@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(vehicle_controller)
 
+## Compile as C++11, supported in ROS Kinetic and newer
+add_compile_options(-std=c++11)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -8,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -110,13 +114,10 @@ catkin_package(
 ## Build ##
 ###########
 
-#set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
-
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -132,10 +133,10 @@ include_directories(
 
 ## Declare a C++ executable
 # add_executable(vehicle_controller_node src/vehicle_controller_node.cpp)
-add_executable(vehicle_controller	src/main.cpp
-									src/vehicle_controller.cpp
-									src/wheel.cpp
-									src/spi.cpp
+add_executable(vehicle_controller_node	src/main.cpp
+										src/vehicle_controller.cpp
+										src/wheel.cpp
+										src/spi.cpp
 )
 
 ## Add cmake target dependencies of the executable
@@ -143,11 +144,8 @@ add_executable(vehicle_controller	src/main.cpp
 # add_dependencies(vehicle_controller_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(vehicle_controller_node
-#   ${catkin_LIBRARIES}
-# )
-target_link_libraries(vehicle_controller
-	${catkin_LIBRARIES}
+target_link_libraries(vehicle_controller_node
+  ${catkin_LIBRARIES}
 )
 
 #############
@@ -157,26 +155,40 @@ target_link_libraries(vehicle_controller
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+# Mark executable scripts (Python etc.) for installation
+# in contrast to setup.py, you can choose the destination
+install(PROGRAMS
+  scripts/teleope_velocity.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-## Mark executables and/or libraries for installation
-# install(TARGETS vehicle_controller vehicle_controller_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+# Mark executables and/or libraries for installation
+install(TARGETS vehicle_controller_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
+
+## Mark launch files for installation
+install(DIRECTORY launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+  FILES_MATCHING PATTERN "*.launch"
+  PATTERN ".svn" EXCLUDE
+)
+
+## Mark script files for installation
+install(DIRECTORY scripts/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/scripts
+  FILES_MATCHING PATTERN "*.py"
+  PATTERN ".svn" EXCLUDE
+)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES

@@ -9,13 +9,15 @@
 #ifndef SM_42BYG011_25_H_
 #define SM_42BYG011_25_H_
 
-namespace sm_42byg011_25
-{
+//C++ Standard Library
+#include <cmath>
+
+namespace sm_42byg011_25 {
 
 /**
- * Steps Resolution[deg/step](for full steps, 200 = 1 turn)
+ * Steps Resolution[rad/step](for full steps, 200 = 1 turn)
  */
-static constexpr double DEG_P_STEP = 360.0 / 200;
+static constexpr double RAD_P_STEP = (2 * M_PI) / 200;
 
 }
 
