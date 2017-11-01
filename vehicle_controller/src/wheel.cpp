@@ -303,8 +303,6 @@ int32_t Wheel::setKvalDec(const uint32_t aIdx, const uint32_t aVal) {
  */
 int32_t Wheel::setOvrCurrDtctTh(const uint32_t aIdx, const int32_t aVal) {
 
-	constexpr int32_t RESOLUTION_MA = 375;	// resolution 375[mA]
-
 	int32_t actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
@@ -317,7 +315,7 @@ int32_t Wheel::setOvrCurrDtctTh(const uint32_t aIdx, const int32_t aVal) {
 			data = confData.mRegConfS_uptr->MAX_VALUE;
 		}
 		confData.mData = data;
-		actPhyVal = (data + 1) * RESOLUTION_MA;
+		actPhyVal = data;
 	}
 
 	return (actPhyVal);
@@ -333,11 +331,9 @@ int32_t Wheel::setOvrCurrDtctTh(const uint32_t aIdx, const int32_t aVal) {
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-double Wheel::setStallDtctTh(const uint32_t aIdx, const int32_t aVal) {
+int32_t Wheel::setStallDtctTh(const uint32_t aIdx, const int32_t aVal) {
 
-	constexpr double RESOLUTION_MA = 31.25;	// resolution 31.25[mA]
-
-	double actPhyVal = -1;
+	int32_t actPhyVal = -1;
 
 	if (aIdx < WHEEL_NUM) {
 		HoldConfDataS &confData = mHoldConfDataVec[aIdx];
@@ -349,7 +345,7 @@ double Wheel::setStallDtctTh(const uint32_t aIdx, const int32_t aVal) {
 			data = confData.mRegConfS_uptr->MAX_VALUE;
 		}
 		confData.mData = data;
-		actPhyVal = (data + 1) * RESOLUTION_MA;
+		actPhyVal = data;
 	}
 
 	return (actPhyVal);

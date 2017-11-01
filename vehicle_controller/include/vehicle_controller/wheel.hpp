@@ -143,7 +143,7 @@ public:
 	int32_t setKvalAcc(const uint32_t, const uint32_t);
 	int32_t setKvalDec(const uint32_t, const uint32_t);
 	int32_t setOvrCurrDtctTh(const uint32_t, const int32_t);
-	double setStallDtctTh(const uint32_t, const int32_t);
+	int32_t setStallDtctTh(const uint32_t, const int32_t);
 	bool transferSetData();
 	bool run(std::vector<double>&);
 	bool stopSoft(bool);

@@ -382,7 +382,7 @@ bool VehicleController::setMaxSpeed(const double aMaxSpd_rps) {
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aMaxSpd_rps * RAD2DEG, actMaxSpdAry[0], isRet, "set Max Speed", "deg/s");
+	displayRosInfo(aMaxSpd_rps * RAD2DEG, actMaxSpdAry[0] * RAD2DEG, isRet, "set Max Speed", "deg/s");
 
 	return (isRet);
 }
@@ -405,7 +405,7 @@ bool VehicleController::setMinSpeed(const double aMinSpd_rps) {
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aMinSpd_rps * RAD2DEG, actMinSpdAry[0], isRet, "set Min Speed", "deg/s");
+	displayRosInfo(aMinSpd_rps * RAD2DEG, actMinSpdAry[0] * RAD2DEG, isRet, "set Min Speed", "deg/s");
 
 	return (isRet);
 }
@@ -428,7 +428,7 @@ bool VehicleController::setAcc(const double aAcc_rpss) {
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aAcc_rpss * RAD2DEG, actAccAry[0], isRet, "set Acc", "deg/s^2");
+	displayRosInfo(aAcc_rpss * RAD2DEG, actAccAry[0] * RAD2DEG, isRet, "set Acc", "deg/s^2");
 
 	return (isRet);
 }
@@ -451,7 +451,7 @@ bool VehicleController::setDec(const double aDec_rpss) {
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aDec_rpss * RAD2DEG, actDecAry[0], isRet, "set Dec", "deg/s^2");
+	displayRosInfo(aDec_rpss * RAD2DEG, actDecAry[0] * RAD2DEG, isRet, "set Dec", "deg/s^2");
 
 	return (isRet);
 }
@@ -560,6 +560,7 @@ bool VehicleController::setKvalDec(const int32_t aKval) {
  */
 bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 
+	constexpr int32_t RESOLUTION_MA = 375;	// resolution 375[mA]
 	int32_t actOcdThAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
@@ -567,6 +568,8 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 	}
 	bool isRet = mWheel.transferSetData();
 
+	int32_t idealVal = (aOcdTh + 1) * RESOLUTION_MA;
+	int32_t actualVal = (actOcdThAry[0] + 1) * RESOLUTION_MA;
 	displayRosInfo(aOcdTh, actOcdThAry[0], isRet, "set OCD Th", "mA");
 
 	return (isRet);
@@ -584,14 +587,17 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
  */
 bool VehicleController::setStallDtctTh(const int32_t aStallDtctTh) {
 
+	constexpr double RESOLUTION_MA = 31.25;	// resolution 31.25[mA]
 	int32_t actStallDtctThAry[WHEEL_NUM];
 
 	for (uint32_t idx = 0; idx < WHEEL_NUM; idx++) {
-		actStallDtctThAry[idx] = mWheel.setOvrCurrDtctTh(idx, aStallDtctTh);
+		actStallDtctThAry[idx] = mWheel.setStallDtctTh(idx, aStallDtctTh);
 	}
 	bool isRet = mWheel.transferSetData();
 
-	displayRosInfo(aStallDtctTh, actStallDtctThAry[0], isRet, "set Stall Detection Th", "mA");
+	double idealVal = (aStallDtctTh + 1) * RESOLUTION_MA;
+	double actualVal = (actStallDtctThAry[0] + 1) * RESOLUTION_MA;
+	displayRosInfo(idealVal, actualVal, isRet, "set Stall Detection Th", "mA");
 
 	return (isRet);
 }
