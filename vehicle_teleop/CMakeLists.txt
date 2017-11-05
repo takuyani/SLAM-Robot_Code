@@ -8,10 +8,12 @@ add_compile_options(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
   roscpp
   rospy
+  ps3joy
   std_msgs
+  sensor_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -117,7 +119,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -137,6 +139,9 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/vehicle_teleop_node.cpp)
 add_executable(alive_polling_node	src/alive_polling.cpp
 )
+add_executable(slambot_teleop_ps3joy_node	src/slambot_teleop_ps3joy.cpp
+											src/teleop_twist_joy.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,6 +157,9 @@ add_executable(alive_polling_node	src/alive_polling.cpp
 target_link_libraries(alive_polling_node
   ${catkin_LIBRARIES}
 )
+target_link_libraries(slambot_teleop_ps3joy_node
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
@@ -163,12 +171,17 @@ target_link_libraries(alive_polling_node
 # Mark executable scripts (Python etc.) for installation
 # in contrast to setup.py, you can choose the destination
 install(PROGRAMS
-  scripts/slambot_teleop_twist_keyboard.py
+  scripts/slambot_teleop_keyboard.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 # Mark executables and/or libraries for installation
 install(TARGETS alive_polling_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(TARGETS slambot_teleop_ps3joy_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

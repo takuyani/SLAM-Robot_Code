@@ -1,0 +1,21 @@
+<!-- slambot_teleop_ps3joy.launch -->
+<launch>
+
+	<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" >
+		<remap from="host_alive" 		to="/vehicle_controller_node/host_alive"/>
+	</node>
+
+	<!-- PS3 joy node -->
+	<node respawn="true" pkg="ps3joy" type="ps3joy_node.py" name="PS3_slambot_joy" >
+		<param name="dev" type="string" value="/dev/input/js0" />
+		<param name="deadzone" value="0.12" />
+	</node>
+ 
+	<!-- Axes -->
+	<param name="axis_linear" value="1" type="int"/>
+	<param name="axis_angular" value="0" type="int"/>
+	<param name="scale_linear" value="2" type="double"/>
+	<param name="scale_angular" value="2" type="double"/>
+
+</launch>
+

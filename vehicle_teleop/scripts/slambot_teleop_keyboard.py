@@ -72,7 +72,7 @@ if __name__=="__main__":
 
     	settings = termios.tcgetattr(sys.stdin)
 	
-	rospy.init_node('slambot_teleop_twist_keyboard')
+	rospy.init_node('slambot_teleop_keyboard_node')
 	pub = rospy.Publisher('cmd_vel', Twist, queue_size = 1)
 
 	speed = rospy.get_param("~speed", 0.1)
