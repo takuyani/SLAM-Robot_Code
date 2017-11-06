@@ -176,25 +176,37 @@ install(DIRECTORY include/${PROJECT_NAME}/
   PATTERN ".svn" EXCLUDE
 )
 
-## Copy launch files
+## Mark launch files for installation
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
   FILES_MATCHING PATTERN "*.launch"
   PATTERN ".svn" EXCLUDE
 )
 
-## Copy urdf files
+## Mark urdf files for installation
 install(DIRECTORY urdf/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf
   PATTERN ".svn" EXCLUDE
 )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+## Mark world files for installation
+install(DIRECTORY world/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/world
+  PATTERN ".svn" EXCLUDE
+)
+
+## Mark config files for installation
+install(DIRECTORY config/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+  PATTERN ".svn" EXCLUDE
+)
+
+## Mark other files for installation (e.g. launch and bag files, etc.) 
+# install(FILES 
+#   # myfile1 
+#   # myfile2 
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION} 
+# ) 
 
 #############
 ## Testing ##
