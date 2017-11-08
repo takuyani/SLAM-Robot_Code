@@ -56,7 +56,7 @@
   <!-- =============== Gazebo =============== -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>slambot</robotNamespace>
+      <robotNamespace>slambot_host</robotNamespace>
 	  <robotParam>slambot_description</robotParam>
     </plugin>
   </gazebo>

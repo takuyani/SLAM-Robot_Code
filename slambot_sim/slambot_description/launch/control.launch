@@ -3,7 +3,7 @@
 	<!-- Load joint controller configurations from YAML file to parameter server -->
 	<rosparam file="$(find slambot_description)/config/controller.yaml" command="load"/>
 
-	<group ns="slambot">
+	<group ns="slambot_host">
 
 		<!-- load the controllers -->
 		<node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
