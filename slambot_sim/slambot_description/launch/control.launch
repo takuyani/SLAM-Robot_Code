@@ -3,17 +3,18 @@
 	<!-- Load joint controller configurations from YAML file to parameter server -->
 	<rosparam file="$(find slambot_description)/config/controller.yaml" command="load"/>
 
-	<!-- load the controllers -->
-	<node name="controller_spawner" pkg="controller_manager"
-		type="spawner" ns="slambot" output="screen"
-		args="joint_state_controller
-		diff_drive_controller"/>
+	<group ns="slambot">
 
-	<!-- convert joint states to TF transforms for rviz, etc -->
-	<node name="robot_state_publisher" pkg="robot_state_publisher"
-		type="robot_state_publisher"
-		respawn="false" output="screen" ns="slambot">
-			<remap from="robot_description" to="slambot_description" />
-	</node>
+		<!-- load the controllers -->
+		<node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+			args="joint_state_controller diff_drive_controller"/>
+
+		<!-- convert joint states to TF transforms for rviz, etc -->
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+			respawn="false" output="screen">
+				<remap from="robot_description" to="slambot_description" />
+		</node>
  
+	</group>
+
 </launch>
