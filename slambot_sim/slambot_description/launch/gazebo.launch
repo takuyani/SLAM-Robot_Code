@@ -49,7 +49,7 @@
 		-configuration_basename toyota_hsr_2d.lua"
 		output="screen">
 			<remap from="scan" to="/sensor_xtion_pro_live/scan" />
-			<remap from="odom" to="/slambot/diff_drive_controller/odom" />
+			<remap from="odom" to="/slambot_host/vehicle_controller/odom" />
 	</node>
 
 	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"

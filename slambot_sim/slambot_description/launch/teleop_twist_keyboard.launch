@@ -1,7 +1,7 @@
 <launch>
 
 	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop" output="screen">
-		<remap from="cmd_vel" to="/slambot/diff_drive_controller/cmd_vel"/>
+		<remap from="cmd_vel" to="/slambot_host/vehicle_controller/cmd_vel"/>
 	</node>
 
 </launch>

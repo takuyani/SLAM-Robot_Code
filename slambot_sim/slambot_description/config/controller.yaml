@@ -3,7 +3,7 @@ slambot_host:
     type: joint_state_controller/JointStateController
     publish_rate: 50
  
-  diff_drive_controller:
+  vehicle_controller:
     type        : "diff_drive_controller/DiffDriveController"
     left_wheel  : 'left_wheel_joint'
     right_wheel : 'right_wheel_joint'
