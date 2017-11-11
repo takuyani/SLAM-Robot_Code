@@ -30,8 +30,8 @@
     <collision>
       <!-- <xacro:insert_block name="joint_origin"/> -->
         <geometry>
-          <!-- <cylinder radius="${wheel_radius}" length="${wheel_length}"/> -->
-          <mesh filename="package://slambot_description/urdf/wheel/meshes/RasPiMouse_wheel.dae"/>
+          <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+          <!-- <mesh filename="package://slambot_description/urdf/wheel/meshes/RasPiMouse_wheel.dae"/> -->
         </geometry>
     </collision>
       <inertial>
