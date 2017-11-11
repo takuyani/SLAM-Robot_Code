@@ -43,20 +43,19 @@
 			<remap from="camera_info" to="sensor_xtion_pro_live/depth_registered/camera_info"/>
 			<remap from="scan" to="sensor_xtion_pro_live/scan"/>
 		</node>
-
-		<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
-			args="
-			-configuration_directory $(find slambot_description)/config/lua
-			-configuration_basename toyota_hsr_2d.lua"
-			output="screen">
-				<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
-				<remap from="odom" to="/slambot_host/vehicle_controller/odom" />
-		</node>
-
-		<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
-			type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
-
 	</group>
+
+	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
+		args="
+		-configuration_directory $(find slambot_description)/config/lua
+		-configuration_basename toyota_hsr_2d.lua"
+		output="screen">
+			<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
+			<remap from="odom" to="/slambot_host/vehicle_controller/odom" />
+	</node>
+
+	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+		type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
 
 </launch>
 
