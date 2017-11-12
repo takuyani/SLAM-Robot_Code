@@ -155,12 +155,12 @@ target_link_libraries(vehicle_controller_node
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-# Mark executable scripts (Python etc.) for installation
-# in contrast to setup.py, you can choose the destination
-install(PROGRAMS
-  scripts/teleope_velocity.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+## Mark executable scripts (Python etc.) for installation
+## in contrast to setup.py, you can choose the destination
+#install(PROGRAMS
+#  scripts/***.py
+#  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
 # Mark executables and/or libraries for installation
 install(TARGETS vehicle_controller_node

@@ -168,7 +168,7 @@ bool VehicleController::initialSeq() {
 	constexpr int32_t KVAL_ACC = 0xFF;		// Kval Acceleration
 	constexpr int32_t KVAL_DEC = 0xFF;		// Kval Deceleration
 	constexpr int32_t OCD_TH = 0x0F;		// (OCD_TH+1) * 375[mA]
-	constexpr int32_t STALL_DTCT_TH = 0x7F;	// (STALL_DTCT_TH+1) * 375[mA]
+	constexpr int32_t STALL_DTCT_TH = 0x7F;	// (STALL_DTCT_TH+1) * 31.25[mA]
 
 	if (mDoDebug == false) {
 		if (setMaxSpeed(MAX_SPEED_DPS * DEG2RAD) == false) {
@@ -576,10 +576,10 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 }
 
 /**
- * @brief			set Over Current Detection Threshold.
+ * @brief			set Stall Detection Threshold.
  *
- * @param[in]		aStallDtctTh	OCD_TH value.
- * 									- (aVal+1) * 375[mA]
+ * @param[in]		aStallDtctTh	STALL_DTCT_TH value.
+ * 									- (aVal+1) * 31.25[mA]
  * @return			bool
  * 					- true: success
  * 					- false: failure
