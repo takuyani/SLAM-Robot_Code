@@ -570,7 +570,7 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 
 	int32_t idealVal = (aOcdTh + 1) * RESOLUTION_MA;
 	int32_t actualVal = (actOcdThAry[0] + 1) * RESOLUTION_MA;
-	displayRosInfo(aOcdTh, actOcdThAry[0], isRet, "set OCD Th", "mA");
+	displayRosInfo(idealVal, actualVal, isRet, "set OCD Th", "mA");
 
 	return (isRet);
 }

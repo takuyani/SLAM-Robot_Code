@@ -2,11 +2,12 @@
 <launch>
 
 	<!-- Vehicle Controller -->
-	<node pkg="vehicle_controller" type="vehicle_controller_node" name="vehicle_controller_node" output="screen">
+	<node pkg="vehicle_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">
 		<remap from="cmd_vel" 		to="cmd_vel"/>
 		<param name="wheel_radius"		type="double"	value="0.024"/>
 		<param name="tread_width"		type="double"	value="0.150"/>
 		<param name="debug/enable"		type="bool"		value="false"/>
 	</node> 
+
 </launch>
 
