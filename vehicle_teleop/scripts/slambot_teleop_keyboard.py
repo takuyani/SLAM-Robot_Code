@@ -21,9 +21,9 @@ For Holonomic mode (strafing), hold down the shift key:
 t : up (+z)
 b : down (-z)
 anything else : stop
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
+q/z : increase/decrease max speeds
+w/x : increase/decrease only linear speed
+e/c : increase/decrease only angular speed
 CTRL-C to quit
 """
 
@@ -72,8 +72,8 @@ if __name__=="__main__":
 
     	settings = termios.tcgetattr(sys.stdin)
 	
-	rospy.init_node('slambot_teleop_keyboard_node')
-	pub = rospy.Publisher('cmd_vel', Twist, queue_size = 1)
+	rospy.init_node("slambot_teleop_keyboard_node")
+	pub = rospy.Publisher("cmd_vel", Twist, queue_size = 1)
 
 	speed = rospy.get_param("~speed", 0.1)
 	turn = rospy.get_param("~turn", 10.0 * np.pi/180.0 )
