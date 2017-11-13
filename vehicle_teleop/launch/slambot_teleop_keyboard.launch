@@ -1,0 +1,17 @@
+<!-- slambot_teleop_keyboard.launch -->
+<launch>
+
+	<group ns="teleop_keyboard_client">
+
+		<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" >
+			<remap from="host_alive" 	to="/vehicle_controller/host_alive"/>
+		</node>
+
+		<node pkg="vehicle_teleop" type="slambot_teleop_keyboard.py" name="slambot_teleop_keyboard" output="screen">
+			<remap from="cmd_vel" 		to="/vehicle_controller/cmd_vel"/>
+		</node>
+ 
+	</group>
+
+</launch>
+
