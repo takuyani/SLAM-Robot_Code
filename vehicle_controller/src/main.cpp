@@ -12,14 +12,13 @@
 #include <cstdint>
 //C Standard Library
 //Add Install Library
-#include <ros/ros.h>
 //My Library
 #include "vehicle_controller/vehicle_controller.hpp"
 
 const std::string NODE_NAME = "vehicle_controller_node";
 const uint32_t LOOP_RATE_HZ = 10;
-const int32_t WHEEL_NUM = 2;	//<! Number of Wheel
-const uint32_t ALIVE_CHECK_HZ = 1;	//<! 1[s]
+const int32_t WHEEL_NUM = 2;		//<! Number of Wheel
+const uint32_t ALIVE_CHECK_HZ = 1;	//<! alive check hertz
 
 /**
  * @enum	StateT
@@ -43,9 +42,7 @@ int main(int argc, char **argv) {
 
 	ros::init(argc, argv, NODE_NAME);
 
-	ros::NodeHandle nh("~");
-
-	VehicleController vc(nh, WHEEL_NUM);
+	VehicleController vc(WHEEL_NUM);
 
 	ros::Rate loopRate(LOOP_RATE_HZ);
 
