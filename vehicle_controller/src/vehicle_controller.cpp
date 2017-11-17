@@ -22,27 +22,27 @@ using namespace sm_42byg011_25;
  *
  * @param[in]		aNh			Ros node handle.
  */
-VehicleController::VehicleController(const ros::NodeHandle &aNh, const uint32_t aWheelNum) :
-		WHEEL_NUM(aWheelNum), mNh(aNh), mWheel(aWheelNum) {
+VehicleController::VehicleController(const uint32_t aWheelNum) :
+		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum) {
 
 	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius: 0.01[m]
 	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width: 0.01[m]
 
 	mMotStsVec.resize(WHEEL_NUM);
 
-	if (mNh.hasParam(PARAM_NAME_WHE_RAD) == false) {
-		mNh.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
+	if (mNhPrv.hasParam(PARAM_NAME_WHE_RAD) == false) {
+		mNhPrv.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
 	}
 
-	if (mNh.hasParam(PARAM_NAME_TRE_WID) == false) {
-		mNh.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
+	if (mNhPrv.hasParam(PARAM_NAME_TRE_WID) == false) {
+		mNhPrv.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
 	}
 
 	mDoDebug = false;
-	if (mNh.hasParam(PARAM_NAME_DEBUG) == false) {
-		mNh.setParam(PARAM_NAME_DEBUG, mDoDebug);
+	if (mNhPrv.hasParam(PARAM_NAME_DEBUG) == false) {
+		mNhPrv.setParam(PARAM_NAME_DEBUG, mDoDebug);
 	} else {
-		mNh.getParam(PARAM_NAME_DEBUG, mDoDebug);
+		mNhPrv.getParam(PARAM_NAME_DEBUG, mDoDebug);
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
@@ -99,7 +99,7 @@ bool VehicleController::checkStatus(bool aIsUvLo) {
 
 	bool isAct = mIsActive;
 
-	mNh.getParam(PARAM_NAME_DEBUG, mDoDebug);
+	mNhPrv.getParam(PARAM_NAME_DEBUG, mDoDebug);
 
 	if (mDoDebug == false) {
 		vector<Wheel::StatusS> statusVec(WHEEL_NUM);
@@ -168,7 +168,7 @@ bool VehicleController::initialSeq() {
 	constexpr int32_t KVAL_ACC = 0xFF;		// Kval Acceleration
 	constexpr int32_t KVAL_DEC = 0xFF;		// Kval Deceleration
 	constexpr int32_t OCD_TH = 0x0F;		// (OCD_TH+1) * 375[mA]
-	constexpr int32_t STALL_DTCT_TH = 0x7F;	// (STALL_DTCT_TH+1) * 375[mA]
+	constexpr int32_t STALL_DTCT_TH = 0x7F;	// (STALL_DTCT_TH+1) * 31.25[mA]
 
 	if (mDoDebug == false) {
 		if (setMaxSpeed(MAX_SPEED_DPS * DEG2RAD) == false) {
@@ -316,8 +316,8 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 
 	double wheelRadius_m = 0;
 	double treadWidth_m = 0;
-	mNh.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
-	mNh.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
+	mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
+	mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
 
 	//	| ωr | = | 1/R  T/(2*R) || V |
 	//	| ωl |   | 1/R -T/(2*R) || W |
@@ -570,16 +570,16 @@ bool VehicleController::setOcdTh(const int32_t aOcdTh) {
 
 	int32_t idealVal = (aOcdTh + 1) * RESOLUTION_MA;
 	int32_t actualVal = (actOcdThAry[0] + 1) * RESOLUTION_MA;
-	displayRosInfo(aOcdTh, actOcdThAry[0], isRet, "set OCD Th", "mA");
+	displayRosInfo(idealVal, actualVal, isRet, "set OCD Th", "mA");
 
 	return (isRet);
 }
 
 /**
- * @brief			set Over Current Detection Threshold.
+ * @brief			set Stall Detection Threshold.
  *
- * @param[in]		aStallDtctTh	OCD_TH value.
- * 									- (aVal+1) * 375[mA]
+ * @param[in]		aStallDtctTh	STALL_DTCT_TH value.
+ * 									- (aVal+1) * 31.25[mA]
  * @return			bool
  * 					- true: success
  * 					- false: failure

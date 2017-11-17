@@ -33,7 +33,7 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	VehicleController(const ros::NodeHandle &, const uint32_t);
+	VehicleController(const uint32_t);
 	virtual ~VehicleController();
 
 	//***** Method *****
@@ -93,6 +93,7 @@ private:
 
 	//***** Member Variable *****
 	ros::NodeHandle mNh;				//!< ROS node handle
+	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
 	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
 	ros::Subscriber mSubHstAlv;			//!< ROS Subscriber "HST_ALIVE"
