@@ -29,7 +29,7 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	TeleopTwistJoy(const ros::NodeHandle &);
+	TeleopTwistJoy();
 	virtual ~TeleopTwistJoy();
 
 	//***** Method *****
@@ -55,7 +55,8 @@ private:
 	void callbackJoy(const sensor_msgs::Joy::ConstPtr& msg);
 
 	//***** Member Variable *****
-	ros::NodeHandle mNh;			//!< ROS node handle
+	ros::NodeHandle mNh;				//!< ROS node handle
+	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
 	ros::Subscriber mSubJoy;		//!< ROS Subscriber "JOY"
 	ros::Publisher mPubCmdVel;		//!< ROS Publisher "CMD_VEL"
 

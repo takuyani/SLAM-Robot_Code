@@ -23,8 +23,8 @@ using namespace std;
  *
  * @param[in]		aNh			Ros node handle.
  */
-TeleopTwistJoy::TeleopTwistJoy(const ros::NodeHandle &aNh) :
-		mNh(aNh) {
+TeleopTwistJoy::TeleopTwistJoy() :
+		mNh() {
 
 	mSubJoy = mNh.subscribe(TOPIC_NAME_JOY, 1, &TeleopTwistJoy::callbackJoy, this);
 	mPubCmdVel = mNh.advertise<geometry_msgs::Twist>(TOPIC_NAME_CMD_VEL, 1);
@@ -35,7 +35,8 @@ TeleopTwistJoy::TeleopTwistJoy(const ros::NodeHandle &aNh) :
 	cout << "" << endl;
 	cout << "Reading from the Dual Shock 4 Controller and Publishing to Twist!" << endl;
 	cout << "---------------------------" << endl;
-	cout << "\"Circle\"   + Up/Down key : increase/decrease max only linear speed by " << LINEAR_STEP << "[m/s]" << endl;
+	cout << "\"Circle\"   + Up/Down key : increase/decrease max only linear speed by " << LINEAR_STEP << "[m/s]"
+			<< endl;
 	cout << "\"Triangle\" + Up/Down key : increase/decrease max only linear speed by " << LINEAR_STEP * LINEAR_GAIN
 			<< "[m/s]" << endl;
 	cout << "\"Cross\"    + Up/Down key: increase/decrease max only angular speed by " << ANGULAR_STEP << "[deg/s]"
