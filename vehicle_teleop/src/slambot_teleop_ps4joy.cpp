@@ -12,7 +12,6 @@
 #include <cstdint>
 //C Standard Library
 //Add Install Library
-#include <ros/ros.h>
 //My Library
 #include "slambot_teleop_ps4joy/teleop_twist_joy.hpp"
 
@@ -23,9 +22,7 @@ int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "slambot_teleop_ps4joy_node");
 
-	ros::NodeHandle nh;
-
-	TeleopTwistJoy ttj(nh);
+	TeleopTwistJoy ttj();
 
 	ros::spin();
 
