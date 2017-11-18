@@ -3,18 +3,20 @@
 
 	<group ns="teleop_joy_client">
 
+		<!-- Alive_Polling -->
 		<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" >
-			<remap from="host_alive" 		to="/vehicle_controller/host_alive"/>
+			<remap from="host_alive" 	to="/slambot_host/host_alive"/>
 		</node>
 
-		<!-- PS4 joy node -->
-		<node respawn="true" pkg="joy" type="joy_node" name="ps4_slambot_joy" >
+		<!-- PS4 Joy -->
+		<node pkg="joy" type="joy_node" name="ps4_slambot_joy" >
 			<param name="dev" type="string" value="/dev/input/js0" />
 		</node>
 
-		<node respawn="true" pkg="vehicle_teleop" type="slambot_teleop_ps4joy_node" name="slambot_teleop_ps4joy" output="screen" >
+		<!-- Slambot Teleop Ps4joy -->
+		<node pkg="vehicle_teleop" type="slambot_teleop_ps4joy_node" name="slambot_teleop_ps4joy" output="screen" >
 			<remap from="joy" 		to="joy" />
-			<remap from="cmd_vel" 	to="/vehicle_controller/cmd_vel"/>
+			<remap from="cmd_vel" 	to="/slambot_host/cmd_vel"/>
 		</node> 
 
 	</group>
