@@ -4,7 +4,7 @@ Vehicle controller package
 ## 目次  
 - 1.&nbsp;[Overview](#1-overview)  
 - 2.&nbsp;[Nodes](#2-nodes)  
-  - 2.1.&nbsp;[vehicle_controller](#21-vehicle_controller)  
+  - 2.1.&nbsp;[vehicle_controller_node](#21-vehicle_controller_node)  
     - 2.1.1.&nbsp;[Subscribed Topics](#211-subscribed-topics)  
     - 2.1.2.&nbsp;[Published Topics](#212-published-topics)  
     - 2.1.3.&nbsp;[Parameters](#213-parameters)  
@@ -18,7 +18,7 @@ Vehicle controller package
 |![parallel_two_wheel_vehicle_01](https://farm5.staticflickr.com/4275/34410303220_19fae79e7f_b.jpg)|![parallel_two_wheel_vehicle_02](https://farm5.staticflickr.com/4166/33986938193_790790a94e_b.jpg)|
 
 ## 2. Nodes
-### 2.1. vehicle_controller
+### 2.1. vehicle_controller_node
 車体の運動制御を行うノードです。入力信号は並進速度[m/s]と回転速度[rad/s]であり、Topicのcmd_velによって与えられます。  
 ここで、両輪の回転速度の平均を並進速度、両輪の回転速度の差分を回転速度と呼ぶことにします。並進速度は前進で正の値、後退で負の値とする。
 回転速度は、反時計回りのときに正の値、時計回りの時に負の値とする。
