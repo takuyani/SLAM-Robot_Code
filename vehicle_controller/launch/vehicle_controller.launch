@@ -8,7 +8,7 @@
 			<remap from="cmd_vel" 		to="cmd_vel"/>
 			<param name="wheel_radius"		type="double"	value="0.024"/>
 			<param name="tread_width"		type="double"	value="0.150"/>
-			<param name="debug/enable"		type="bool"		value="true"/>
+			<param name="debug/enable"		type="bool"		value="false"/>
 		</node> 
 
 	</group>
