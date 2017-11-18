@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "slambot_teleop_ps4joy_node");
 
-	TeleopTwistJoy ttj();
+	TeleopTwistJoy ttj;
 
 	ros::spin();
 

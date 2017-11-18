@@ -29,7 +29,7 @@ TeleopTwistJoy::TeleopTwistJoy() :
 	mSubJoy = mNh.subscribe(TOPIC_NAME_JOY, 1, &TeleopTwistJoy::callbackJoy, this);
 	mPubCmdVel = mNh.advertise<geometry_msgs::Twist>(TOPIC_NAME_CMD_VEL, 1);
 
-	mLinearMax = 0.5;	//[m/s]
+	mLinearMax = 0.1;	//[m/s]
 	mAngularMax = 30.0;	//[deg/s]
 
 	cout << "" << endl;
