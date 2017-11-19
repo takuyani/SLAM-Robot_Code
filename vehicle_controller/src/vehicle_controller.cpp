@@ -25,10 +25,20 @@ using namespace sm_42byg011_25;
 VehicleController::VehicleController(const uint32_t aWheelNum) :
 		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum) {
 
-	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius: 0.01[m]
-	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width: 0.01[m]
+	constexpr double CMD_VEL_TIMEOUT_DEF = 1.0;		// Cmd vel timeout[s]
+	constexpr double POLLING_RATE_DEF = 10.0;		// Polling rate[Hz]
+	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius[m]
+	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width[m]
 
 	mMotStsVec.resize(WHEEL_NUM);
+
+	if (mNhPrv.hasParam(PARAM_NAME_CMD_VEL_TIMEOUT) == false) {
+		mNhPrv.setParam(PARAM_NAME_CMD_VEL_TIMEOUT, CMD_VEL_TIMEOUT_DEF);
+	}
+
+	if (mNhPrv.hasParam(PARAM_NAME_POLLING_RATE) == false) {
+		mNhPrv.setParam(PARAM_NAME_POLLING_RATE, POLLING_RATE_DEF);
+	}
 
 	if (mNhPrv.hasParam(PARAM_NAME_WHE_RAD) == false) {
 		mNhPrv.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
@@ -46,7 +56,6 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
-	mSubHstAlv = mNh.subscribe(TOPIC_NAME_HST_ALIVE, 1, &VehicleController::callbackHstAlv, this);
 	mPubAlvRsp = mNh.advertise<std_msgs::Bool>(TOPIC_NAME_ALIVE_RSP, 1);
 
 	if (mDoDebug == true) {
@@ -56,7 +65,14 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 		mIsActive = false;
 	}
 
-	mIsHostAlive = false;
+	restartTimer(mTimerAlv);
+	restartTimer(mTimerPolling);
+}
+
+/**
+ * @brief	Destructor
+ */
+VehicleController::~VehicleController() {
 }
 
 /**
@@ -67,7 +83,7 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
  * 				- false: failure
  * @exception	none
  */
-bool VehicleController::initVehicleController() {
+bool VehicleController::init() {
 
 	bool isRet = true;
 
@@ -79,9 +95,167 @@ bool VehicleController::initVehicleController() {
 }
 
 /**
- * @brief	Destructor
+ * @brief	main loop.
+ *
+ * @return			none
+ * @exception		none
  */
-VehicleController::~VehicleController() {
+void VehicleController::mainLoop() {
+
+	static StateT state = INITIAL_STS;
+	static bool isUvLo = false;
+
+	double cmdVelTimeout;
+	mNhPrv.getParam(PARAM_NAME_CMD_VEL_TIMEOUT, cmdVelTimeout);
+
+	ros::Time nowTm = ros::Time::now();
+	if ((mTimerAlv.mIsTimeout == false) && (nowTm - mTimerAlv.mStartTm > ros::Duration(cmdVelTimeout))) {
+		mTimerAlv.mIsTimeout = true;
+	}
+
+	double pollingRate_hz;
+	mNhPrv.getParam(PARAM_NAME_CMD_VEL_TIMEOUT, pollingRate_hz);
+	ros::Duration pollingPeriod_s = ros::Duration(1.0 / pollingRate_hz);
+
+	if (nowTm - mTimerPolling.mStartTm > pollingPeriod_s) {
+		mTimerPolling.mIsTimeout = true;
+	}
+
+	if (mTimerPolling.mIsTimeout == true) {
+
+		switch (state) {
+		case INITIAL_STS:
+			initialMode(state, isUvLo);
+			break;
+		case ACTIVE_STS:
+			activeMode(state, isUvLo);
+			break;
+		case RECOVERY_STS:
+			recoveryMode(state, isUvLo);
+			break;
+		default:
+			state = RECOVERY_STS;
+			break;
+		}
+		restartTimer(mTimerPolling);
+	}
+}
+
+/**
+ * @brief			callback function of CMD_VEL.
+ *
+ * @param[in]		aTwistMsg		ROS topic type "Twist".
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
+
+	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
+	restartTimer(mTimerAlv);
+	publishAliveResponse();
+}
+
+/**
+ * @brief			publish Alive Response.
+ *
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::publishAliveResponse() {
+
+	std_msgs::Bool isSts;
+
+	if (mIsActive == true) {
+		isSts.data = true;
+	} else {
+		isSts.data = false;
+	}
+
+	mPubAlvRsp.publish(isSts);
+}
+
+/**
+ * @brief	initial mode process.
+ *
+ * @param[in,out]	aState			enum StateT instance.
+ * @param[in,out]	aIsUvLo			check UVLO flag.
+ * 									- true: check UVLO
+ * 									- false: Not check UVLO
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::initialMode(StateT &aState, bool &aIsUvLo) {
+
+	if (checkStatus(aIsUvLo) == true) {
+		if (initialSeq() == true) {
+			aState = ACTIVE_STS;
+			aIsUvLo = true;
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "ACTIVE STATE");
+		} else {
+			aState = RECOVERY_STS;
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "RECOVERY STATE");
+		}
+	} else {
+		aState = RECOVERY_STS;
+		ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "RECOVERY STATE");
+	}
+}
+
+/**
+ * @brief	active mode process.
+ *
+ * @param[in,out]	aState			enum StateT instance.
+ * @param[in,out]	aIsUvLo			check UVLO flag.
+ * 									- true: check UVLO
+ * 									- false: Not check UVLO
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::activeMode(StateT &aState, bool &aIsUvLo) {
+
+	if (checkStatus(aIsUvLo) == true) {
+		if (activeSeq() == true) {
+			aIsUvLo = true;
+		} else {
+			aState = RECOVERY_STS;
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "RECOVERY STATE");
+		}
+	} else {
+		aState = RECOVERY_STS;
+		ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "RECOVERY STATE");
+	}
+}
+
+/**
+ * @brief	recovery mode process.
+ *
+ * @param[in,out]	aState			enum StateT instance.
+ * @param[in,out]	aIsUvLo			check UVLO flag.
+ * 									- true: check UVLO
+ * 									- false: Not check UVLO
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::recoveryMode(StateT &aState, bool &aIsUvLo) {
+
+	if (recoverySeq() == true) {
+		aState = ACTIVE_STS;
+		aIsUvLo = false;
+	}
+}
+
+/**
+ * @brief	restart Timer.
+ *
+ * @param[in,out]	aTimer		Timer struct.
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::restartTimer(TimerS &aTimer) {
+
+	aTimer.mStartTm = ros::Time::now();
+	aTimer.mIsStart = true;
+	aTimer.mIsTimeout = false;
 }
 
 /**
@@ -120,19 +294,19 @@ bool VehicleController::checkStatus(bool aIsUvLo) {
 
 					isAct = false;
 					if (sts.mIsHiz == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridges high Z");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Bridges high Z");
 					} else if ((aIsUvLo == true) && (sts.mIsUvLo == true)) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Under Voltage lock-out");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Under Voltage lock-out");
 					} else if (sts.mIsThWrn == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Thermal Warning detection");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Thermal Warning detection");
 					} else if (sts.mIsThSd == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Thermal Shutdown detection");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Thermal Shutdown detection");
 					} else if (sts.mIsOcd == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Over Current detection");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Over Current detection");
 					} else if (sts.mIsStepLossA == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridge A Stall detection");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Bridge A Stall detection");
 					} else if (sts.mIsStepLossB == true) {
-						ROS_WARN_STREAM("L6740 Device["<<i<<"]:Bridge B Stall detection");
+						ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "L6740 Device["<<i<<"]:Bridge B Stall detection");
 					} else {
 						isAct = true;
 					}
@@ -215,6 +389,12 @@ bool VehicleController::initialSeq() {
  * @exception		none
  */
 bool VehicleController::activeSeq() {
+
+	if (mTimerAlv.mIsTimeout == true) {
+		bool isHoldTrq = true;
+		mWheel.stopSoft(isHoldTrq);
+		ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "Topics from Host is Timeout.");
+	}
 	return (true);
 }
 
@@ -237,68 +417,6 @@ bool VehicleController::recoverySeq() {
 	}
 
 	return (isRet);
-}
-
-/**
- * @brief			check host machine alive.
- *                  If Host Machine is dead, stop vehicle.
- *
- * @return			bool
- * 					- true: success
- * 					- false: failure
- * @exception		none
- */
-void VehicleController::checkHostAlive() {
-	if (mIsHostAlive == false) {
-		if (mDoDebug == false) {
-			mWheel.stopSoft(true);
-		}
-		ROS_WARN_STREAM_THROTTLE(1.0, "Alive Signal from Host is Not recieved.");
-	}
-	mIsHostAlive = false;
-}
-
-/**
- * @brief			callback function of CMD_VEL.
- *
- * @param[in]		aTwistMsg		ROS topic type "Twist".
- * @return			none
- * @exception		none
- */
-void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
-	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
-	mIsHostAlive = true;
-}
-
-/**
- * @brief			callback function of HST_ALIVE.
- *
- * @param[in]		aBoolMsg		ROS topic type "Bool".
- * @return			none
- * @exception		none
- */
-void VehicleController::callbackHstAlv(const std_msgs::Bool &aBoolMsg) {
-	mIsHostAlive = aBoolMsg.data;
-	publishAliveResponse();
-}
-
-/**
- * @brief			publish Alive Response.
- *
- * @return			none
- * @exception		none
- */
-void VehicleController::publishAliveResponse() {
-
-	std_msgs::Bool isSts;
-
-	if (mIsActive == true) {
-		isSts.data = true;
-	} else {
-		isSts.data = false;
-	}
-
-	mPubAlvRsp.publish(isSts);
 }
 
 /**
@@ -343,15 +461,16 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 				bool isHoldTrq = true;
 				isRet = mWheel.stopSoft(isHoldTrq);
 			}
-			ROS_DEBUG_STREAM("Stop:");
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "Stop:");
 		} else {
 			if (mDoDebug == true) {
 				isRet = true;
 			} else {
 				isRet = mWheel.run(spdVec);
 			}
-			ROS_DEBUG_STREAM("Run:");
-			ROS_DEBUG_STREAM(" <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]>");
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "Run:");
+			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ,
+					" <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]>");
 			ROS_DEBUG_STREAM(
 					" <Left Angle = " << spdVec[1]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[0]*RAD2DEG << "[deg/s]>");
 		}

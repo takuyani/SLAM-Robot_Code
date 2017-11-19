@@ -41,6 +41,7 @@ private:
 	//***** User Define *****
 
 	//***** Const Value *****
+	const double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
 
 	//***** Method *****
 
