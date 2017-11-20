@@ -136,8 +136,6 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/vehicle_teleop_node.cpp)
-add_executable(alive_polling_node	src/alive_polling.cpp
-)
 add_executable(slambot_teleop_ps4joy_node	src/slambot_teleop_ps4joy.cpp
 											src/teleop_twist_joy.cpp
 )
@@ -153,9 +151,6 @@ add_executable(slambot_teleop_ps4joy_node	src/slambot_teleop_ps4joy.cpp
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(alive_polling_node
-  ${catkin_LIBRARIES}
-)
 target_link_libraries(slambot_teleop_ps4joy_node
   ${catkin_LIBRARIES}
 )
@@ -175,11 +170,6 @@ install(PROGRAMS
 )
 
 # Mark executables and/or libraries for installation
-install(TARGETS alive_polling_node
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 install(TARGETS slambot_teleop_ps4joy_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
