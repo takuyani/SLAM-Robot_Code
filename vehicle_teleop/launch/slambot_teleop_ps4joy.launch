@@ -2,15 +2,10 @@
 <launch>
 
 	<group ns="teleop_joy_client">
-
-		<!-- Alive_Polling -->
-		<node pkg="vehicle_teleop" type="alive_polling_node" name="alive_polling_node" output="screen" >
-			<remap from="host_alive" 	to="/slambot_host/host_alive"/>
-		</node>
-
 		<!-- PS4 Joy -->
 		<node pkg="joy" type="joy_node" name="ps4_slambot_joy" >
-			<param name="dev" type="string" value="/dev/input/js0" />
+			<param name="dev" 				type="string"	value="/dev/input/js0" />
+			<param name="coalesce_interval" type="double"	value="0.1" />
 		</node>
 
 		<!-- Slambot Teleop Ps4joy -->
@@ -18,7 +13,6 @@
 			<remap from="joy" 		to="joy" />
 			<remap from="cmd_vel" 	to="/slambot_host/cmd_vel"/>
 		</node> 
-
 	</group>
 
 </launch>
