@@ -114,7 +114,7 @@ void VehicleController::mainLoop() {
 	}
 
 	double pollingRate_hz;
-	mNhPrv.getParam(PARAM_NAME_CMD_VEL_TIMEOUT, pollingRate_hz);
+	mNhPrv.getParam(PARAM_NAME_POLLING_RATE, pollingRate_hz);
 	ros::Duration pollingPeriod_s = ros::Duration(1.0 / pollingRate_hz);
 
 	if (nowTm - mTimerPolling.mStartTm > pollingPeriod_s) {
@@ -391,8 +391,10 @@ bool VehicleController::initialSeq() {
 bool VehicleController::activeSeq() {
 
 	if (mTimerAlv.mIsTimeout == true) {
-		bool isHoldTrq = true;
-		mWheel.stopSoft(isHoldTrq);
+		if (mDoDebug == false) {
+			bool isHoldTrq = true;
+			mWheel.stopSoft(isHoldTrq);
+		}
 		ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "Topics from Host is Timeout.");
 	}
 	return (true);
@@ -468,11 +470,8 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 			} else {
 				isRet = mWheel.run(spdVec);
 			}
-			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "Run:");
-			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ,
-					" <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]>");
 			ROS_DEBUG_STREAM(
-					" <Left Angle = " << spdVec[1]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[0]*RAD2DEG << "[deg/s]>");
+					"Run: <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]> <Left Angle = " << spdVec[1]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[0]*RAD2DEG << "[deg/s]>");
 		}
 	}
 
