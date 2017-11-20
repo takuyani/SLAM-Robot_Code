@@ -141,7 +141,7 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_WR_MODE32, &mMode);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_WR_MODE32 [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_WR_MODE32 [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
@@ -150,11 +150,11 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_RD_MODE32, &mode);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_MODE32 [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_MODE32 [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	} else if (mMode != mode) {
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_MODE32 [Not match mode]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_MODE32 [Not match mode]");
 		close(mFd);
 		return (false);
 	}
@@ -163,7 +163,7 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_WR_BITS_PER_WORD, &mBits);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_WR_BITS_PER_WORD [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_WR_BITS_PER_WORD [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
@@ -172,11 +172,11 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_BITS_PER_WORD [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_BITS_PER_WORD [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	} else if (mBits != bits) {
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_BITS_PER_WORD [Not match bits]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_BITS_PER_WORD [Not match bits]");
 		close(mFd);
 		return (false);
 	}
@@ -185,7 +185,7 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_WR_MAX_SPEED_HZ, &mSpeed_hz);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_WR_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_WR_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	}
@@ -194,11 +194,11 @@ bool Spi::initSpi() {
 	ret = ioctl(mFd, SPI_IOC_RD_MAX_SPEED_HZ, &speed_hz);
 	if (ret < 0) {
 		int errno_sv = errno;
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_MAX_SPEED_HZ [errno = "<< errno_sv <<"]");
 		close(mFd);
 		return (false);
 	} else if (mSpeed_hz != speed_hz) {
-		ROS_ERROR_STREAM("error:SPI_IOC_RD_MAX_SPEED_HZ [Not match speed_hz]");
+		ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_RD_MAX_SPEED_HZ [Not match speed_hz]");
 		close(mFd);
 		return (false);
 	}
@@ -239,7 +239,7 @@ bool Spi::transfer(const uint32_t aSize, uint8_t* aTxRx_ptr) {
 
 		if (ioctl(mFd, SPI_IOC_MESSAGE(1), &tr) < 0) {
 			int errno_sv = errno;
-			ROS_ERROR_STREAM("error:SPI_IOC_MESSAGE [errno = "<< errno_sv <<"]");
+			ROS_ERROR_STREAM_THROTTLE(STREAM_HZ, "error:SPI_IOC_MESSAGE [errno = "<< errno_sv <<"]");
 		} else {
 			isRet = true;
 		}

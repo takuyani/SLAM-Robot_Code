@@ -37,21 +37,50 @@ public:
 	virtual ~VehicleController();
 
 	//***** Method *****
-	bool initVehicleController();
-	bool checkStatus(bool);
-	bool initialSeq();
-	bool activeSeq();
-	bool recoverySeq();
-	void checkHostAlive();
+	bool init();
+	void mainLoop();
 
 private:
 	//***** User Define *****
+	/**
+	 * @enum	StateT
+	 * @brief  	Vehicle Device State.
+	 */
+	typedef enum {
+		INITIAL_STS,	//!< Initial State
+		ACTIVE_STS,		//!< Active State
+		RECOVERY_STS,	//!< Recovery State
+	} StateT;
+
+	/**
+	 * @struct	TimerS
+	 * @brief  	Timer.
+	 */
+	typedef struct {
+		/**
+		 *  Start time
+		 */
+		ros::Time mStartTm;
+		/**
+		 *  Timer start flag
+		 * - true: start
+		 * - false: Not start
+		 */
+		bool mIsStart;
+		/**
+		 *  Timerout flag
+		 * - true: timeout
+		 * - false: Not timeout
+		 */
+		bool mIsTimeout;
+	} TimerS;
 
 	//***** Const Value *****
 	const std::string TOPIC_NAME_CMD_VEL = "cmd_vel";
-	const std::string TOPIC_NAME_HST_ALIVE = "host_alive";
 	const std::string TOPIC_NAME_ALIVE_RSP = "alive_resp";
 
+	const std::string PARAM_NAME_CMD_VEL_TIMEOUT = "cmd_vel_timeout";
+	const std::string PARAM_NAME_POLLING_RATE = "polling_rate";
 	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
 	const std::string PARAM_NAME_TRE_WID = "tread_width";
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
@@ -59,12 +88,22 @@ private:
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain
 	static constexpr double DEG2RAD = M_PI / 180.0;	//!< Degree to radian gain
 
-	const uint32_t WHEEL_NUM;	//!< Number of Wheel
+	const uint32_t WHEEL_NUM;		//!< Number of Wheel
+	const double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
-	void callbackHstAlv(const std_msgs::Bool &);
 	void publishAliveResponse();
+
+	void initialMode(StateT&, bool&);
+	void activeMode(StateT&, bool&);
+	void recoveryMode(StateT&, bool&);
+	void restartTimer(TimerS&);
+
+	bool checkStatus(bool);
+	bool initialSeq();
+	bool activeSeq();
+	bool recoverySeq();
 
 	void move(const double, const double);
 	bool setMaxSpeed(const double);
@@ -96,7 +135,6 @@ private:
 	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
 	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
-	ros::Subscriber mSubHstAlv;			//!< ROS Subscriber "HST_ALIVE"
 
 	Wheel mWheel;	//!< Wheel Class
 
@@ -117,18 +155,14 @@ private:
 	bool mIsActive;
 
 	/**
-	 *  Host Alive flag
-	 * - true: alive
-	 * - false: dead
-	 */
-	bool mIsHostAlive;
-
-	/**
 	 *  Debug Mode active flag
 	 * - true: active
 	 * - false: deactive
 	 */
 	bool mDoDebug;
+
+	TimerS mTimerAlv;		//!< Timer for Alive
+	TimerS mTimerPolling;	//!< Timer for Polling
 
 };
 
