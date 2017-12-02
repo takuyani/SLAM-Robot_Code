@@ -25,7 +25,7 @@ Vehicle controller package
 回転速度は、反時計回りのときに正の値、時計回りの時に負の値とする。  
 並進、回転の速度が決まると、モータの回転速が算出される。  
 
-__式：__  
+**式：**  
 - ωr = V/R + W\*T/(2\*R)  
 - ωl = V/R - W\*T/(2\*R)  
 
@@ -38,7 +38,7 @@ T  : 車輪幅(tread width)[m]
 
 以下は車体の動作例となります。  
 
-__例：__  
+**例：**  
 - 並進速度 =  10, 回転速度 =   0 ⇒  10[m/s]で直進  
 - 並進速度 = -10, 回転速度 =   0 ⇒ -10[m/s]で後退  
 - 並進速度 =   0, 回転速度 =  10 ⇒  10[rad/s]で右回転  
@@ -46,8 +46,14 @@ __例：__  
 - 並進速度 =  10, 回転速度 =  10 ⇒ 並進速度10[m/s], 回転速度10[rad/s]で右旋回  
 - 並進速度 =  10, 回転速度 = -10 ⇒ 並進速度10[m/s], 回転速度10[rad/s]で左旋回  
 
+<br>
+
+**■フェールセーフ**  
+フェールセーフ機能として、本ノードとトピック送信元のノードとの間に通信途絶が発生した場合、車体を緊急停止させます。
+通信途絶はSubscribed Topicsの**cmd_vel**受信間隔で判定される。
+
 #### 2.1.1. Subscribed Topics
-- __cmd_vel__([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))  
+- **cmd_vel**([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))  
   - linear.x: 並進速度[m/s]（+：前進, -：後退）
   - linear.y: 未使用
   - linear.z: 未使用
@@ -56,19 +62,27 @@ __例：__  
   - angular.z: 回転速度[rad/s]（+：左, -：右）
 
 #### 2.1.2. Published Topics
-- __alive_resp__([geometry_msgs/Bool](http://docs.ros.org/api/std_msgs/html/msg/Bool.html))  
-  Subscribed Topic "__cmd_vel__"の受信応答。車体の状態を送信する。  
+- **alive_resp**([geometry_msgs/Bool](http://docs.ros.org/api/std_msgs/html/msg/Bool.html))  
+  Subscribed Topic "**cmd_vel**"の受信応答。車体の状態を送信する。  
   ・ true: 車体制御可能状態  
   ・ false: 車体制御不可能状態  
 
 #### 2.1.3. Parameters
-- __~wheel_radius__(double, default: 0.01)  
+- **~cmd_vel_timeout**(double, default: 1.0)  
+  Subscribed Topicsの**cmd_vel**正常受信タイムアウト時間[s]。  
+  **cmd_vel**を正常に受信してから、タイムアウト時間内に**cmd_vel**を正常に受信できなかった場合、車体に停止信号を送信する。
+
+- **~polling_rate**(double, default: 10.0)  
+  車体の状態をチェックするポーリングレート[Hz]。  
+  車体に異常等が発生した場合のリカバリーモードはこの周期で実行される。
+
+- **~wheel_radius**(double, default: 0.01)  
   車輪半径[m]
 
-- __~tread_width__(double, default: 0.01)  
+- **~tread_width**(double, default: 0.01)  
   車輪幅[m]
 
-- __~debug/enable__(bool, default: false)  
+- **~debug/enable**(bool, default: false)  
   デバッグモード有効フラグ。trueの場合、デバッグモードとなり、本ノードのデバッグを行うことが可能。  
   開発用のParameterであり、普段はfalseに設定しておくこと。
 
