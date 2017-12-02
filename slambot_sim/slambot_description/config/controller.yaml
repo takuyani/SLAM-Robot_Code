@@ -26,22 +26,25 @@ slambot_host:
      
     # Base frame_id
     base_frame_id: base_footprint #default: base_link
-     
+
+	# Enable odom tf     
+	enable_odom_tf: true
+
     # Velocity and acceleration limits
     # Whenever a min_* is unspecified, default to -max_*
-    linear:
-      x:
-        has_velocity_limits    : true
-        max_velocity           : 0.3  # m/s
+#    linear:
+#      x:
+#        has_velocity_limits    : true
+#        max_velocity           : 0.3  # m/s
 #        min_velocity           : -0.5 # m/s
-        has_acceleration_limits: true
-        max_acceleration       : 0.6  # m/s^2
+#        has_acceleration_limits: true
+#        max_acceleration       : 0.6  # m/s^2
 #        min_acceleration       : -0.25 # m/s^2
-    angular:
-      z:
-        has_velocity_limits    : true
-        max_velocity           : 0.523  # rad/s
+#    angular:
+#      z:
+#        has_velocity_limits    : true
+#        max_velocity           : 0.523  # rad/s
 #        min_velocity           : -0.5
-        has_acceleration_limits: true
-        max_acceleration       : 1.047  # rad/s^2
+#        has_acceleration_limits: true
+#        max_acceleration       : 1.047  # rad/s^2
 #        min_acceleration       : -0.5
