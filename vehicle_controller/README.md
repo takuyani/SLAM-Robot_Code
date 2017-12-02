@@ -20,9 +20,10 @@ Vehicle controller package
 ## 2. Nodes
 ### 2.1. vehicle_controller_node
 車体の運動制御を行うノードです。入力信号は並進速度[m/s]と回転速度[rad/s]であり、Topicのcmd_velによって与えられます。  
-ここで、両輪の回転速度の平均を並進速度、両輪の回転速度の差分を回転速度と呼ぶことにします。並進速度は前進で正の値、後退で負の値とする。
-回転速度は、反時計回りのときに正の値、時計回りの時に負の値とする。
-並進、回転の速度が決まると、モータの回転速が算出される。
+ここで、両輪の回転速度の平均を並進速度、両輪の回転速度の差分を回転速度と呼ぶことにします。  
+並進速度は前進で正の値、後退で負の値とする。  
+回転速度は、反時計回りのときに正の値、時計回りの時に負の値とする。  
+並進、回転の速度が決まると、モータの回転速が算出される。  
 
 __式：__  
 - ωr = V/R + W\*T/(2\*R)  
@@ -54,13 +55,9 @@ __例：__  
   - angular.y: 未使用
   - angular.z: 回転速度[rad/s]（+：左, -：右）
 
-- __host_alive__([geometry_msgs/Bool](http://docs.ros.org/api/std_msgs/html/msg/Bool.html))  
-  ホストコンピュータ生存信号。1[sec]以内に"true"を受信できなかった場合、車体を停止させる。  
-  よってホストコンピュータから連続して車体の制御を行う場合、ホストコンピュータは本トピックを値"true"で定周期送信する必要がある。
-
 #### 2.1.2. Published Topics
 - __alive_resp__([geometry_msgs/Bool](http://docs.ros.org/api/std_msgs/html/msg/Bool.html))  
-  Subscribed Topic "__host_alive__"の受信応答。車体の状態を送信する。  
+  Subscribed Topic "__cmd_vel__"の受信応答。車体の状態を送信する。  
   ・ true: 車体制御可能状態  
   ・ false: 車体制御不可能状態  
 
