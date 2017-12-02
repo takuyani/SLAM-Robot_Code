@@ -16,9 +16,9 @@
 #include <geometry_msgs/Twist.h>
 //My Library
 
+ros::Publisher pubCmdVel;
 
-void callback(const geometry_msgs::Twist &);
-
+void callbackCmdVelSrc(const geometry_msgs::Twist &);
 
 /**
  * @brief	main function
@@ -29,14 +29,16 @@ int main(int argc, char **argv) {
 
 	ros::NodeHandle nh;
 
-	ros::Subscriber subCmdVel = nh.subscribe("src/cmd_vel", 1, &callback);
-	ros::Publisher  pubCmdVel = nh.advertise<geometry_msgs::Twist>("dst/cmd_vel", 1);
+	ros::Subscriber subCmdVel = nh.subscribe("src/cmd_vel", 1, &callbackCmdVelSrc);
+	pubCmdVel = nh.advertise<geometry_msgs::Twist>("dst/cmd_vel", 1);
 
 	ros::spin();
 
 	return (1);
 }
 
+void callbackCmdVelSrc(const geometry_msgs::Twist &aCmdVel) {
 
-void callback(const geometry_msgs::Twist &aCmdVel) {
+	pubCmdVel.publish(aCmdVel);
+
 }

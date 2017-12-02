@@ -26,6 +26,12 @@
 
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
 			args="-urdf -model slambot -param robot_description"/>
+
+		<node name="mediation_cmdvel" pkg="slambot_description" type="mediation_cmdvel_node" respawn="true" output="screen" >
+			<remap from="src/cmd_vel" to="cmd_vel"/>
+			<remap from="dst/cmd_vel" to="diff_drive_controller/cmd_vel"/>
+		</node>
+
 	</group>
 
 	<include file="$(find slambot_description)/launch/control.launch"/>
@@ -51,7 +57,7 @@
 		-configuration_basename toyota_hsr_2d.lua"
 		output="screen">
 			<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
-			<remap from="odom" to="/slambot_host/vehicle_controller/odom" />
+			<remap from="odom" to="/slambot_host/diff_drive_controller/odom" />
 	</node>
 
 	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
