@@ -27,8 +27,11 @@ int main(int argc, char **argv) {
 
 	VehicleController vc(WHEEL_NUM);
 
-	while (ros::ok() || (vc.init() == false)) {
+	while (vc.init() == false) {
 		ROS_ERROR_STREAM_THROTTLE(1.0, "Node [" << NODE_NAME << "]:Initialize Failure!");
+		if (ros::ok() == false) {
+			return (1);
+		}
 	}
 	ROS_INFO_STREAM("Running Node:[" << NODE_NAME << "]");
 

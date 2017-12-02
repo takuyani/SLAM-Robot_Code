@@ -273,8 +273,6 @@ bool VehicleController::checkStatus(bool aIsUvLo) {
 
 	bool isAct = mIsActive;
 
-	mNhPrv.getParam(PARAM_NAME_DEBUG, mDoDebug);
-
 	if (mDoDebug == false) {
 		vector<Wheel::StatusS> statusVec(WHEEL_NUM);
 
