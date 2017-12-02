@@ -46,8 +46,8 @@ Vehicle Teleoperation package
 <br>  
 
 ### 2.2. slambot_teleop_ps4joy_node
-ジョイスティック入力値([sensor_msgs/Joy](http://docs.ros.org/api/sensor_msgs/html/msg/Joy.html))をcmd_vel([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))に変換するノード。
-ジョイスティック操作により、車体制御が可能。
+ジョイスティック入力値([sensor_msgs/Joy](http://docs.ros.org/api/sensor_msgs/html/msg/Joy.html))をcmd_vel([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))に変換するノードです。  
+ジョイスティック操作により、車体制御が可能となっています。
 
 #### 2.2.1. Subscribed Topics
 - __joy__([sensor_msgs/Joy](http://docs.ros.org/api/sensor_msgs/html/msg/Joy.html))  
