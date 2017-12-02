@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="slambot">
+
+  <xacro:include filename="$(find slambot_description)/urdf/slambot_properties.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/body/body.urdf.xacro" />
+  <xacro:include filename="$(find slambot_description)/urdf/wheel/wheel.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/sensors/xtion_pro_live/xtion_pro_live.urdf.xacro"/>
+
+  <xacro:property name="ofs_foot" value="0.055" />
+  <xacro:property name="mass" value="0.055" />
+
+  <!-- Sensor Position offset -->
+  <xacro:property name="xtion_ofs_x" value="0.085" />
+  <xacro:property name="xtion_ofs_y" value="0" />
+  <xacro:property name="xtion_ofs_z" value="0.05" />
+
+  <!-- =============== Link & Joint =============== -->
+  <link name="base_footprint"/>
+
+  <!-- Base body -->
+  <xacro:body parent="base_footprint">
+    <origin xyz="0 0 ${ofs_foot}"/>
+  </xacro:body>
+
+  <!-- Wheel -->
+  <xacro:wheel prefix="right" parent="base_body">
+    <origin xyz="0 ${-tread_width/2} ${wheel_radius - ofs_foot}"
+            rpy="${M_PI/2} 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:wheel>
+  <xacro:wheel prefix="left" parent="base_body">
+    <origin xyz="0 ${tread_width/2} ${wheel_radius - ofs_foot}"
+            rpy="${-M_PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:wheel>
+
+  <!-- Sensor -->
+  <xacro:sensor_xtion_pro_live prefix="sensor_xtion_pro_live" parent="base_body">
+<!-- 
+    <origin xyz="0.0900 0.0205 0.04000"
+-->
+    <origin xyz="${xtion_ofs_x} ${xtion_ofs_y + 0.022} ${xtion_ofs_z + 0.023}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:sensor_xtion_pro_live>
+
+
+  <!-- ===============  Transmission =============== -->
+  <!-- <xacro:wheel_trans prefix="right" interface="EffortJointInterface"/> -->
+  <!-- <xacro:wheel_trans prefix="left" interface="EffortJointInterface"/> -->
+  <xacro:wheel_trans prefix="right" interface="hardware_interface/VelocityJointInterface" reduction="1.0"/>
+  <xacro:wheel_trans prefix="left" interface="hardware_interface/VelocityJointInterface" reduction="1.0"/>
+
+  <!-- =============== Gazebo =============== -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>slambot_host</robotNamespace>
+	  <robotParam>robot_description</robotParam>
+    </plugin>
+  </gazebo>
+
+  <!-- Body -->
+  <xacro:body_gazebo/>
+
+  <!-- Wheel -->
+  <xacro:wheel_gazebo prefix="right"/>
+  <xacro:wheel_gazebo prefix="left"/>
+
+  <!-- Sensors -->
+  <xacro:xtion_pro_live_gazebo camera_name="sensor_xtion_pro_live"/>
+
+</robot>

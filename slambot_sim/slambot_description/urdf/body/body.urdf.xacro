@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find slambot_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find slambot_description)/urdf/body/caster_board.urdf.xacro" />
+  <xacro:include filename="$(find slambot_description)/urdf/body/body.gazebo.xacro" />
+  <xacro:include filename="$(find slambot_description)/urdf/body/spacer.urdf.xacro" />
+
+  <xacro:property name="tread_width" value="0.1500" />
+  <!-- Base Body -->
+  <xacro:property name="body_x" value="0.210" />
+  <xacro:property name="body_y" value="0.160" />
+  <xacro:property name="body_z" value="0.003" />
+
+  <xacro:property name="velocity_scale_factor" value="1.0"/>
+  <xacro:macro name="body" params="parent *joint_origin">
+
+  <joint name="base_joint" type="fixed">
+    <xacro:insert_block name="joint_origin"/>
+    <parent link="${parent}"/>
+    <child link="base_body"/>
+  </joint>
+
+
+  <!-- Robot Body -->
+  <!-- Base Board -->
+  <link name="base_body">
+    <visual>
+      <origin xyz="0 0 ${body_z/2}"/>
+      <geometry>
+        <box size="${body_x} ${body_y} ${body_z}"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+ 
+    <collision>
+      <origin xyz="0 0 ${body_z/2}"/>
+      <geometry>
+        <box size="${body_x} ${body_y} ${body_z}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 ${body_z/2}"/>
+      <mass value="0.500"/>
+      <inertia ixx="0.0020833333" ixy="0" ixz="0" iyy="0.0070833333" iyz="0" izz="0.0083333333"/>
+    </inertial>
+  </link>
+
+  <!-- Upper Board -->
+  <joint name="upper_board_joint" type="fixed">
+    <parent link="base_body"/>
+    <child link="upper_board"/>
+    <origin xyz="0 0 ${body_z + spacer_len40 + body_z/2}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <link name="upper_board">
+    <visual>
+      <geometry>
+        <box size="${body_x} ${body_y} ${body_z}"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+ 
+    <collision>
+      <geometry>
+        <box size="${body_x} ${body_y} ${body_z}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.500"/>
+      <inertia ixx="0.0020833333" ixy="0" ixz="0" iyy="0.0070833333" iyz="0" izz="0.0083333333"/>
+    </inertial>
+  </link>
+
+  <!-- Front caster_board -->
+  <xacro:caster_board prefix="front" parent="base_body">
+    <origin xyz="${body_x/2 - caster_board_x/2} 0 -${spacer_len27 + body_z/2}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:caster_board>
+
+  <!-- Rear caster_board -->
+  <xacro:caster_board prefix="rear" parent="base_body">
+    <origin xyz="-${body_x/2 - caster_board_x/2} 0 -${spacer_len27 + body_z/2}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:caster_board>
+
+  <!-- Spacer_1 -->
+  <xacro:spacer prefix="base_body" suffix="1" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
+    <origin xyz="${body_x/2 - spacer_radius} ${body_y/2 - spacer_radius} ${body_z}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:spacer>
+
+  <!-- Spacer_2 -->
+  <xacro:spacer prefix="base_body" suffix="2" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
+    <origin xyz="${body_x/2 - spacer_radius} -${body_y/2 - spacer_radius} ${body_z}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:spacer>
+
+  <!-- Spacer_3 -->
+  <xacro:spacer prefix="base_body" suffix="3" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
+    <origin xyz="-${body_x/2 - spacer_radius} ${body_y/2 - spacer_radius} ${body_z}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:spacer>
+
+  <!-- Spacer_4 -->
+  <xacro:spacer prefix="base_body" suffix="4" len="${spacer_len40}" rad="${spacer_radius}" parent="base_body">
+    <origin xyz="-${body_x/2 - spacer_radius} -${body_y/2 - spacer_radius} ${body_z}"
+            rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </xacro:spacer>
+
+  </xacro:macro> 
+</robot>
+
