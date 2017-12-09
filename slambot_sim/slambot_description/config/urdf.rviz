@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Map1/Status1
+        - /TF1/Frames1
       Splitter Ratio: 0.636507928
     Tree Height: 747
   - Class: rviz/Selection
@@ -202,7 +202,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -219,7 +219,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -227,28 +227,28 @@ Visualization Manager:
         Min Value: -10
         Value: true
       Axis: Z
-      Channel Name: intensity
+      Channel Name: x
       Class: rviz/LaserScan
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
+      Max Color: 0; 255; 0
+      Max Intensity: 2.50124311
+      Min Color: 0; 255; 0
+      Min Intensity: 2.49841881
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.0500000007
       Style: Flat Squares
       Topic: /slambot_host/sensor_xtion_pro_live/scan
       Unreliable: false
       Use Fixed Frame: true
-      Use rainbow: true
+      Use rainbow: false
       Value: true
     - Alpha: 0.699999988
       Class: rviz/Map
@@ -262,13 +262,140 @@ Visualization Manager:
       Value: true
     - Class: Submaps
       Enabled: true
+      High Resolution: true
+      Low Resolution: false
       Name: Submaps
       Submap query service: /submap_query
       Submaps:
-        All Enabled: true
+        All: true
       Topic: ""
       Tracking frame: base_link
       Unreliable: false
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /trajectory_node_list
+      Name: MarkerArray
+      Namespaces:
+        Trajectory 0: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        base_body:
+          Value: false
+        base_body_spacer_1:
+          Value: false
+        base_body_spacer_2:
+          Value: false
+        base_body_spacer_3:
+          Value: false
+        base_body_spacer_4:
+          Value: false
+        base_footprint:
+          Value: true
+        front_caster:
+          Value: false
+        front_caster_board:
+          Value: false
+        front_spacer_1:
+          Value: false
+        front_spacer_2:
+          Value: false
+        front_spacer_3:
+          Value: false
+        front_spacer_4:
+          Value: false
+        left_wheel:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        rear_caster:
+          Value: false
+        rear_caster_board:
+          Value: false
+        rear_spacer_1:
+          Value: false
+        rear_spacer_2:
+          Value: false
+        rear_spacer_3:
+          Value: false
+        rear_spacer_4:
+          Value: false
+        right_wheel:
+          Value: true
+        sensor_xtion_pro_live_ir_frame:
+          Value: false
+        sensor_xtion_pro_live_ir_optical_frame:
+          Value: false
+        sensor_xtion_pro_live_link:
+          Value: false
+        sensor_xtion_pro_live_rgb_frame:
+          Value: false
+        sensor_xtion_pro_live_rgb_optical_frame:
+          Value: false
+        upper_board:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          odom:
+            base_footprint:
+              base_body:
+                base_body_spacer_1:
+                  {}
+                base_body_spacer_2:
+                  {}
+                base_body_spacer_3:
+                  {}
+                base_body_spacer_4:
+                  {}
+                front_caster_board:
+                  front_caster:
+                    {}
+                  front_spacer_1:
+                    {}
+                  front_spacer_2:
+                    {}
+                  front_spacer_3:
+                    {}
+                  front_spacer_4:
+                    {}
+                left_wheel:
+                  {}
+                rear_caster_board:
+                  rear_caster:
+                    {}
+                  rear_spacer_1:
+                    {}
+                  rear_spacer_2:
+                    {}
+                  rear_spacer_3:
+                    {}
+                  rear_spacer_4:
+                    {}
+                right_wheel:
+                  {}
+                sensor_xtion_pro_live_rgb_frame:
+                  sensor_xtion_pro_live_ir_frame:
+                    sensor_xtion_pro_live_ir_optical_frame:
+                      {}
+                  sensor_xtion_pro_live_link:
+                    {}
+                  sensor_xtion_pro_live_rgb_optical_frame:
+                    {}
+                upper_board:
+                  {}
+      Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
@@ -301,18 +428,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.608519435
-        Y: 0.14089027
-        Z: 0.662320971
+        X: 0.606976628
+        Y: 0.252773434
+        Z: 0.662321031
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.749796867
+      Pitch: 0.644796968
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.21038294
+      Yaw: 3.14538264
     Saved: ~
 Window Geometry:
   Displays:
