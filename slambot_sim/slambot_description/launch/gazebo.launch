@@ -54,7 +54,7 @@
 	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
 		args="
 		-configuration_directory $(find slambot_description)/config/lua
-		-configuration_basename toyota_hsr_2d.lua"
+		-configuration_basename slambot_2d.lua"
 		output="screen">
 			<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
 			<remap from="odom" to="/slambot_host/diff_drive_controller/odom" />
