@@ -4,7 +4,7 @@
 	<group ns="slambot_host">
 
 		<!-- Vehicle Controller -->
-		<node respawn="true" pkg="vehicle_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">
+		<node respawn="true" pkg="slambot_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">
 			<remap from="cmd_vel" 		to="cmd_vel"/>
 			<param name="cmd_vel_timeout"	type="double"	value="0.5"/>
 			<param name="polling_rate"		type="double"	value="10"/>

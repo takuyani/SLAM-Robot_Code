@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(vehicle_teleop)
+project(slambot_teleop)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -72,7 +72,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -100,14 +100,14 @@ find_package(catkin REQUIRED COMPONENTS
 ###################################
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
+## INCLUDE_DIRS: uncomment this if your package contains header files
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES vehicle_teleop
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+#  LIBRARIES slambot_teleop
+#  CATKIN_DEPENDS roscpp rospy
 #  DEPENDS system_lib
 )
 
@@ -124,7 +124,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/vehicle_teleop.cpp
+#   src/${PROJECT_NAME}/slambot_teleop.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -135,7 +135,6 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/vehicle_teleop_node.cpp)
 add_executable(slambot_teleop_ps4joy_node	src/slambot_teleop_ps4joy.cpp
 											src/teleop_twist_joy.cpp
 )
@@ -202,7 +201,7 @@ install(DIRECTORY launch/
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_vehicle_teleop.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_slambot_teleop.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

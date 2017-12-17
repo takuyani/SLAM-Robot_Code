@@ -9,7 +9,7 @@
 		</node>
 
 		<!-- Slambot Teleop Ps4joy -->
-		<node pkg="vehicle_teleop" type="slambot_teleop_ps4joy_node" name="slambot_teleop_ps4joy" output="screen" >
+		<node pkg="slambot_teleop" type="slambot_teleop_ps4joy_node" name="slambot_teleop_ps4joy" output="screen" >
 			<remap from="joy" 		to="joy" />
 			<remap from="cmd_vel" 	to="/slambot_host/cmd_vel"/>
 		</node> 

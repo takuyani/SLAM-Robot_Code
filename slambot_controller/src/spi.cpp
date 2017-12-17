@@ -21,7 +21,7 @@
 //Add Install Library
 #include <ros/ros.h>
 //My Library
-#include "vehicle_controller/spi.hpp"
+#include "slambot_controller/spi.hpp"
 
 /**
  * @brief		Constructor.

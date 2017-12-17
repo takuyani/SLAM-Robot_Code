@@ -13,7 +13,7 @@
 //C Standard Library
 //Add Install Library
 //My Library
-#include "vehicle_controller/vehicle_controller.hpp"
+#include "slambot_controller/vehicle_controller.hpp"
 
 const std::string NODE_NAME = "vehicle_controller_node";
 const int32_t WHEEL_NUM = 2;		//<! Number of Wheel
