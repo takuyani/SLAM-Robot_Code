@@ -2,7 +2,7 @@
 
 	<!-- arguments -->
 	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
-	<arg name="rvizconfig" default="$(find slambot_description)/config/urdf.rviz"/>
+	<arg name="rvizconfig" default="$(find slambot_gazebo)/config/sim.rviz"/>
 	<arg name="gui" default="True"/>
 
 	<!-- prameters -->
