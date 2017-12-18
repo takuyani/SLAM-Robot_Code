@@ -1,0 +1,12 @@
+<!-- slambot_teleop_keyboard.launch -->
+<launch>
+
+	<group ns="teleop_keyboard_client">
+		<!-- Slambot Teleop Keyboard -->
+		<node pkg="slambot_teleop" type="slambot_teleop_keyboard.py" name="slambot_teleop_keyboard" output="screen">
+			<remap from="cmd_vel" 		to="/slambot_host/cmd_vel"/>
+		</node>
+	</group>
+
+</launch>
+
