@@ -1,5 +1,5 @@
-# vehicle_teleop
-Vehicle Teleoperation package
+# slambot_teleop
+Slambot vehicle teleoperation package
 
 ## 目次  
 - 1.&nbsp;[Overview](#1-overview)  
