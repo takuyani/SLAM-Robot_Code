@@ -1,5 +1,5 @@
-# vehicle_controller
-Vehicle controller package
+# slambot_controller
+Slambot vehicle controller package
 
 ## 目次  
 - 1.&nbsp;[Overview](#1-overview)  
