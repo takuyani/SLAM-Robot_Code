@@ -1,7 +1,7 @@
 <launch>
  
 	<!-- Load joint controller configurations from YAML file to parameter server -->
-	<rosparam file="$(find slambot_slam)/config/controller.yaml" command="load"/>
+	<rosparam file="$(find slambot_navigation)/param/controller.yaml" command="load"/>
 
 	<group ns="slambot_host">
 
