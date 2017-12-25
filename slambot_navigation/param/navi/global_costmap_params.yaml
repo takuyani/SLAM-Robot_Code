@@ -1,7 +1,7 @@
 global_costmap:
-  global_frame: /map
-  robot_base_frame: /base_footprint
-  update_frequency: 2.0
-  publish_frequency: 0.1
-  static_map: true
-  transform_tolerance: 1.0
+  global_frame: /map	# マップフレームの設定
+  robot_base_frame: /base_footprint		# ロボットベースフレームの設定
+  update_frequency: 2.0		# 更新周期[Hz]
+  publish_frequency: 0.1	# 配信周期[Hz]
+  static_map: true		# 指定したマップを使用するかの設定
+  transform_tolerance: 1.0	# 変換許容距離[m]

@@ -1,8 +1,30 @@
-shutdown_costmaps: false
-controller_frequency: 3.0
-controller_patience: 1.0
+# shutdown_costmaps   (bool, default false)
+# 障害物をコストマップに残し続けておくか．これをfalseにしておくと人等の移動物体はその移動軌跡が障害物となってコストマップに現れる．
+shutdown_costmaps: ture
+
+# controller_frequency   (double [Hz], default: 20.0)
+# cmd_velトピック（前進速度と回頭速度）をpublishする周波数．
+controller_frequency: 10.0
+
+# controller_patience   (double [sec], default: 15.0)
+# space-clearing動作が実行される前に、コントローラが制御情報を受信待機する最大時間
+controller_patience: 3.0
+
+# planner_frequency   (double [Hz], default 0.0)
+# global plannerがグローバルパスを計算する頻度．0.0に設定すると，最初にゴールが設定された時のみにグローバルパスが計算される．
 planner_frequency: 2.0
-planner_patience: 1.0
+
+# planner_patience   (double [sec], default: 5.0)
+# 有効なパスが見つからなかった時にプランナーがどれだけ待機するか．待機の後にspace-clearing oparations（recovery behaviorsのこと？）が呼ばれる．待機時間内に前方の障害物が移動してパスが見つかった場合には復活するということ？
+planner_patience: 3.0
+
+# oscillation_timeout (double, default: 0.0)
+# 回復行動 (軌道計画に失敗した時の行動)を実行する前に、ロボットが行ったり来たりすることを可能にする時間
 oscillation_timeout: 10.0
+
+# oscillation_distance (double, default: 0.5)
+# この距離を移動した場合、oscillation_timeoutは初期化される。
 oscillation_distance: 0.2
+
+# conservative_reset_dist   (double [m], default: 3.0)
 conservative_reset_dist: 0.10

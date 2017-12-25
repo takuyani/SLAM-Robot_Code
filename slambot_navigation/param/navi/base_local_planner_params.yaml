@@ -1,26 +1,27 @@
 TrajectoryPlannerROS:
 
-# Robot Configuration Parameters
-  max_vel_x: 0.18
-  min_vel_x: 0.08
+### Robot Configuration Parameters
+  max_vel_x: 0.18	# (double [m/s], default: 0.5) x方向の最大速度
+  min_vel_x: 0.08	# (double [m/s], default: 0.1) x方向の最小速度
 
-  max_vel_theta:  1.0
-  min_vel_theta: -1.0
-  min_in_place_vel_theta: 1.0
+  max_vel_theta:  1.0	# (double [rad/s], default: 1.0) x方向の最大角速度
+  min_vel_theta: -1.0	# (double [rad/s], default: -1.0) x方向の最小角速度
+  min_in_place_vel_theta: 1.0	# (double [rad/s], default: 0.4) 目的地に到着し，ロボットの角度を合わせるために回転するときの最小角速度．
 
-  acc_lim_x: 1.0
-  acc_lim_y: 0.0
-  acc_lim_theta: 0.6
+  acc_lim_x: 1.0	# (double [m/s^2], default: 2.5) 方向（ロボットの前進方向）の最大加速度．
+  acc_lim_y: 0.0	# (double [m/s^2], default: 2.5) y方向の最大加速度．（全方位移動車両等のホロノミックロボットの場合にのみ使用？）
+  acc_lim_theta: 0.6	# (double [rad/s^2], default: 3.2) 回転の最大角加速度．
 
-# Goal Tolerance Parameters
-  xy_goal_tolerance: 0.10
-  yaw_goal_tolerance: 0.05
+### Goal Tolerance Parameters
+  xy_goal_tolerance: 0.10	# (double [m], default: 0.1) 目標地点と現在地点との距離がxy_goal_tolerance以下となった時，目標地点に到達したと判定する．
+  yaw_goal_tolerance: 0.05	#  (double [rad], default: 0.05) 目標角度と現在角度の差がyaw_goal_tolerance以下になった時，目標地点に到達したと判定する．
 
-# Differential-drive robot configuration
+### Differential-drive robot configuration
+# (bool, default: true) ホロノミックなロボットかどうか．全方位移動車両の場合にはtrueにする．差動二輪やステアリング型の場合はfalse．
   holonomic_robot: false
 
-# Forward Simulation Parameters
-  sim_time: 0.8
-  vx_samples: 18
-  vtheta_samples: 20
-  sim_granularity: 0.05
+### Forward Simulation Parameters
+  sim_time: 0.8	# (double [sec], default 1.0) ロボットの移動を何秒間シミュレートするか．
+  vx_samples: 18	# (int, default 3) x軸速度空間で探索するサンプル数
+  vtheta_samples: 20	# (int, default 20) yaw軸速度空間で探索するサンプル数
+  sim_granularity: 0.05	#  (double [m], default 0.025) 算出する経路のきめ細かさ．

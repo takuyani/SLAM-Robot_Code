@@ -1,11 +1,12 @@
 local_costmap:
-  global_frame: /odom
-  robot_base_frame: /base_footprint
-  update_frequency: 2.0
-  publish_frequency: 0.5
-  static_map: false
-  rolling_window: true
-  width: 3.5
-  height: 3.5
-  resolution: 0.05
-  transform_tolerance: 1.0
+  global_frame: /odom	# マップフレームの設定
+  robot_base_frame: /base_footprint		# ロボットベースフレームの設定
+  update_frequency: 2.0		# 更新周期[Hz]
+  publish_frequency: 0.5	# 配信周期[Hz]
+  static_map: false		# 指定したマップを使用するかの設定
+  rolling_window: true	# 局所環境地図ウィンドウの使用設定
+  width: 3.5	# 局所環境地図ウィンドウの横[m]
+  height: 3.5	# 局所環境地図ウィンドウの縦[m]
+  resolution: 0.05	# 局所環境地図ウィンドウの解像度[m/cell]
+  transform_tolerance: 1.0	# 変換許容距離[m]
+
