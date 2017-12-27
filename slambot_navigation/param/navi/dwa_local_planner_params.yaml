@@ -1,48 +1,51 @@
 DWAPlannerROS:
 
-# Robot Configuration Parameters
-  max_vel_x: 0.18
-  min_vel_x: -0.18
+### Robot Configuration Parameters
+  # x軸の設定
+  max_vel_x: 0.18	# x軸の最大速度[m/s]
+  min_vel_x: -0.18	# x軸の最小速度[m/s]
 
-  max_vel_y: 0.0
-  min_vel_y: 0.0
+  # y軸の設定(全方向ロボットの場合に設定)
+  max_vel_y: 0.0	# y軸の最大速度[m/s]
+  min_vel_y: 0.0	# y軸の最小速度[m/s]
 
   # The velocity when robot is moving in a straight line
-  max_trans_vel:  0.18
-  min_trans_vel:  0.05
-#  trans_stopped_vel: 0.01
+  max_trans_vel:  0.18	# 最大並進速度[m/s]
+  min_trans_vel:  0.05	# 最小並進速度[m/s]
+### trans_stopped_vel: 0.01	# 停止並進速度[m/s]
 
-  max_rot_vel: 1.8
-  min_rot_vel: 0.7
-#  rot_stopped_vel: 0.01
+  max_rot_vel: 1.8	# 最大回転速度[rad/s]
+  min_rot_vel: 0.7	# 最小回転速度[rad/s]
+### rot_stopped_vel: 0.01	#　停止回転速度[rad/s]
 
-  acc_lim_x: 2.0
+  acc_lim_x: 2.0	# x軸加速度制限[m/s^2̂]
   acc_lim_theta: 2.0
-  acc_lim_y: 0.0
+  acc_lim_y: 0.0	# y軸加速度制限[m/s^2̂]
 
-# Goal Tolerance Parametes
-  yaw_goal_tolerance: 0.15
-  xy_goal_tolerance: 0.05
+### Goal Tolerance Parametes
+  yaw_goal_tolerance: 0.15	# yaw軸の角度許容誤差[rad]
+  xy_goal_tolerance: 0.05	#x、y座標の距離許容誤差[m]
 
-# Forward Simulation Parameters
-  sim_time: 3.5
-  vx_samples: 20
-  vy_samples: 0
-  vtheta_samples: 40
+### Forward Simulation Parameters
+  sim_time: 3.5			# フォワードシミュレーション軌跡時間
+  vx_samples: 20		# x軸速度空間で探索するサンプル数
+  vy_samples: 0			# y軸速度空間で探索するサンプル数
+  vtheta_samples: 40	# yaw軸速度空間で探索するサンプル数
 
-# Trajectory Scoring Parameters
-  path_distance_bias: 32.0
-  goal_distance_bias: 24.0
-  occdist_scale: 0.04
-  forward_point_distance: 0.325
-  stop_time_buffer: 0.2
-  scaling_speed: 0.25
-  max_scaling_factor: 0.2
+### Trajectory Scoring Parameters
+  path_distance_bias: 32.0	# コントローラのパス追従の重み
+  goal_distance_bias: 24.0	# 目標地点と制御速度に近いかどうかの重み
+  occdist_scale: 0.04		# 障害物回避のための重み
+  forward_point_distance: 0.325	# ロボットから追加スクロール点との距離[m]
+  stop_time_buffer: 0.2		# ロボット停止に必要な時間[s]
+  scaling_speed: 0.25		# スケーリング速度[m/s]
+  max_scaling_factor: 0.2	# 最大スケーリング係数
 
-# Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.05
+### Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05	# oscillationフラグがリセットされる前に、ロボットがどのように移動するかの設定
 
-# Debugging
-  publish_traj_pc : true
-  publish_cost_grid_pc: true
- # global_frame_id: odom
+### Debugging
+  publish_traj_pc : true		# 移動軌跡のデバッグ設定
+  publish_cost_grid_pc: true	# costmapデバッグ設定
+  global_frame_id: odom		# グローバルフレームIDの設定
+
