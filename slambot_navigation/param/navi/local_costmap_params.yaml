@@ -1,12 +1,40 @@
 local_costmap:
-  global_frame: /odom	# マップフレームの設定
-  robot_base_frame: /base_footprint		# ロボットベースフレームの設定
-  update_frequency: 2.0		# 更新周期[Hz]
-  publish_frequency: 0.5	# 配信周期[Hz]
-  static_map: false		# 指定したマップを使用するかの設定
-  rolling_window: true	# 局所環境地図ウィンドウの使用設定
-  width: 3.5	# 局所環境地図ウィンドウの横[m]
-  height: 3.5	# 局所環境地図ウィンドウの縦[m]
-  resolution: 0.05	# 局所環境地図ウィンドウの解像度[m/cell]
-  transform_tolerance: 1.0	# 変換許容距離[m]
+## global_frame (string, default: "/map")
+## マップフレームの設定
+  global_frame: /map
 
+## robot_base_frame (string, default: "base_link")
+## ロボットベースフレームの設定
+  robot_base_frame: /base_footprint
+
+## update_frequency [Hz] (double, default: 5.0)
+## 更新周期
+  update_frequency: 3.0
+
+## publish_frequency [Hz] (double, default: 0.0)
+## 配信周期
+  publish_frequency: 2.0
+
+## static_map (bool, default: true)
+## 指定したマップを使用するかの設定
+  static_map: false
+
+## rolling_window (bool, default: false)
+## 局所環境地図ウィンドウの使用設定
+  rolling_window: true
+
+## width [m] (int, default: 10)
+## 局所環境地図ウィンドウの横
+  width: 4.0
+
+## height [m] (int, default: 10)
+## 局所環境地図ウィンドウの縦
+  height: 4.0 				
+
+## resolution [m/cell] (double, default: 0.05)
+## 局所環境地図ウィンドウの解像度 (メートル/セル)
+  resolution: 0.05
+
+## transform_tolerance [sec] (double, default: 0.2)
+## ネットワークの遅延に対処するための待ち時間（秒）
+  transform_tolerance: 0.5
