@@ -17,6 +17,7 @@
 		<arg name="headless" value="$(arg headless)"/>
 	</include>
 
+	<!-- slambot model -->
 	<group ns="slambot_host">
 		<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
@@ -44,9 +45,10 @@
 			<remap from="image" to="sensor_xtion_pro_live/depth_registered/image_raw"/>
 			<remap from="camera_info" to="sensor_xtion_pro_live/depth_registered/camera_info"/>
 			<remap from="scan" to="sensor_xtion_pro_live/scan"/>
-		</node>
+		</node>	
 	</group>
 
+	<!-- cartographer -->
 	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
 		args="
 		-configuration_directory $(find slambot_navigation)/config/lua
@@ -58,6 +60,21 @@
 
 	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
 		type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+
+	<!-- move_base -->
+	<arg name="cmd_vel_topic" default="cmd_vel_2" />
+	<arg name="odom_topic" default="odom" />
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns=" global_costmap" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns=" local_costmap" />
+		<rosparam file="$(find slambot_navigation)/param/navi/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find slambot_navigation)/param/navi/global_costmap_params.yaml" command="load" />
+		<rosparam file="$(find slambot_navigation)/param/navi/dwa_local_planner_params.yaml" command="load" />
+		<rosparam file="$(find slambot_navigation)/param/navi/move_base_params.yaml" command="load" />
+		<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+		<remap from="odom" to="$(arg odom_topic)"/>
+	</node>
 
 </launch>
 
