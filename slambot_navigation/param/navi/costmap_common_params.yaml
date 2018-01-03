@@ -62,5 +62,5 @@ max_obstacle_height: 0.60
 
 ## 使用するセンサの指定（名前空間を指定する）．
 observation_sources: laser_scan_sensor
-laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true, min_obstacle_height: 0.25, max_obstacle_height: 0.35}
+laser_scan_sensor: {data_type: LaserScan, topic: /slambot_host/sensor_xtion_pro_live/scan, marking: true, clearing: true}
 
