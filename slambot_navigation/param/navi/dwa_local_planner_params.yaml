@@ -1,51 +1,81 @@
 DWAPlannerROS:
 
 ### Robot Configuration Parameters
-  ## x軸の設定
-  max_vel_x: 0.5		# x軸の最大速度[m/s]
-  min_vel_x: 0.0		# x軸の最小速度[m/s]
+  ## ＜x軸の設定＞
+  # x軸の最大速度[m/s]
+  max_vel_x: 0.5
+  # x軸の最小速度[m/s]
+  min_vel_x: 0.0
 
-  ## y軸の設定(全方向[ホロノミック]ロボット）の場合に設定)
-  max_vel_y: 0.0		# y軸の最大速度[m/s]
-  min_vel_y: 0.0		# y軸の最小速度[m/s]
+  ## ＜y軸の設定＞(全方向[ホロノミック]ロボット）の場合に設定)
+  # y軸の最大速度[m/s]
+  max_vel_y: 0.0
+  # y軸の最小速度[m/s]
+  min_vel_y: 0.0
 
   ## The velocity when robot is moving in a straight line
-  max_trans_vel:  0.5		# 最大並進速度[m/s]
-  min_trans_vel:  0.1		# 最小並進速度[m/s]
-  trans_stopped_vel: 0.1	# 停止並進速度[m/s]
+  # 最大並進速度[m/s]
+  max_trans_vel:  0.5
+  # 最小並進速度[m/s]
+  min_trans_vel:  0.1
+  # 停止並進速度[m/s]
+  trans_stopped_vel: 0.1
 
-  max_rot_vel: 5.0			# 最大回転速度[rad/s]
-  min_rot_vel: 0.4			# 最小回転速度[rad/s]
-  rot_stopped_vel: 0.4	# 停止回転速度[rad/s]
+  # 最大回転速度[rad/s]
+  max_rot_vel: 5.0
+  # 最小回転速度[rad/s]
+  min_rot_vel: 0.4
+  # 停止回転速度[rad/s]
+  rot_stopped_vel: 0.4
 
-  acc_lim_x: 1.0			# x軸加速度制限[m/s^2̂]
-  acc_lim_y: 0.0			# y軸加速度制限[m/s^2̂](全方向[ホロノミック]ロボット）の場合に設定)
-  acc_lim_theta: 2.0		# yaw軸加速度制限[m/s^2̂]
+  # x軸加速度制限[m/s^2̂]
+  acc_lim_x: 1.0
+  # y軸加速度制限[m/s^2̂](全方向[ホロノミック]ロボット）の場合に設定)
+  acc_lim_y: 0.0
+  # yaw軸加速度制限[m/s^2̂]
+  acc_lim_theta: 2.0
 
 ### Goal Tolerance Parametes
-  yaw_goal_tolerance: 0.3		# yaw軸の角度許容誤差[rad]
-  xy_goal_tolerance: 0.15		# x、y座標の距離許容誤差[m]（地図の解像度よりも小さい値にしないこと）
+  # yaw軸の角度許容誤差[rad]
+  yaw_goal_tolerance: 0.3
+  # x、y座標の距離許容誤差[m]（地図の解像度よりも小さい値にしないこと）
+  xy_goal_tolerance: 0.15
 
 ### Forward Simulation Parameters
-  sim_time: 1.0			# フォワードシミュレーション軌跡時間
-  vx_samples: 6			# x軸速度空間で探索するサンプル数
-  vy_samples: 1			# y軸速度空間で探索するサンプル数
-  vtheta_samples: 20		# yaw軸速度空間で探索するサンプル数
+  # フォワードシミュレーション軌跡時間
+  sim_time: 1.0
+  # x軸速度空間で探索するサンプル数
+  vx_samples: 6
+  # y軸速度空間で探索するサンプル数
+  vy_samples: 1
+  # yaw軸速度空間で探索するサンプル数
+  vtheta_samples: 20
 
 ### Trajectory Scoring Parameters
-  path_distance_bias: 64.0		# コントローラのパス追従の重み
-  goal_distance_bias: 24.0		# 目標地点と制御速度に近いかどうかの重み
-  occdist_scale: 0.5				# 障害物回避のための重み
-  forward_point_distance: 0.325	# ロボットから追加スクロール点との距離[m]
-  stop_time_buffer: 0.2			# ロボット停止に必要な時間[s]
-  scaling_speed: 0.25				# スケーリング速度[m/s]
-  max_scaling_factor: 0.2			# 最大スケーリング係数
+  # コントローラのパス追従の重み
+  path_distance_bias: 64.0
+  # 目標地点と制御速度に近いかどうかの重み
+  goal_distance_bias: 24.0
+  # 障害物回避のための重み
+  occdist_scale: 0.5
+  # ロボットから追加スクロール点との距離[m]
+  forward_point_distance: 0.325
+  # ロボット停止に必要な時間[s]
+  stop_time_buffer: 0.2
+  # スケーリング速度[m/s]
+  scaling_speed: 0.25
+  # 最大スケーリング係数
+  max_scaling_factor: 0.2
 
 ### Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.05	# oscillationフラグがリセットされる前に、ロボットがどのように移動するかの設定
+  # oscillationフラグがリセットされる前に、ロボットがどのように移動するかの設定
+  oscillation_reset_dist: 0.05
 
 ### Debugging
-  publish_traj_pc : true			# 移動軌跡のデバッグ設定
-  publish_cost_grid_pc: true		# costmapデバッグ設定
-  global_frame_id: odom			# グローバルフレームIDの設定
+  # 移動軌跡のデバッグ設定
+  publish_traj_pc : true
+  # costmapデバッグ設定
+  publish_cost_grid_pc: true
+  # グローバルフレームIDの設定
+  global_frame_id: odom
 

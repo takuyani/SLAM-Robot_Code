@@ -29,7 +29,7 @@ local_costmap:
 
 ## height [m] (int, default: 10)
 ## 局所環境地図ウィンドウの縦
-  height: 4.0 				
+  height: 4.0
 
 ## resolution [m/cell] (double, default: 0.05)
 ## 局所環境地図ウィンドウの解像度 (メートル/セル)
