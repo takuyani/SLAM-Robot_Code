@@ -4,7 +4,7 @@ shutdown_costmaps: false
 
 ## controller_frequency [Hz]  (double, default: 20.0)
 ## ロボットベースに速度コマンドを与えるコントロール繰り返しの周期 (Hz単位)
-controller_frequency: 10.0
+controller_frequency: 5.0
 
 ## controller_patience  [sec] (double, default: 15.0)
 ## space-clearing動作が実行される前に、コントローラが制御情報を受信待機する最大時間

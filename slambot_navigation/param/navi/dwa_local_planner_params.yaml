@@ -5,7 +5,7 @@ DWAPlannerROS:
   # x軸の最大速度[m/s]
   max_vel_x: 0.5
   # x軸の最小速度[m/s]
-  min_vel_x: 0.0
+  min_vel_x: -0.1
 
   ## ＜y軸の設定＞(全方向[ホロノミック]ロボット）の場合に設定)
   # y軸の最大速度[m/s]
@@ -15,18 +15,18 @@ DWAPlannerROS:
 
   ## The velocity when robot is moving in a straight line
   # 最大並進速度[m/s]
-  max_trans_vel:  0.5
+  max_trans_vel: 0.5
   # 最小並進速度[m/s]
-  min_trans_vel:  0.1
+  min_trans_vel: -0.1
   # 停止並進速度[m/s]
-  trans_stopped_vel: 0.1
+  trans_stopped_vel: 0.4
 
   # 最大回転速度[rad/s]
-  max_rot_vel: 5.0
+  max_rot_vel: 0.3
   # 最小回転速度[rad/s]
-  min_rot_vel: 0.4
+  min_rot_vel: -0.3
   # 停止回転速度[rad/s]
-  rot_stopped_vel: 0.4
+  rot_stopped_vel: 0.2
 
   # x軸加速度制限[m/s^2̂]
   acc_lim_x: 1.0
@@ -61,7 +61,7 @@ DWAPlannerROS:
   # ロボットから追加スクロール点との距離[m]
   forward_point_distance: 0.325
   # ロボット停止に必要な時間[s]
-  stop_time_buffer: 0.2
+  stop_time_buffer: 0.5
   # スケーリング速度[m/s]
   scaling_speed: 0.25
   # 最大スケーリング係数
