@@ -8,7 +8,7 @@ raytrace_range: 6.0
 
 ## footprint
 ## ロボットの形状を多角形で指示することができる．footprintの形状に応じてコストマップのdefinitery in collisionとpossibly in collisionの径が決定される．
-footprint: [[-0.205, -0.145], [-0.205, 0.145], [0.077, 0.145], [0.077, -0.145]]
+footprint: [[-0.105, -0.080], [-0.105, 0.080], [0.105, 0.080], [0.105, -0.080]]
 
 ## robot_radius [m] (double, default: 0.46)
 ## footpritによって多角形でロボットの形状を指定する代わりに，ロボットを円とみなしてその半径を指定することができる．
