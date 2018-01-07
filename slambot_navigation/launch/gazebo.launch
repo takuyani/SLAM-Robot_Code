@@ -9,6 +9,7 @@
 
 	<!-- select SLAM -->
 	<arg name="slam_mode" default="cartographer"/>
+<!--	<arg name="slam_mode" default="gmapping"/> -->
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 	    <arg name="world_name" value="$(find slambot_gazebo)/world/willow_garage.world"/> 
@@ -50,7 +51,7 @@
 		</node>	
 	</group>
 
-	<!-- cartographer -->
+	<!-- SLAM -->
 	<include file="$(find slambot_navigation)/launch/slam/$(arg slam_mode).launch"/>
 
 	<!-- move_base -->
