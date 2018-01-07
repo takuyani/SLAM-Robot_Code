@@ -1,12 +1,14 @@
 <launch>
 	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
 
-	<arg name="camera" default="xtion_pro_live"/>
 	<arg name="paused" default="false"/>
 	<arg name="use_sim_time" default="true"/>
 	<arg name="gui" default="true"/>
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
+
+	<!-- select SLAM -->
+	<arg name="slam_mode" default="cartographer"/>
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 	    <arg name="world_name" value="$(find slambot_gazebo)/world/willow_garage.world"/> 
@@ -49,17 +51,7 @@
 	</group>
 
 	<!-- cartographer -->
-	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
-		args="
-		-configuration_directory $(find slambot_navigation)/config/lua
-		-configuration_basename slambot_2d.lua"
-		output="screen">
-			<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
-			<remap from="odom" to="/slambot_host/diff_drive_controller/odom" />
-	</node>
-
-	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
-		type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+	<include file="$(find slambot_navigation)/launch/slam/$(arg slam_mode).launch"/>
 
 	<!-- move_base -->
 	<arg name="cmd_vel_topic" default="/slambot_host/cmd_vel" />
