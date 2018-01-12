@@ -1,3 +1,4 @@
+## ----- Coordinate frame and tf parameters -----
 ## global_frame (string, default: "/map")
 ## マップフレームの設定
 global_frame: /map
@@ -6,6 +7,11 @@ global_frame: /map
 ## ロボットベースフレームの設定
 robot_base_frame: /base_footprint
 
+## transform_tolerance [sec] (double, default: 0.2)
+## ネットワークの遅延に対処するための待ち時間（秒）
+transform_tolerance: 0.5
+
+## ----- Rate parameters -----
 ## update_frequency [Hz] (double, default: 5.0)
 ## 更新周期
 update_frequency: 1.0
@@ -14,10 +20,8 @@ update_frequency: 1.0
 ## 配信周期
 publish_frequency: 0.5
 
+## ----- Map management parameters -----
 ## static_map (bool, default: true)
 ## 指定したマップを使用するかの設定
 static_map: true
 
-## transform_tolerance [sec] (double, default: 0.2)
-## ネットワークの遅延に対処するための待ち時間（秒）
-transform_tolerance: 0.5

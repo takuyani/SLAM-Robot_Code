@@ -1,3 +1,4 @@
+## ----- Coordinate frame and tf parameters -----
 ## global_frame (string, default: "/map")
 ## マップフレームの設定
 global_frame: /odom
@@ -6,6 +7,11 @@ global_frame: /odom
 ## ロボットベースフレームの設定
 robot_base_frame: /base_footprint
 
+## transform_tolerance [sec] (double, default: 0.2)
+## ネットワークの遅延に対処するための待ち時間（秒）
+transform_tolerance: 0.5
+
+## ----- Rate parameters -----
 ## update_frequency [Hz] (double, default: 5.0)
 ## 更新周期
 update_frequency: 3.0
@@ -14,6 +20,7 @@ update_frequency: 3.0
 ## 配信周期
 publish_frequency: 2.0
 
+## ----- Map management parameters -----
 ## static_map (bool, default: true)
 ## 指定したマップを使用するかの設定
 static_map: false
@@ -34,6 +41,11 @@ height: 10.0
 ## 局所環境地図ウィンドウの解像度 (メートル/セル)
 resolution: 0.05
 
-## transform_tolerance [sec] (double, default: 0.2)
-## ネットワークの遅延に対処するための待ち時間（秒）
-transform_tolerance: 0.5
+## origin_x (double, default: 0.0)
+## The x origin of the map in the global frame in meters.
+origin_x: 0.0
+
+## origin_y (double, default: 0.0)
+## The y origin of the map in the global frame in meters.
+origin_y: 0.0
+
