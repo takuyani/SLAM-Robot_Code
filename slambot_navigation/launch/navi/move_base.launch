@@ -11,8 +11,8 @@
 	<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
 	<!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
 
-	<arg name="ns_local_costmap" default="local_costmap"/>
-	<arg name="ns_global_costmap" default="global_costmap"/>
+	<arg name="ns_costmap_local" default="costmap_local"/>
+	<arg name="ns_costmap_global" default="costmap_global"/>
 
 
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -35,27 +35,24 @@
 
 		<!-- ========== const map ========== -->
 		<!-- observation sources located in costmap_common.yaml -->
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_global_costmap)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_local_costmap)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
 
 		<!-- local costmap params -->
-	    <rosparam file="$(find slambot_navigation)/param/navi/costmap_local_params.yaml" command="load" ns="$(arg ns_local_costmap)" />
-	    <param name="$(arg ns_local_costmap)/width" value="10.0"/>		<!-- [m] -->
-	    <param name="$(arg ns_local_costmap)/height" value="10.0"/>		<!-- [m] -->
-		<param name="$(arg ns_local_costmap)/resolution" value="0.05"/>	<!-- [m/cell] -->
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_local_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
 
 		<!-- static global costmap, static map provides size -->
 <!--
-		<rosparam file="$(find husky_navigation)/config/costmap_global_static.yaml" command="load" ns="global_costmap"
+		<rosparam file="$(find husky_navigation)/config/costmap_global_static.yaml" command="load" ns="costmap_global"
 			unless="$(arg no_static_map)"/>
 -->
 
 		<!-- global costmap with laser, for odom_navigation_demo -->
 <!--
-		<rosparam file="$(find husky_navigation)/config/costmap_global_laser.yaml" command="load" ns="global_costmap"
+		<rosparam file="$(find husky_navigation)/config/costmap_global_laser.yaml" command="load" ns="costmap_global"
 			if="$(arg no_static_map)"/>
-			<param name="global_costmap/width" value="100.0" if="$(arg no_static_map)"/>
-			<param name="global_costmap/height" value="100.0" if="$(arg no_static_map)"/>
+			<param name="costmap_global/width" value="100.0" if="$(arg no_static_map)"/>
+			<param name="costmap_global/height" value="100.0" if="$(arg no_static_map)"/>
 -->
 	</node>
 
