@@ -26,7 +26,7 @@ TrajectoryPlannerROS:
 
   ## (double [rad/s], default: -1.0)
   ## x方向の最小角速度
-  min_vel_theta: -1.0	
+  min_vel_theta: -1.0
 
   ## (double [rad/s], default: 0.4)
   ## 目的地に到着し，ロボットの角度を合わせるために回転するときの最小角速度．
@@ -147,4 +147,3 @@ TrajectoryPlannerROS:
   ## Defines whether or not to eat up the plan as the robot moves along the path.
   ## If set to true, points will fall off the end of the plan once the robot moves 1 meter past them.
   prune_plan: true
-

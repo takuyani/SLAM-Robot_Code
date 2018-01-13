@@ -2,6 +2,9 @@
 
 	<arg name="no_static_map" default="false"/>
 
+	<arg name="cmd_vel_topic" default="/cmd_vel" />
+	<arg name="odom_topic" default="/odom" />
+
 	<!-- Select "global_planner" plugins -->
 	<arg name="base_global_planner" default="global_planner/GlobalPlanner"/>
 	<!-- <arg name="base_global_planner" default="navfn/NavfnROS"/> -->
@@ -54,6 +57,9 @@
 			<param name="costmap_global/width" value="100.0" if="$(arg no_static_map)"/>
 			<param name="costmap_global/height" value="100.0" if="$(arg no_static_map)"/>
 -->
+		<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+		<remap from="odom" to="$(arg odom_topic)"/>
+
 	</node>
 
 </launch>

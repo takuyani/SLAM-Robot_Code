@@ -12,7 +12,7 @@
 <!--	<arg name="slam_mode" default="gmapping"/> -->
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-	    <arg name="world_name" value="$(find slambot_gazebo)/world/willow_garage.world"/> 
+	    <arg name="world_name" value="$(find slambot_gazebo)/world/willow_garage.world"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />
 		<arg name="paused" value="$(arg paused)"/>
@@ -48,28 +48,24 @@
 			<remap from="image" to="sensor_xtion_pro_live/depth_registered/image_raw"/>
 			<remap from="camera_info" to="sensor_xtion_pro_live/depth_registered/camera_info"/>
 			<remap from="scan" to="sensor_xtion_pro_live/scan"/>
-		</node>	
+		</node>
 	</group>
 
 	<!-- SLAM -->
-	<include file="$(find slambot_navigation)/launch/slam/$(arg slam_mode).launch"/>
+	<include file="$(find slambot_navigation)/launch/slam/$(arg slam_mode).launch">
+		<arg name="scan_topic" value="/slambot_host/sensor_xtion_pro_live/scan" />
+		<arg name="odom_topic" value="/slambot_host/diff_drive_controller/odom" />
+	</include>
 
 	<!-- move_base -->
-	<arg name="cmd_vel_topic" default="/slambot_host/cmd_vel" />
-	<arg name="odom_topic" default="/slambot_host/diff_drive_controller/odom" />
-	<arg name="global_costmap" default="global_costmap" />
-	<arg name="local_costmap" default="local_costmap" />
-	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg local_costmap)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg global_costmap)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/local_costmap_params.yaml" command="load" ns="$(arg local_costmap)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/global_costmap_params.yaml" command="load" ns="$(arg global_costmap)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/dwa_local_planner_params.yaml" command="load" />
-		<rosparam file="$(find slambot_navigation)/param/navi/move_base_params.yaml" command="load" />
-		<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
-		<remap from="odom" to="$(arg odom_topic)"/>
-	</node>
+	<include file="$(find slambot_navigation)/launch/navi/move_base.launch">
+		<arg name="cmd_vel_topic" value="/slambot_host/cmd_vel"/>
+		<arg name="odom_topic" value="/slambot_host/diff_drive_controller/odom"/>
+		<arg name="no_static_map" value="false"/>
+
+		<arg name="base_global_planner" default="global_planner/GlobalPlanner"/>
+		<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
+
+	</include>
 
 </launch>
-
