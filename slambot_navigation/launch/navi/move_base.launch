@@ -23,8 +23,8 @@
 		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
 		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
 		<rosparam file="$(find slambot_navigation)/param/navi/costmap_local_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_global_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
-
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_global_withoutmap_params.yaml" command="load" ns="$(arg ns_costmap_global)" if="$(arg no_static_map)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_global_withmap_params.yaml" command="load" ns="$(arg ns_costmap_global)" unless="$(arg no_static_map)" />
 
 		<!-- global planner params -->
 		<param name="base_global_planner" value="$(arg base_global_planner)"/>

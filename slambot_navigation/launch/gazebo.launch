@@ -61,7 +61,7 @@
 	<include file="$(find slambot_navigation)/launch/navi/move_base.launch">
 		<arg name="cmd_vel_topic" value="/slambot_host/cmd_vel"/>
 		<arg name="odom_topic" value="/slambot_host/diff_drive_controller/odom"/>
-		<arg name="no_static_map" value="false"/>
+		<arg name="no_static_map" value="true"/>
 
 		<arg name="base_global_planner" default="global_planner/GlobalPlanner"/>
 		<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>

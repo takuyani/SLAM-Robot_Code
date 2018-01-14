@@ -1,4 +1,4 @@
-## ----- Coordinate frame and tf parameters -----
+## ========== Coordinate frame and tf parameters ==========
 ## global_frame (string, default: "/map")
 ## マップフレームの設定
 global_frame: /map
@@ -11,7 +11,7 @@ robot_base_frame: /base_footprint
 ## ネットワークの遅延に対処するための待ち時間（秒）
 transform_tolerance: 0.5
 
-## ----- Rate parameters -----
+## ========== Rate parameters ==========
 ## update_frequency [Hz] (double, default: 5.0)
 ## 更新周期
 update_frequency: 1.0
@@ -20,7 +20,16 @@ update_frequency: 1.0
 ## 配信周期
 publish_frequency: 0.5
 
-## ----- Map management parameters -----
+## ========== Map management parameters ==========
 ## static_map (bool, default: true)
 ## 指定したマップを使用するかの設定
 static_map: true
+
+## rolling_window (bool, default: false)
+## 局所環境地図ウィンドウの使用設定
+rolling_window: false
+
+## ========== plugins ==========
+plugins:
+  - {name: static,                  type: "costmap_2d::StaticLayer"}
+  - {name: inflation,               type: "costmap_2d::InflationLayer"}

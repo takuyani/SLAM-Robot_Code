@@ -1,4 +1,4 @@
-## ========== Coordinate frame and tf parameters ==========
+## ----- Coordinate frame and tf parameters -----
 ## global_frame (string, default: "/map")
 ## マップフレームの設定
 global_frame: /odom
@@ -14,11 +14,11 @@ transform_tolerance: 0.5
 ## ----- Rate parameters -----
 ## update_frequency [Hz] (double, default: 5.0)
 ## 更新周期
-update_frequency: 3.0
+update_frequency: 1.0
 
 ## publish_frequency [Hz] (double, default: 0.0)
 ## 配信周期
-publish_frequency: 2.0
+publish_frequency: 0.5
 
 ## ========== Map management parameters ==========
 ## static_map (bool, default: true)
@@ -31,11 +31,11 @@ rolling_window: true
 
 ## width [m] (int, default: 10)
 ## 局所環境地図ウィンドウの横
-width: 10.0
+width: 100.0
 
 ## height [m] (int, default: 10)
 ## 局所環境地図ウィンドウの縦
-height: 10.0
+height: 100.0
 
 ## resolution [m/cell] (double, default: 0.05)
 ## 局所環境地図ウィンドウの解像度 (メートル/セル)
