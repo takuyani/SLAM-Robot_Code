@@ -14,49 +14,31 @@
 	<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
 	<!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
 
-	<arg name="ns_costmap_local" default="costmap_local"/>
-	<arg name="ns_costmap_global" default="costmap_global"/>
-
+	<arg name="ns_costmap_local" default="local_costmap"/>
+	<arg name="ns_costmap_global" default="global_costmap"/>
 
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-		<!-- ========== planner setting ========== -->
-		<rosparam file="$(find slambot_navigation)/param/navi/move_base_params.yaml" command="load" />
-		<param name="base_global_planner" value="$(arg base_global_planner)"/>
-		<param name="base_local_planner" value="$(arg base_local_planner)"/>
+		<!-- observation sources located in costmap_common.yaml -->
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_local_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
+		<rosparam file="$(find slambot_navigation)/param/navi/costmap_global_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
+
 
 		<!-- global planner params -->
+		<param name="base_global_planner" value="$(arg base_global_planner)"/>
 		<rosparam file="$(find slambot_navigation)/param/navi/global_planner/global_planner_params.yaml" command="load" />
 		<rosparam file="$(find slambot_navigation)/param/navi/global_planner/navfn_params.yaml" command="load" />
 		<rosparam file="$(find slambot_navigation)/param/navi/global_planner/carrot_planner_params.yaml" command="load" />
 
 		<!-- local planner params -->
+		<param name="base_local_planner" value="$(arg base_local_planner)"/>
 		<rosparam file="$(find slambot_navigation)/param/navi/local_planner/base_local_planner_params.yaml" command="load" />
 		<rosparam file="$(find slambot_navigation)/param/navi/local_planner/dwa_local_planner_params.yaml" command="load" />
 		<rosparam file="$(find slambot_navigation)/param/navi/local_planner/teb_local_planner_params.yaml" command="load" />
 
 
-		<!-- ========== const map ========== -->
-		<!-- observation sources located in costmap_common.yaml -->
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_global)" />
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
-
-		<!-- local costmap params -->
-		<rosparam file="$(find slambot_navigation)/param/navi/costmap_local_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
-
-		<!-- static global costmap, static map provides size -->
-<!--
-		<rosparam file="$(find husky_navigation)/config/costmap_global_static.yaml" command="load" ns="costmap_global"
-			unless="$(arg no_static_map)"/>
--->
-
-		<!-- global costmap with laser, for odom_navigation_demo -->
-<!--
-		<rosparam file="$(find husky_navigation)/config/costmap_global_laser.yaml" command="load" ns="costmap_global"
-			if="$(arg no_static_map)"/>
-			<param name="costmap_global/width" value="100.0" if="$(arg no_static_map)"/>
-			<param name="costmap_global/height" value="100.0" if="$(arg no_static_map)"/>
--->
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
 		<remap from="odom" to="$(arg odom_topic)"/>
 
