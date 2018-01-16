@@ -1,0 +1,115 @@
+# Process 1 out of every this many scans (set it to a higher number to skip more scans)
+throttle_scans: 1
+
+# The frame attached to the mobile base.
+base_frame: "base_footprint"
+
+# The frame attached to the map.
+map_frame: "map"
+
+# The frame attached to the odometry system.
+odom_frame: "odom"
+
+# How long (in seconds) between updates to the map.
+# Lowering this number updates the occupancy grid more often, at the expense of greater computational load.
+map_update_interval: 2.0
+
+# The maximum usable range of the laser. A beam is cropped to this value.
+maxUrange: 5.0
+
+# The sigma used by the greedy endpoint matching
+sigma: 0.05
+
+# The kernel in which to look for a correspondence
+kernelSize: 1
+
+# The optimization step in translation
+lstep: 0.05
+
+# The optimization step in rotation
+astep: 0.05
+
+# The number of iterations of the scanmatcher
+iterations: 5
+
+# The sigma of a beam used for likelihood computation
+lsigma: 0.075
+
+# Gain to be used while evaluating the likelihood, for smoothing the resampling effects
+ogain: 3.0
+
+# Number of beams to skip in each scan.
+lskip: 0
+
+# Minimum score for considering the outcome of the scan matching good.
+# Can avoid jumping pose estimates in large open spaces when using laser scanners with limited range (e.g. 5m).
+# Scores go up to 600+, try 50 for example when experiencing jumping estimate issues.
+minimumScore: 100.0
+
+# Odometry error in translation as a function of translation (rho/rho)
+srr: 0.01
+
+# Odometry error in translation as a function of rotation (rho/theta)
+srt: 0.02
+
+# Odometry error in rotation as a function of translation (theta/rho)
+str: 0.01
+
+# Odometry error in rotation as a function of rotation (theta/theta)
+stt: 0.02
+
+# Process a scan each time the robot translates this far
+linearUpdate: 0.2
+
+# Process a scan each time the robot rotates this far
+angularUpdate: 0.5
+
+# Process a scan if the last scan processed is older than the update time in seconds.
+# A value less than zero will turn time based updates off.
+temporalUpdate: -1.0
+
+# The Neff based resampling threshold
+resampleThreshold: 0.5
+
+# Number of particles in the filter
+particles: 100
+
+# Initial map size
+xmin: -10.0
+
+# Initial map size
+ymin: -10.0
+
+# Initial map size
+xmax: 10.0
+
+# Initial map size
+ymax: 10.0
+
+# Resolution of the map
+delta: 0.05
+
+# Translational sampling range for the likelihood
+llsamplerange: 0.01
+
+# Translational sampling step for the likelihood
+llsamplestep: 0.01
+
+# Angular sampling range for the likelihood
+lasamplerange: 0.005
+
+# Angular sampling step for the likelihood
+lasamplestep: 0.005
+
+# How long (in seconds) between transform publications.
+transform_publish_period: 0.05
+
+# Threshold on gmapping's occupancy values.
+# Cells with greater occupancy are considered occupied (i.e., set to 100 in the resulting sensor_msgs/LaserScan).
+# New in 1.1.0.
+occ_thresh: 0.25
+
+# The maximum range of the sensor.
+# If regions with no obstacles within the range of the sensor should appear as free space in the map, set maxUrange < maximum range of the real sensor <= maxRange.
+maxRange: 6.1
+

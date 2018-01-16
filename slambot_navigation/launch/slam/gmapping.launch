@@ -1,0 +1,10 @@
+<launch>
+
+	<arg name="scan_topic" default="/scan" />
+
+	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+		<remap from="scan" to="$(arg scan_topic)"/>
+		<rosparam file="$(find slambot_navigation)/param/slam/gmapping.yaml" command="load" />
+	</node>
+
+</launch>

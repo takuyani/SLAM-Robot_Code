@@ -1,0 +1,18 @@
+<launch>
+
+	<arg name="scan_topic" default="/scan" />
+	<arg name="odom_topic" default="/odom" />
+
+	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
+		args="
+		-configuration_directory $(find slambot_navigation)/config/lua
+		-configuration_basename slambot_2d.lua"
+		output="screen">
+			<remap from="scan" to="$(arg scan_topic)"/>
+			<remap from="odom" to="$(arg odom_topic)" />
+	</node>
+
+	<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+		type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+
+</launch>
