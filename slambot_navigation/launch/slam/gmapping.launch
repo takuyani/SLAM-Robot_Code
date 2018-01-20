@@ -1,6 +1,7 @@
 <launch>
 
 	<arg name="scan_topic" default="/scan" />
+	<arg name="odom_topic" default="/odom" />
 
 	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
 		<remap from="scan" to="$(arg scan_topic)"/>
