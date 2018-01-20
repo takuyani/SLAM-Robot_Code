@@ -1,7 +1,7 @@
 <launch>
- 
+
 	<!-- Load joint controller configurations from YAML file to parameter server -->
-	<rosparam file="$(find slambot_slam)/config/controller.yaml" command="load"/>
+	<rosparam file="$(find slambot_slam)/param/controller.yaml" command="load"/>
 
 	<group ns="slambot_host">
 
@@ -14,7 +14,7 @@
 			respawn="false" output="screen">
 				<remap from="robot_description" to="robot_description" />
 		</node>
- 
+
 	</group>
 
 </launch>

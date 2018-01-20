@@ -191,7 +191,7 @@ install(DIRECTORY config/
   PATTERN ".svn" EXCLUDE
 )
 
-## Mark config files for installation
+## Mark parameters files for installation
 install(DIRECTORY param/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/param
   PATTERN ".svn" EXCLUDE
