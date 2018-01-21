@@ -2,7 +2,7 @@ DWAPlannerROS:
   ## ----- Robot configuration parameters -----
   ## acc_lim_x (double, default: 2.5)
   ## The x acceleration limit of the robot in meters/sec^2
-  acc_lim_x: 2.5
+  acc_lim_x: 1.0
 
   ## acc_lim_y (double, default: 2.5)
   ## The y acceleration limit of the robot in meters/sec^2
@@ -14,10 +14,17 @@ DWAPlannerROS:
 
   ## max_trans_vel (double, default: 0.55)
   ## The absolute value of the maximum translational velocity for the robot in m/s
+  ## choose slightly less than the base's capability
   max_trans_vel: 0.30
 
   ## min_trans_vel (double, default: 0.1)
   ## The absolute value of the minimum translational velocity for the robot in m/s
+  ## this is the min trans velocity when there is negligible rotational velocity
+  # Warning!
+  #   do not set min_trans_vel to 0.0 otherwise dwa will always think
+  #   translational velocities
+  #   are non-negligible and small in place rotational velocities will be
+  #   created.
   min_trans_vel: 0.1
 
   ## max_vel_x (double, default: 0.55)
@@ -26,7 +33,7 @@ DWAPlannerROS:
 
   ## min_vel_x (double, default: 0.0)
   ## The minimum x velocity for the robot in m/s, negative for backwards motion.
-  min_vel_x: -0.30
+  min_vel_x: 0.08
 
   ## max_vel_y (double, default: 0.1)
   ## The maximum y velocity for the robot in m/s
@@ -38,11 +45,12 @@ DWAPlannerROS:
 
   ## max_rot_vel (double, default: 1.0)
   ## The absolute value of the maximum rotational velocity for the robot in rad/s
-  max_rot_vel: 3.2
+  max_rot_vel: 0.5
 
   ## min_rot_vel (double, default: 0.4)
   ## The absolute value of the minimum rotational velocity for the robot in rad/s
-  min_rot_vel: 0.4
+  # this is the min angular velocity when there is negligible translational velocity
+  min_rot_vel: 0.1
 
   ## ----- Goal Tolerance Parameters -----
   ## yaw_goal_tolerance (double, default: 0.05)
@@ -72,7 +80,7 @@ DWAPlannerROS:
 
   ## vy_samples (integer, default: 10)
   ## The number of samples to use when exploring the y velocity space
-  vy_samples: 10
+  vy_samples: 1
 
   ## vth_samples (integer, default: 20)
   ## The number of samples to use when exploring the theta velocity space
