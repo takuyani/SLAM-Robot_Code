@@ -13,7 +13,7 @@ controller_patience: 3.0
 ## planner_frequency  [Hz] (double, default 0.0)
 ## 全域計画の繰り返し周期 (Hz単位)
 ## global plannerがグローバルパスを計算する頻度．0.0に設定すると，最初にゴールが設定された時のみにグローバルパスが計算される．
-planner_frequency: 1.0
+planner_frequency: 2.0
 
 ## planner_patience  [sec] (double, default: 5.0)
 ## 有効なパスが見つからなかった時にプランナーがどれだけ待機するか．待機の後にspace-clearing oparations（recovery behaviorsのこと？）が呼ばれる．待機時間内に前方の障害物が移動してパスが見つかった場合には復活するということ？
@@ -21,11 +21,11 @@ planner_patience: 5.0
 
 ## oscillation_timeout [sec] (double, default: 0.0)
 ## 回復行動 (軌道計画に失敗した時の行動)を実行する前に、ロボットが行ったり来たりすることを可能にする時間
-oscillation_timeout: 10.0
+oscillation_timeout: 0.0
 
 ## oscillation_distance [m] (double, default: 0.5)
 ## この距離を移動した場合、oscillation_timeoutは初期化される。
-oscillation_distance: 0.2
+oscillation_distance: 0.5
 
 ## conservative_reset_dist   (double [m], default: 3.0)
 conservative_reset_dist: 3.0

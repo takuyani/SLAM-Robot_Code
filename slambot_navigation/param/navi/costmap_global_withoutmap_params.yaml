@@ -14,11 +14,11 @@ transform_tolerance: 0.5
 ## ----- Rate parameters -----
 ## update_frequency [Hz] (double, default: 5.0)
 ## 更新周期
-update_frequency: 1.0
+update_frequency: 5.0
 
 ## publish_frequency [Hz] (double, default: 0.0)
 ## 配信周期
-publish_frequency: 0.5
+publish_frequency: 2.0
 
 ## ========== Map management parameters ==========
 ## static_map (bool, default: true)
