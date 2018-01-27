@@ -25,7 +25,7 @@ DWAPlannerROS:
   #   translational velocities
   #   are non-negligible and small in place rotational velocities will be
   #   created.
-  min_trans_vel: 0.1
+  min_trans_vel: 0.0
 
   ## max_vel_x (double, default: 0.55)
   ## The maximum x velocity for the robot in m/s.
@@ -33,7 +33,7 @@ DWAPlannerROS:
 
   ## min_vel_x (double, default: 0.0)
   ## The minimum x velocity for the robot in m/s, negative for backwards motion.
-  min_vel_x: 0.08
+  min_vel_x: 0.0
 
   ## max_vel_y (double, default: 0.1)
   ## The maximum y velocity for the robot in m/s
@@ -45,12 +45,12 @@ DWAPlannerROS:
 
   ## max_rot_vel (double, default: 1.0)
   ## The absolute value of the maximum rotational velocity for the robot in rad/s
-  max_rot_vel: 0.5
+  max_rot_vel: 2.0
 
   ## min_rot_vel (double, default: 0.4)
   ## The absolute value of the minimum rotational velocity for the robot in rad/s
   # this is the min angular velocity when there is negligible translational velocity
-  min_rot_vel: 0.1
+  min_rot_vel: 0.0
 
   ## ----- Goal Tolerance Parameters -----
   ## yaw_goal_tolerance (double, default: 0.05)
@@ -68,7 +68,7 @@ DWAPlannerROS:
   ## ----- Forward Simulation Parameters -----
   ## sim_time (double, default: 1.7)
   ## The amount of time to forward-simulate trajectories in seconds
-  sim_time: 1.7
+  sim_time: 1.0
 
   ## sim_granularity (double, default: 0.025)
   ## The step size, in meters, to take between points on a given trajectory

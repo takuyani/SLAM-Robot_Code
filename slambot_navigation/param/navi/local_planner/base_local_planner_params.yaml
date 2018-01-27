@@ -10,7 +10,7 @@ TrajectoryPlannerROS:
 
   ## (double [rad/s^2], default: 3.2)
   ## 回転の最大角加速度．
-  acc_lim_theta: 1.0
+  acc_lim_theta: 3.2 #1.0
 
   ## (double [m/s], default: 0.5)
   ## x方向の最大速度
@@ -22,15 +22,15 @@ TrajectoryPlannerROS:
 
   ## (double [rad/s], default: 1.0)
   ## x方向の最大角速度
-  max_vel_theta: 1.0
+  max_vel_theta: 2.0
 
   ## (double [rad/s], default: -1.0)
   ## x方向の最小角速度
-  min_vel_theta: -1.0
+  min_vel_theta: -2.0
 
   ## (double [rad/s], default: 0.4)
   ## 目的地に到着し，ロボットの角度を合わせるために回転するときの最小角速度．
-  min_in_place_vel_theta: 0.4
+  min_in_place_vel_theta: 0.01
 
   ## escape_vel (double, default: -0.1)
   ## Speed used for driving during escapes in meters/sec.
@@ -67,7 +67,7 @@ TrajectoryPlannerROS:
   ## ----- Forward Simulation Parameters -----
   ## sim_time (double, default: 1.0)
   ## ロボットの移動を何秒間シミュレートするか．
-  sim_time: 1.0
+  sim_time: 3.0
 
   ## sim_granularity (double, default: 0.025)
   ## 算出する経路のきめ細かさ．
