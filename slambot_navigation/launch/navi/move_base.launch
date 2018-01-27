@@ -13,6 +13,9 @@
 
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
+		<!-- move_base_params.yaml -->
+		<rosparam file="$(find slambot_navigation)/param/navi/move_base_params.yaml" command="load" />
+
 		<!-- observation sources located in costmap_common.yaml -->
 		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_local)" />
 		<rosparam file="$(find slambot_navigation)/param/navi/costmap_common_params.yaml" command="load" ns="$(arg ns_costmap_global)" />

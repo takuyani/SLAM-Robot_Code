@@ -67,7 +67,7 @@ TrajectoryPlannerROS:
   ## ----- Forward Simulation Parameters -----
   ## sim_time (double, default: 1.0)
   ## ロボットの移動を何秒間シミュレートするか．
-  sim_time: 0.8
+  sim_time: 1.0
 
   ## sim_granularity (double, default: 0.025)
   ## 算出する経路のきめ細かさ．
@@ -84,12 +84,6 @@ TrajectoryPlannerROS:
   ## vtheta_samples (integer, default: 20)
   ## yaw軸速度空間で探索するサンプル数
   vtheta_samples: 20
-
-  ## controller_frequency (double, default: 20.0)
-  ## The frequency at which this controller will be called in Hz. Uses searchParam to read the parameter from parent namespaces if not set in the namespace of the controller.
-  ## For use with move_base, this means that you only need to set its "controller_frequency" parameter and can safely leave this one unset.
-  controller_frequency: 5.0
-
 
   ## ----- Trajectory Scoring Parameters -----
   ## meter_scoring (bool, default: false)
