@@ -27,7 +27,7 @@ obstacles_laser:
 inflation:
     ## inflation_radius [m] (double, default: 0.55)
     ## インフレーション領域 (ロボットの近傍領域)を表す円の半径で、障害物へ接近させないようにするパラメータ
-    inflation_radius: 0.5
+    inflation_radius: 0.6
 
     ## cost_scaling_factor (double, default: 10.0)
     ## A scaling factor to apply to cost values during inflation.

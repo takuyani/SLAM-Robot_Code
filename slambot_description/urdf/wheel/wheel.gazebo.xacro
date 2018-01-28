@@ -9,6 +9,7 @@
       <mu2>10.0</mu2>
       <kp>1000000.0</kp>
       <kd>100.0</kd>
+      <fdir1 value="1 0 0"/>
       <minDepth>0.001</minDepth>
       <!--   <maxVel>1.0</maxVel> -->
     </gazebo>
