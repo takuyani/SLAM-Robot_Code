@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /LocalPath1/Status1
       Splitter Ratio: 0.636507928
     Tree Height: 815
   - Class: rviz/Selection
@@ -236,9 +237,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 0; 255; 0
-      Max Intensity: 2.50352001
+      Max Intensity: 2.50023651
       Min Color: 0; 255; 0
-      Min Intensity: 2.49827695
+      Min Intensity: 2.49739909
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -461,7 +462,7 @@ Visualization Manager:
       Radius: 0.0299999993
       Shaft Diameter: 0.100000001
       Shaft Length: 0.100000001
-      Topic: /move_base/TrajectoryPlannerROS/local_plan
+      Topic: /move_base/DWAPlannerROS/local_plan
       Unreliable: false
       Value: true
     - Alpha: 1

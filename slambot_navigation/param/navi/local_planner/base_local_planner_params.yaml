@@ -67,7 +67,7 @@ TrajectoryPlannerROS:
   ## ----- Forward Simulation Parameters -----
   ## sim_time (double, default: 1.0)
   ## ロボットの移動を何秒間シミュレートするか．
-  sim_time: 3.0
+  sim_time: 1.0
 
   ## sim_granularity (double, default: 0.025)
   ## 算出する経路のきめ細かさ．
@@ -92,7 +92,7 @@ TrajectoryPlannerROS:
 
   ## pdist_scale (double, default: 0.6)
   ## The weighting for how much the controller should stay close to the path it was given, maximal possible value is 5.0
-  pdist_scale: 0.6
+  pdist_scale: 1.0
 
   ## gdist_scale (double, default: 0.8)
   ## The weighting for how much the controller should attempt to reach its local goal, also controls speed, maximal possible value is 5.0
@@ -108,7 +108,7 @@ TrajectoryPlannerROS:
 
   ## heading_scoring (bool, default: false)
   ## Whether to score based on the robot's heading to the path or its distance from the path
-  heading_scoring: false
+  heading_scoring: true
 
   ## heading_scoring_timestep (double, default: 0.8)
   ## How far to look ahead in time in seconds along the simulated trajectory when using heading scoring

@@ -26,7 +26,7 @@ diff_drive_controller:
   ## Base frame_id
   base_frame_id: base_footprint #default: base_link
 
-  ## Enable odom tf     
+  ## Enable odom tf
   enable_odom_tf: true
 
   ## Velocity and acceleration limits

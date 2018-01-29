@@ -93,11 +93,11 @@ DWAPlannerROS:
 
   ## goal_distance_bias (double, default: 24.0)
   ## The weighting for how much the controller should attempt to reach its local goal, also controls speed
-  goal_distance_bias: 24.0
+  goal_distance_bias: 12.0 #24.0
 
   ## occdist_scale (double, default: 0.01)
   ## The weighting for how much the controller should attempt to avoid obstacles
-  occdist_scale: 0.01
+  occdist_scale: 0.1
 
   ## forward_point_distance (double, default: 0.325)
   ## The distance from the center point of the robot to place an additional scoring point, in meters

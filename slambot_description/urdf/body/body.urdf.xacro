@@ -34,7 +34,7 @@
         <color rgba="1 1 1 1"/>
       </material>
     </visual>
- 
+
     <collision>
       <origin xyz="0 0 ${body_z/2}"/>
       <geometry>
@@ -67,7 +67,7 @@
         <color rgba="1 1 1 1"/>
       </material>
     </visual>
- 
+
     <collision>
       <geometry>
         <box size="${body_x} ${body_y} ${body_z}"/>
@@ -123,6 +123,5 @@
     <axis xyz="0 0 0"/>
   </xacro:spacer>
 
-  </xacro:macro> 
+  </xacro:macro>
 </robot>
-
