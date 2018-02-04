@@ -29,6 +29,7 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	constexpr double POLLING_RATE_DEF = 10.0;		// Polling rate[Hz]
 	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius[m]
 	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width[m]
+	constexpr bool ENA_ODO_TF_DEF = false;			// enable_odom_tf
 
 	mMotStsVec.resize(WHEEL_NUM);
 
@@ -46,6 +47,10 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 
 	if (mNhPrv.hasParam(PARAM_NAME_TRE_WID) == false) {
 		mNhPrv.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
+	}
+
+	if (mNhPrv.hasParam(PARAM_NAME_ENA_ODO_TF) == false) {
+		mNhPrv.setParam(PARAM_NAME_ENA_ODO_TF, ENA_ODO_TF_DEF);
 	}
 
 	mDoDebug = false;
@@ -67,6 +72,8 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 
 	restartTimer(mTimerAlv);
 	restartTimer(mTimerPolling);
+	restartTimer(mTimer1m);
+
 }
 
 /**
@@ -101,6 +108,8 @@ bool VehicleController::init() {
  * @exception		none
  */
 void VehicleController::mainLoop() {
+
+	const ros::Duration LOOP_1M = ros::Duration(ODOM_CALC_PERIOD);
 
 	static StateT state = INITIAL_STS;
 	static bool isUvLo = false;
@@ -139,6 +148,13 @@ void VehicleController::mainLoop() {
 		}
 		restartTimer(mTimerPolling);
 	}
+
+	// 1msec loop
+	if (nowTm - mTimer1m.mStartTm > LOOP_1M) {
+
+		restartTimer(mTimer1m);
+	}
+
 }
 
 /**

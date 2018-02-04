@@ -83,6 +83,7 @@ private:
 	const std::string PARAM_NAME_POLLING_RATE = "polling_rate";
 	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
 	const std::string PARAM_NAME_TRE_WID = "tread_width";
+	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
 
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain
@@ -90,6 +91,8 @@ private:
 
 	const uint32_t WHEEL_NUM;		//!< Number of Wheel
 	const double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
+
+	const double ODOM_CALC_PERIOD = 0.001;	//!< Odom calculate period[s]
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
@@ -163,6 +166,7 @@ private:
 
 	TimerS mTimerAlv;		//!< Timer for Alive
 	TimerS mTimerPolling;	//!< Timer for Polling
+	TimerS mTimer1m;		//!< Timer for 1msec loop
 
 };
 
