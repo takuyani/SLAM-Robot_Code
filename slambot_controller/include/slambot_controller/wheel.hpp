@@ -125,6 +125,8 @@ public:
 		bool mIsSckMod;
 	} StatusS;
 
+	using uint32VecT = std::vector<uint32_t>;
+
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
@@ -150,6 +152,7 @@ public:
 	bool stopHard(bool);
 	bool resetDevice();
 	bool getStatus(std::vector<StatusS>&);
+	bool getAbsolutePosition(uint32VecT&);
 
 private:
 	//***** User Define *****

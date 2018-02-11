@@ -17,6 +17,8 @@
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
+#include <nav_msgs/Odometry.h>
+#include <tf/tfMessage.h>
 #include <ros/ros.h>
 //My Library
 #include "wheel.hpp"
@@ -92,11 +94,12 @@ private:
 	const uint32_t WHEEL_NUM;		//!< Number of Wheel
 	const double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
 
-	const double ODOM_CALC_PERIOD = 0.001;	//!< Odom calculate period[s]
+	const double ODOM_CALC_PERIOD = 0.1;	//!< Odom calculate period[s]
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
 	void publishAliveResponse();
+	void publishOdometry();
 
 	void initialMode(StateT&, bool&);
 	void activeMode(StateT&, bool&);
@@ -109,6 +112,7 @@ private:
 	bool recoverySeq();
 
 	void move(const double, const double);
+	bool getAbsolutePosition();
 	bool setMaxSpeed(const double);
 	bool setMinSpeed(const double);
 	bool setAcc(const double);
@@ -137,6 +141,9 @@ private:
 	ros::NodeHandle mNh;				//!< ROS node handle
 	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
 	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
+	ros::Publisher mPubOdom;			//!< ROS Publisher "ODOM"
+	ros::Publisher mPubTf;				//!< ROS Publisher "TF"
+
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
 
 	Wheel mWheel;	//!< Wheel Class
@@ -166,7 +173,7 @@ private:
 
 	TimerS mTimerAlv;		//!< Timer for Alive
 	TimerS mTimerPolling;	//!< Timer for Polling
-	TimerS mTimer1m;		//!< Timer for 1msec loop
+	TimerS mTimerOdom;		//!< Timer for Odom loop
 
 };
 

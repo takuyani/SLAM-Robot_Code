@@ -649,6 +649,42 @@ bool Wheel::getStatus(vector<StatusS> &aStatusVec) {
 }
 
 /**
+ * @brief			get Absolute Position.
+ *
+ * @param[in,out]	aAbsPosVec		AbsPos parameter.
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
+ * @exception		none
+ */
+bool Wheel::getAbsolutePosition(uint32VecT &aAbsPosVec) {
+
+	uint8_t tx[ABS_POS.BYTE_SIZE][WHEEL_NUM];
+	bool isRet = true;
+	for (int32_t i = 0; (i < ABS_POS.BYTE_SIZE) && (isRet == true); i++) {
+		for (uint32_t j = 0; j < WHEEL_NUM; j++) {
+			if (i == 0) {
+				tx[i][j] = CMD_GET_PARAM | ABS_POS.REG_ADDR;
+			} else {
+				tx[i][j] = CMD_NOP;
+			}
+		}
+		isRet = mSpi.transfer(WHEEL_NUM, tx[i]);
+	}
+
+	if ((isRet == true) && (WHEEL_NUM <= aAbsPosVec.size())) {
+		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
+			uint32_t absPos = 0;
+			for (int32_t j = 1; j < ABS_POS.BYTE_SIZE; j++) {
+				absPos |= tx[j][i] << ((ABS_POS.BYTE_SIZE - j - 1) * BYTE_SIZE_8);
+			}
+			aAbsPosVec.at(i) = absPos;
+		}
+	}
+	return (isRet);
+}
+
+/**
  * @brief			construct Transfer Data.
  *
  * @param[out]		aDataVec2_iter		Transfer data iterator.
@@ -787,7 +823,6 @@ bool Wheel::verifyData(const uint8Vec2CIterT aRxVec2_citer) {
  * 					If the wrong wheel index number, return -1.
  * @exception		none
  */
-
 int32_t Wheel::setKval(HoldConfDataS &aConfData, const RegConfS &aRegConf, const int32_t aVal) {
 
 	int32_t data = -1;

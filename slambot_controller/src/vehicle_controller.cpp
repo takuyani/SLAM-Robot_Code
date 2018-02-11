@@ -72,7 +72,7 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 
 	restartTimer(mTimerAlv);
 	restartTimer(mTimerPolling);
-	restartTimer(mTimer1m);
+	restartTimer(mTimerOdom);
 
 }
 
@@ -109,7 +109,7 @@ bool VehicleController::init() {
  */
 void VehicleController::mainLoop() {
 
-	const ros::Duration LOOP_1M = ros::Duration(ODOM_CALC_PERIOD);
+	const ros::Duration LOOP_ODOM = ros::Duration(ODOM_CALC_PERIOD);
 
 	static StateT state = INITIAL_STS;
 	static bool isUvLo = false;
@@ -149,10 +149,10 @@ void VehicleController::mainLoop() {
 		restartTimer(mTimerPolling);
 	}
 
-	// 1msec loop
-	if (nowTm - mTimer1m.mStartTm > LOOP_1M) {
+	// odom loop
+	if (nowTm - mTimerOdom.mStartTm > LOOP_ODOM) {
 
-		restartTimer(mTimer1m);
+		restartTimer(mTimerOdom);
 	}
 
 }
@@ -188,6 +188,29 @@ void VehicleController::publishAliveResponse() {
 	}
 
 	mPubAlvRsp.publish(isSts);
+}
+
+/**
+ * @brief			publish Alive Response.
+ *
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::publishOdometry() {
+
+	nav_msgs::Odometry odom;
+
+	odom.header.stamp = ros::Time::now();
+	odom.header.frame_id = "aaa";
+	odom.header.seq = 0;
+	odom.child_frame_id = "aaa";
+	odom.pose.pose.position.x = 0;
+	odom.pose.pose.position.y = 0;
+	odom.pose.pose.orientation.w = 0;
+	odom.twist.twist.linear.x = 0;
+	odom.twist.twist.angular.z = 0;
+
+	mPubOdom.publish(odom);
 }
 
 /**
@@ -494,6 +517,30 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 		isRet = mWheel.stopHard(isHoldTrq);
 		mIsActive = false;
 	}
+}
+
+/**
+ * @brief			get Absolute Position.
+ *
+ * @param[in]		aMaxSpd_rps		Max speed[rad/s].
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
+ * @exception		none
+ */
+bool VehicleController::getAbsolutePosition() {
+
+	std::vector<uint32_t> absPosVec(WHEEL_NUM);
+
+	bool isRet = mWheel.getAbsolutePosition(absPosVec);
+
+	if (isRet == true) {
+		ROS_INFO_STREAM("AbsPos: [0] = " << absPosVec[0] <<", [1] = " << absPosVec[1]);
+	} else {
+		ROS_INFO_STREAM("AbsPos: Error");
+	}
+
+	return (isRet);
 }
 
 /**
