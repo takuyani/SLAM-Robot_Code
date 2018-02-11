@@ -151,7 +151,7 @@ void VehicleController::mainLoop() {
 
 	// odom loop
 	if (nowTm - mTimerOdom.mStartTm > LOOP_ODOM) {
-
+		publishOdometry();
 		restartTimer(mTimerOdom);
 	}
 
@@ -199,6 +199,8 @@ void VehicleController::publishAliveResponse() {
 void VehicleController::publishOdometry() {
 
 	nav_msgs::Odometry odom;
+
+	getAbsolutePosition();
 
 	odom.header.stamp = ros::Time::now();
 	odom.header.frame_id = "aaa";
