@@ -80,6 +80,7 @@ private:
 	//***** Const Value *****
 	const std::string TOPIC_NAME_CMD_VEL = "cmd_vel";
 	const std::string TOPIC_NAME_ALIVE_RSP = "alive_resp";
+	const std::string TOPIC_NAME_ODOM = "odom";
 
 	const std::string PARAM_NAME_CMD_VEL_TIMEOUT = "cmd_vel_timeout";
 	const std::string PARAM_NAME_POLLING_RATE = "polling_rate";
