@@ -685,6 +685,16 @@ bool Wheel::getAbsolutePosition(uint32VecT &aAbsPosVec) {
 }
 
 /**
+ * @brief			get Micro Step.
+ *
+ * @return			Number of Micro Step.
+ * @exception		none
+ */
+double Wheel::getRadPerMicroStep() {
+	return (RAD_P_STEP / (1 << mMicroStepMode));
+}
+
+/**
  * @brief			construct Transfer Data.
  *
  * @param[out]		aDataVec2_iter		Transfer data iterator.

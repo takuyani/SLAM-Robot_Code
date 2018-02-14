@@ -153,6 +153,7 @@ public:
 	bool resetDevice();
 	bool getStatus(std::vector<StatusS>&);
 	bool getAbsolutePosition(uint32VecT&);
+	double getRadPerMicroStep();
 
 private:
 	//***** User Define *****

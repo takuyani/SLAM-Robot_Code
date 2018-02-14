@@ -124,6 +124,8 @@ private:
 	bool setKvalDec(const int32_t);
 	bool setOcdTh(const int32_t);
 	bool setStallDtctTh(const int32_t);
+	void resetTwistMsg();
+	double adjustPiRange(const double);
 
 	template<typename T>
 	void displayRosInfo(const T aIdealVal, const T aActualVal, const bool aIsRet, const std::string aSeqTypeName,
@@ -144,7 +146,6 @@ private:
 	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Publisher mPubOdom;			//!< ROS Publisher "ODOM"
 	ros::Publisher mPubTf;				//!< ROS Publisher "TF"
-
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
 
 	Wheel mWheel;	//!< Wheel Class
@@ -176,6 +177,10 @@ private:
 	TimerS mTimerPolling;	//!< Timer for Polling
 	TimerS mTimerOdom;		//!< Timer for Odom loop
 
+	/**
+	 *  Latest Twist Msg
+	 */
+	geometry_msgs::Twist mTwistMsgLatest;
 };
 
 #endif /* VEHICLE_CONTROLLER_HPP_ */

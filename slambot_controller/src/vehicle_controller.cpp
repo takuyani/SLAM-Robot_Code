@@ -75,6 +75,7 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	restartTimer(mTimerPolling);
 	restartTimer(mTimerOdom);
 
+	resetTwistMsg();
 }
 
 /**
@@ -170,6 +171,8 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
 	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
 	restartTimer(mTimerAlv);
 	publishAliveResponse();
+
+	mTwistMsgLatest = aTwistMsg;
 }
 
 /**
@@ -199,21 +202,61 @@ void VehicleController::publishAliveResponse() {
  */
 void VehicleController::publishOdometry() {
 
-	nav_msgs::Odometry odom;
+	static nav_msgs::Odometry odom;
+	static ros::Time prvTm = ros::Time::now();
+	static std::vector<uint32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
 
-	getAbsolutePosition();
+	std::vector<uint32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	ros::Time nowTm = ros::Time::now();
+	bool isRet = mWheel.getAbsolutePosition(nowAbsPosVec);
 
-	odom.header.stamp = ros::Time::now();
-	odom.header.frame_id = "aaa";
-	odom.header.seq = 0;
-	odom.child_frame_id = "aaa";
-	odom.pose.pose.position.x = 0;
-	odom.pose.pose.position.y = 0;
-	odom.pose.pose.orientation.w = 0;
-	odom.twist.twist.linear.x = 0;
-	odom.twist.twist.angular.z = 0;
+	if (isRet == true) {
+		double absPosCrnt_rps[WHEEL_NUM];
+		double dt = (nowTm - prvTm).toSec();
+		double radPerSecGain = mWheel.getRadPerMicroStep() / dt;
+		absPosCrnt_rps[0] = ( (nowAbsPosVec[0] - prvAbsPosVec[0]) * radPerSecGain);
+		absPosCrnt_rps[1] = ( -(nowAbsPosVec[1] - prvAbsPosVec[1]) * radPerSecGain);
 
-	mPubOdom.publish(odom);
+		ROS_DEBUG_STREAM("time[sec]:"<< dt <<
+						 ", diff[0][deg]:" << (nowAbsPosVec[0] - prvAbsPosVec[0]) * RAD2DEG <<
+						 ", diff[1][deg]:" << -(nowAbsPosVec[1] - prvAbsPosVec[1]) * RAD2DEG <<
+						 ", rps[0][deg/s]:" << absPosCrnt_rps[0] * RAD2DEG <<
+						 ", rps[1][deg/s]:" << absPosCrnt_rps[1] * RAD2DEG
+		);
+
+		double wheelRadius_m = 0;
+		double treadWidth_m = 0;
+		mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
+		mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
+
+		//	| V | = | R/2  R/2 || ωr |
+		//	| W |   | R/T -R/T || ωl |
+		//
+		//  V  : vehicle linear velocity
+		//  W  : vehicle angular velocity
+		// ωr : angular velocity of right wheel
+		// ωl : angular velocity of left wheel
+		//  R  : left and right wheel radius
+		//  T  : tread width
+
+		double linear_mps = (wheelRadius_m / 2) * (absPosCrnt_rps[0] + absPosCrnt_rps[1]);
+		double angular_rps = (wheelRadius_m / treadWidth_m) * (absPosCrnt_rps[0] - absPosCrnt_rps[1]);
+
+		odom.header.stamp = ros::Time::now();
+		odom.header.frame_id = "aaa";
+		odom.header.seq = 0;
+		odom.child_frame_id = "aaa";
+		odom.pose.pose.position.x += 0;
+		odom.pose.pose.position.y += 0;
+		odom.pose.pose.orientation.w = adjustPiRange(odom.pose.pose.orientation.w + 0);
+		odom.twist.twist.linear.x = mTwistMsgLatest.linear.x;
+		odom.twist.twist.angular.z = mTwistMsgLatest.angular.z;
+
+		mPubOdom.publish(odom);
+
+		prvTm = nowTm;
+		prvAbsPosVec = nowAbsPosVec;
+	}
 }
 
 /**
@@ -232,6 +275,7 @@ void VehicleController::initialMode(StateT &aState, bool &aIsUvLo) {
 		if (initialSeq() == true) {
 			aState = ACTIVE_STS;
 			aIsUvLo = true;
+			resetTwistMsg();
 			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "ACTIVE STATE");
 		} else {
 			aState = RECOVERY_STS;
@@ -283,6 +327,7 @@ void VehicleController::recoveryMode(StateT &aState, bool &aIsUvLo) {
 	if (recoverySeq() == true) {
 		aState = ACTIVE_STS;
 		aIsUvLo = false;
+		resetTwistMsg();
 	}
 }
 
@@ -434,6 +479,7 @@ bool VehicleController::activeSeq() {
 		if (mDoDebug == false) {
 			bool isHoldTrq = true;
 			mWheel.stopSoft(isHoldTrq);
+			resetTwistMsg();
 		}
 		ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "Topics from Host is Timeout.");
 	}
@@ -502,6 +548,7 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 			} else {
 				bool isHoldTrq = true;
 				isRet = mWheel.stopSoft(isHoldTrq);
+				resetTwistMsg();
 			}
 			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "Stop:");
 		} else {
@@ -782,4 +829,42 @@ bool VehicleController::setStallDtctTh(const int32_t aStallDtctTh) {
 	displayRosInfo(idealVal, actualVal, isRet, "set Stall Detection Th", "mA");
 
 	return (isRet);
+}
+
+/**
+ * @brief			reset Twist Msg.
+ *
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::resetTwistMsg(){
+
+	mTwistMsgLatest.linear.x = 0;
+	mTwistMsgLatest.linear.y = 0;
+	mTwistMsgLatest.linear.z = 0;
+	mTwistMsgLatest.angular.x = 0;
+	mTwistMsgLatest.angular.y = 0;
+	mTwistMsgLatest.angular.z = 0;
+}
+
+/**
+ * @brief			adjust PI range(-pi - pi).
+ *
+ * @param[in]		aAng_rad	Angle[rad].
+ * @return			adjusted angle
+ * @exception		none
+ */
+double VehicleController::adjustPiRange(const double aAng_rad) {
+
+	constexpr double PI2 = 2 * M_PI;
+
+	double ang = aAng_rad;
+
+	while (ang >= M_PI) {
+		ang -= PI2;
+	}
+	while (ang <= -M_PI) {
+		ang += PI2;
+	}
+	return (ang);
 }
