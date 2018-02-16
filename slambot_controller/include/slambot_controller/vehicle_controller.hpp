@@ -22,6 +22,7 @@
 #include <ros/ros.h>
 //My Library
 #include "wheel.hpp"
+#include "odometry.hpp"
 
 /**
  * @class	VehicleController
@@ -149,6 +150,7 @@ private:
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"
 
 	Wheel mWheel;	//!< Wheel Class
+	Odometry mOdom;	//!< Odometry Class
 
 	/**
 	 *  Current motor status

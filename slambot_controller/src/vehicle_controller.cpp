@@ -242,13 +242,15 @@ void VehicleController::publishOdometry() {
 		double linear_mps = (wheelRadius_m / 2) * (absPosCrnt_rps[0] + absPosCrnt_rps[1]);
 		double angular_rps = (wheelRadius_m / treadWidth_m) * (absPosCrnt_rps[0] - absPosCrnt_rps[1]);
 
+		Odometry::PoseS pose = mOdom.move(linear_mps, angular_rps, dt);
+
 		odom.header.stamp = ros::Time::now();
 		odom.header.frame_id = "aaa";
 		odom.header.seq = 0;
 		odom.child_frame_id = "aaa";
-		odom.pose.pose.position.x += 0;
-		odom.pose.pose.position.y += 0;
-		odom.pose.pose.orientation.w = adjustPiRange(odom.pose.pose.orientation.w + 0);
+		odom.pose.pose.position.x = pose.x;
+		odom.pose.pose.position.y = pose.y;
+		odom.pose.pose.orientation.w = pose.yaw;
 		odom.twist.twist.linear.x = mTwistMsgLatest.linear.x;
 		odom.twist.twist.angular.z = mTwistMsgLatest.angular.z;
 
@@ -845,26 +847,4 @@ void VehicleController::resetTwistMsg(){
 	mTwistMsgLatest.angular.x = 0;
 	mTwistMsgLatest.angular.y = 0;
 	mTwistMsgLatest.angular.z = 0;
-}
-
-/**
- * @brief			adjust PI range(-pi - pi).
- *
- * @param[in]		aAng_rad	Angle[rad].
- * @return			adjusted angle
- * @exception		none
- */
-double VehicleController::adjustPiRange(const double aAng_rad) {
-
-	constexpr double PI2 = 2 * M_PI;
-
-	double ang = aAng_rad;
-
-	while (ang >= M_PI) {
-		ang -= PI2;
-	}
-	while (ang <= -M_PI) {
-		ang += PI2;
-	}
-	return (ang);
 }
