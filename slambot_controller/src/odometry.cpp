@@ -105,14 +105,20 @@ void Odometry::publishOdom() {
 	const geometry_msgs::Quaternion orient(tf::createQuaternionMsgFromYaw(mPose.yaw));
 	const ros::Time time = ros::Time::now();
 
+	string odomFrameId;
+	string baseFrameId;
+	mNhPrv.getParam(PARAM_NAME_ODOM_FRAME_ID, odomFrameId);
+	mNhPrv.getParam(PARAM_NAME_BASE_FRAME_ID, baseFrameId);
+
 	// Populate odom message and publish
 	if (mPubOdom_sptr->trylock()) {
 		mPubOdom_sptr->msg_.header.stamp = time;
-		mPubOdom_sptr->msg_.header.frame_id = "aaa";
+		mPubOdom_sptr->msg_.header.frame_id = odomFrameId;
+		mPubOdom_sptr->msg_.child_frame_id = baseFrameId;
 		mPubOdom_sptr->msg_.header.seq = 0;
-		mPubOdom_sptr->msg_.child_frame_id = "aaa";
 		mPubOdom_sptr->msg_.pose.pose.position.x = mPose.x;
 		mPubOdom_sptr->msg_.pose.pose.position.y = mPose.y;
+		mPubOdom_sptr->msg_.pose.pose.position.z = 0.0;
 		mPubOdom_sptr->msg_.pose.pose.orientation = orient;
 		mPubOdom_sptr->msg_.twist.twist.linear.x = mVel;
 		mPubOdom_sptr->msg_.twist.twist.angular.z = mYawRate;
@@ -125,8 +131,12 @@ void Odometry::publishOdom() {
 	if (enable_odom_tf && mPubTf_sptr->trylock()) {
 		geometry_msgs::TransformStamped& odom_frame = mPubTf_sptr->msg_.transforms[0];
 		odom_frame.header.stamp = time;
+		odom_frame.header.frame_id = odomFrameId;
+		odom_frame.child_frame_id = baseFrameId;
+		odom_frame.header.seq = 0;
 		odom_frame.transform.translation.x = mPose.x;
 		odom_frame.transform.translation.y = mPose.y;
+		odom_frame.transform.translation.z = 0.0;
 		odom_frame.transform.rotation = orient;
 		mPubTf_sptr->unlockAndPublish();
 	}
