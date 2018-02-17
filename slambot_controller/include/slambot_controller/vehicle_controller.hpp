@@ -87,7 +87,6 @@ private:
 	const std::string PARAM_NAME_POLLING_RATE = "polling_rate";
 	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
 	const std::string PARAM_NAME_TRE_WID = "tread_width";
-	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
 
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain

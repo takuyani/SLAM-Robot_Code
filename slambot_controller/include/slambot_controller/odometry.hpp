@@ -15,6 +15,8 @@
 //Add Install Library
 #include <nav_msgs/Odometry.h>
 #include <tf/tfMessage.h>
+#include <realtime_tools/realtime_buffer.h>
+#include <realtime_tools/realtime_publisher.h>
 #include <ros/ros.h>
 //My Library
 
@@ -49,27 +51,36 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	Odometry(const std::string = "odom");
+	Odometry(const std::string = "odom", const std::string = "/tf");
 	virtual ~Odometry();
 
 	//***** Method *****
 	void initOdometry(Odometry::PoseS);
-	PoseS move(double, double, double);
+	PoseS moveMotionModel(double, double, double);
+	void publishOdom();
 
 private:
 	//***** User Define *****
 
 	//***** Const Value *****
+	const std::string PARAM_NAME_BASE_FRAME_ID = "base_frame_id";
+	const std::string PARAM_NAME_ODOM_FRAME_ID = "odom_frame_id";
+	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
 
 	//***** Method *****
 	double adjustPiRange(const double);
 
 	//***** Member Variable *****
-	ros::NodeHandle mNh;				//!< ROS node handle
-	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
-	ros::Publisher mPubOdom;	//!< ROS Publisher "ODOM"
-	ros::Publisher mPubTf;		//!< ROS Publisher "TF"
+	ros::NodeHandle mNh;		//!< ROS node handle
+	ros::NodeHandle mNhPrv;		//!< ROS node handle(private)
+//	ros::Publisher mPubOdom;	//!< ROS Publisher "ODOM"
+//	ros::Publisher mPubTf;		//!< ROS Publisher "TF"
+    std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > mPubOdom_sptr;
+    std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > mPubTf_sptr;
 
+
+	double mVel;
+	double mYawRate;
 	PoseS mPose;
 };
 
