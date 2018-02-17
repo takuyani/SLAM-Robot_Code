@@ -82,8 +82,8 @@ Odometry::PoseS Odometry::moveMotionModel(double aVel, double aYawRate, double a
 	double dYaw = adjustPiRange(aYawRate * aDt);
 	double yawNext = adjustPiRange(mPose.yaw + dYaw);
 
-	mPose.x += a * (-sin(mPose.y) + sin(yawNext));
-	mPose.y += a * (cos(mPose.y) - cos(yawNext));
+	mPose.x += a * (-sin(mPose.yaw) + sin(yawNext));
+	mPose.y += a * (cos(mPose.yaw) - cos(yawNext));
 	mPose.yaw = yawNext;
 
 	mVel = aVel;

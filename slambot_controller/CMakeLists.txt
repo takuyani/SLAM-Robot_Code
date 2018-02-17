@@ -10,8 +10,10 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  tf
   std_msgs
   geometry_msgs
+  nav_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -136,6 +138,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(vehicle_controller_node	src/main.cpp
 										src/vehicle_controller.cpp
+                                        src/odometry.cpp
 										src/wheel.cpp
 										src/spi.cpp
 )

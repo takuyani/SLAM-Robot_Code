@@ -73,8 +73,6 @@ private:
 	//***** Member Variable *****
 	ros::NodeHandle mNh;		//!< ROS node handle
 	ros::NodeHandle mNhPrv;		//!< ROS node handle(private)
-//	ros::Publisher mPubOdom;	//!< ROS Publisher "ODOM"
-//	ros::Publisher mPubTf;		//!< ROS Publisher "TF"
     std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > mPubOdom_sptr;
     std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > mPubTf_sptr;
 
