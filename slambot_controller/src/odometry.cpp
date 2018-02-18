@@ -24,7 +24,7 @@ using namespace realtime_tools;
 Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameTf) :
 		mNh(), mNhPrv("~") {
 
-	const string BASE_FRAME_ID = "base_link";
+	const string BASE_FRAME_ID = "/base_link";
 	const string ODOM_FRAME_ID = "/odom";
 	constexpr bool ENA_ODO_TF_DEF = false;			// enable_odom_tf
 
