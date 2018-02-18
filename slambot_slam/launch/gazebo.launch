@@ -22,12 +22,6 @@
 
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
 			args="-urdf -model slambot -param robot_description"/>
-
-		<node name="mediation_cmdvel" pkg="slambot_gazebo" type="mediation_cmdvel_node" respawn="true" output="screen" >
-			<remap from="src/cmd_vel" to="cmd_vel"/>
-			<remap from="dst/cmd_vel" to="diff_drive_controller/cmd_vel"/>
-		</node>
-
 	</group>
 
 	<include file="$(find slambot_slam)/launch/control.launch"/>

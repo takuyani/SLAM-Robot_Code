@@ -4,9 +4,8 @@
 	<group ns="teleop_keyboard_client">
 		<!-- Slambot Teleop Keyboard -->
 		<node pkg="slambot_teleop" type="slambot_teleop_keyboard.py" name="slambot_teleop_keyboard" output="screen">
-			<remap from="cmd_vel" 		to="/slambot_host/cmd_vel"/>
+			<remap from="cmd_vel" 		to="/slambot_host/diff_drive_controller/cmd_vel"/>
 		</node>
 	</group>
 
 </launch>
-
