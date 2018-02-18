@@ -657,7 +657,7 @@ bool Wheel::getStatus(vector<StatusS> &aStatusVec) {
  * 					- false: failure
  * @exception		none
  */
-bool Wheel::getAbsolutePosition(uint32VecT &aAbsPosVec) {
+bool Wheel::getAbsolutePosition(int32VecT &aAbsPosVec) {
 
 	uint8_t tx[ABS_POS.BYTE_SIZE][WHEEL_NUM];
 	bool isRet = true;
@@ -674,7 +674,7 @@ bool Wheel::getAbsolutePosition(uint32VecT &aAbsPosVec) {
 
 	if ((isRet == true) && (WHEEL_NUM <= aAbsPosVec.size())) {
 		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
-			uint32_t absPos = 0;
+			int32_t absPos = 0;
 			for (int32_t j = 1; j < ABS_POS.BYTE_SIZE; j++) {
 				absPos |= tx[j][i] << ((ABS_POS.BYTE_SIZE - j - 1) * BYTE_SIZE_8);
 			}
@@ -682,6 +682,27 @@ bool Wheel::getAbsolutePosition(uint32VecT &aAbsPosVec) {
 		}
 	}
 	return (isRet);
+}
+
+/**
+ * @brief			calculate difference of Absolute Position.
+ *
+ * @param[in]		nowAbsPos		Now absolute position.
+ * @param[in]		preAbsPos		Previous absolute position.
+ * @return			difference absolute position.
+ * @exception		none
+ */
+int32_t Wheel::calcDiffAbsolutePosition(const int32_t nowAbsPos, const int32_t preAbsPos) {
+
+	const int32_t ABS_POS_TH = Wheel::ABS_POS.MAX_VALUE >> 1;		// judge overflow threshold
+
+	int32_t diff = nowAbsPos - preAbsPos;
+	if (diff > ABS_POS_TH) {
+		diff -= Wheel::ABS_POS.MAX_VALUE;
+	} else if (diff < -ABS_POS_TH) {
+		diff += Wheel::ABS_POS.MAX_VALUE;
+	}
+	return (diff);
 }
 
 /**

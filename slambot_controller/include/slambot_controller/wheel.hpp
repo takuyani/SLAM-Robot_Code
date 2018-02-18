@@ -125,7 +125,7 @@ public:
 		bool mIsSckMod;
 	} StatusS;
 
-	using uint32VecT = std::vector<uint32_t>;
+	using int32VecT = std::vector<int32_t>;
 
 	//***** Const Value *****
 
@@ -152,7 +152,8 @@ public:
 	bool stopHard(bool);
 	bool resetDevice();
 	bool getStatus(std::vector<StatusS>&);
-	bool getAbsolutePosition(uint32VecT&);
+	bool getAbsolutePosition(int32VecT&);
+	int32_t calcDiffAbsolutePosition(const int32_t, const int32_t);
 	double getRadPerMicroStep();
 
 private:

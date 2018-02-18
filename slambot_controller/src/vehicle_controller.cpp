@@ -197,11 +197,12 @@ void VehicleController::publishAliveResponse() {
  */
 void VehicleController::publishOdometry() {
 
-	static nav_msgs::Odometry odom;
 	static ros::Time prvTm = ros::Time::now();
-	static std::vector<uint32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	static std::vector<int32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
 
-	std::vector<uint32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	std::vector<int32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	int32_t diffAbsPosR;
+	int32_t diffAbsPosL;
 	ros::Time nowTm = ros::Time::now();
 	bool isRet = mWheel.getAbsolutePosition(nowAbsPosVec);
 
@@ -209,11 +210,12 @@ void VehicleController::publishOdometry() {
 		double absPosCrnt_rps[WHEEL_NUM];
 		double dt = (nowTm - prvTm).toSec();
 		double radPerSecGain = mWheel.getRadPerMicroStep() / dt;
-		absPosCrnt_rps[0] = ((nowAbsPosVec[0] - prvAbsPosVec[0]) * radPerSecGain);
-		absPosCrnt_rps[1] = (-(nowAbsPosVec[1] - prvAbsPosVec[1]) * radPerSecGain);
-
+		diffAbsPosR = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[0], prvAbsPosVec[0]);
+		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
+		absPosCrnt_rps[0] = diffAbsPosR * radPerSecGain;
+		absPosCrnt_rps[1] = -diffAbsPosL * radPerSecGain;
 		ROS_DEBUG_STREAM(
-				"time[sec]:"<< dt << ", diff[0][deg]:" << (nowAbsPosVec[0] - prvAbsPosVec[0]) * RAD2DEG << ", diff[1][deg]:" << -(nowAbsPosVec[1] - prvAbsPosVec[1]) * RAD2DEG << ", rps[0][deg/s]:" << absPosCrnt_rps[0] * RAD2DEG << ", rps[1][deg/s]:" << absPosCrnt_rps[1] * RAD2DEG);
+				"time[sec]:"<< dt << ", diff[0][deg]:" << diffAbsPosR * RAD2DEG << ", diff[1][deg]:" << -diffAbsPosL * RAD2DEG << ", rps[0][deg/s]:" << absPosCrnt_rps[0] * RAD2DEG << ", rps[1][deg/s]:" << absPosCrnt_rps[1] * RAD2DEG);
 
 		double wheelRadius_m = 0;
 		double treadWidth_m = 0;
@@ -233,19 +235,8 @@ void VehicleController::publishOdometry() {
 		double linear_mps = (wheelRadius_m / 2) * (absPosCrnt_rps[0] + absPosCrnt_rps[1]);
 		double angular_rps = (wheelRadius_m / treadWidth_m) * (absPosCrnt_rps[0] - absPosCrnt_rps[1]);
 
-		Odometry::PoseS pose = mOdom.moveMotionModel(linear_mps, angular_rps, dt);
-
-		odom.header.stamp = ros::Time::now();
-		odom.header.frame_id = "aaa";
-		odom.header.seq = 0;
-		odom.child_frame_id = "aaa";
-		odom.pose.pose.position.x = pose.x;
-		odom.pose.pose.position.y = pose.y;
-		odom.pose.pose.orientation.w = pose.yaw;
-		odom.twist.twist.linear.x = mTwistMsgLatest.linear.x;
-		odom.twist.twist.angular.z = mTwistMsgLatest.angular.z;
-
-		mPubOdom.publish(odom);
+		mOdom.moveMotionModel(linear_mps, angular_rps, dt);
+		mOdom.publishOdom();
 
 		prvTm = nowTm;
 		prvAbsPosVec = nowAbsPosVec;
@@ -573,7 +564,7 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
  */
 bool VehicleController::getAbsolutePosition() {
 
-	std::vector<uint32_t> absPosVec(WHEEL_NUM);
+	std::vector<int32_t> absPosVec(WHEEL_NUM);
 
 	bool isRet = mWheel.getAbsolutePosition(absPosVec);
 
