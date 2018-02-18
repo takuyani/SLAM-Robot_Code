@@ -5,7 +5,7 @@
 
 		<!-- Vehicle Controller -->
 		<node respawn="true" pkg="slambot_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">
-			<remap from="cmd_vel" 			to="cmd_vel"/>
+			<remap from="cmd_vel" 			to="diff_drive_controller/cmd_vel"/>
 			<param name="cmd_vel_timeout"	type="double"	value="0.5"/>
 			<param name="polling_rate"		type="double"	value="10"/>
 			<param name="wheel_radius"		type="double"	value="0.024"/>
