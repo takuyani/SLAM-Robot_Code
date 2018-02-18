@@ -203,8 +203,12 @@ void VehicleController::publishOdometry() {
 	std::vector<int32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
 	int32_t diffAbsPosR;
 	int32_t diffAbsPosL;
+
 	ros::Time nowTm = ros::Time::now();
-	bool isRet = mWheel.getAbsolutePosition(nowAbsPosVec);
+	bool isRet = true;
+	if (mDoDebug == false) {
+		isRet = mWheel.getAbsolutePosition(nowAbsPosVec);
+	}
 
 	if (isRet == true) {
 		double absPosCrnt_rps[WHEEL_NUM];
@@ -214,7 +218,7 @@ void VehicleController::publishOdometry() {
 		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
 		absPosCrnt_rps[0] = diffAbsPosR * radPerSecGain;
 		absPosCrnt_rps[1] = -diffAbsPosL * radPerSecGain;
-		ROS_DEBUG_STREAM(
+		ROS_ERROR_STREAM(
 				"time[sec]:"<< dt << ", diff[0][deg]:" << diffAbsPosR * RAD2DEG << ", diff[1][deg]:" << -diffAbsPosL * RAD2DEG << ", rps[0][deg/s]:" << absPosCrnt_rps[0] * RAD2DEG << ", rps[1][deg/s]:" << absPosCrnt_rps[1] * RAD2DEG);
 
 		double wheelRadius_m = 0;

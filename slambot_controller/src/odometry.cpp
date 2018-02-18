@@ -42,6 +42,7 @@ Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameTf) :
 
 	mPubOdom_sptr.reset(new RealtimePublisher<nav_msgs::Odometry>(mNh, aTopicNameOdom, 100));
 	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 100));
+	mPubTf_sptr->msg_.transforms.resize(1);
 
 	mPose.x = 0.0;
 	mPose.y = 0.0;
@@ -105,6 +106,8 @@ void Odometry::publishOdom() {
 	const geometry_msgs::Quaternion orient(tf::createQuaternionMsgFromYaw(mPose.yaw));
 	const ros::Time time = ros::Time::now();
 
+	static uint32_t seq = 0;
+
 	string odomFrameId;
 	string baseFrameId;
 	mNhPrv.getParam(PARAM_NAME_ODOM_FRAME_ID, odomFrameId);
@@ -115,7 +118,7 @@ void Odometry::publishOdom() {
 		mPubOdom_sptr->msg_.header.stamp = time;
 		mPubOdom_sptr->msg_.header.frame_id = odomFrameId;
 		mPubOdom_sptr->msg_.child_frame_id = baseFrameId;
-		mPubOdom_sptr->msg_.header.seq = 0;
+		mPubOdom_sptr->msg_.header.seq = seq;
 		mPubOdom_sptr->msg_.pose.pose.position.x = mPose.x;
 		mPubOdom_sptr->msg_.pose.pose.position.y = mPose.y;
 		mPubOdom_sptr->msg_.pose.pose.position.z = 0.0;
@@ -133,13 +136,15 @@ void Odometry::publishOdom() {
 		odom_frame.header.stamp = time;
 		odom_frame.header.frame_id = odomFrameId;
 		odom_frame.child_frame_id = baseFrameId;
-		odom_frame.header.seq = 0;
+		odom_frame.header.seq = seq;
 		odom_frame.transform.translation.x = mPose.x;
 		odom_frame.transform.translation.y = mPose.y;
 		odom_frame.transform.translation.z = 0.0;
 		odom_frame.transform.rotation = orient;
 		mPubTf_sptr->unlockAndPublish();
 	}
+
+	seq++;
 }
 
 /**
