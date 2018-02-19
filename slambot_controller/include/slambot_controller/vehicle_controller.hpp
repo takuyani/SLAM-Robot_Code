@@ -80,7 +80,6 @@ private:
 
 	//***** Const Value *****
 	const std::string TOPIC_NAME_CMD_VEL = "cmd_vel";
-	const std::string TOPIC_NAME_ALIVE_RSP = "alive_resp";
 	const std::string TOPIC_NAME_ODOM = "odom";
 
 	const std::string PARAM_NAME_CMD_VEL_TIMEOUT = "cmd_vel_timeout";
@@ -99,7 +98,6 @@ private:
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);
-	void publishAliveResponse();
 	void publishOdometry();
 
 	void initialMode(StateT&, bool&);
@@ -143,7 +141,6 @@ private:
 	//***** Member Variable *****
 	ros::NodeHandle mNh;				//!< ROS node handle
 	ros::NodeHandle mNhPrv;				//!< ROS node handle(private)
-	ros::Publisher mPubAlvRsp;			//!< ROS Publisher "ALIVE_RSP"
 	ros::Publisher mPubOdom;			//!< ROS Publisher "ODOM"
 	ros::Publisher mPubTf;				//!< ROS Publisher "TF"
 	ros::Subscriber mSubCmdVel;			//!< ROS Subscriber "CMD_VEL"

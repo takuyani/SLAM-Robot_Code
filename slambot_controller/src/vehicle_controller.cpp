@@ -56,7 +56,6 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
-	mPubAlvRsp = mNh.advertise<std_msgs::Bool>(TOPIC_NAME_ALIVE_RSP, 1);
 	mPubOdom = mNh.advertise<nav_msgs::Odometry>(TOPIC_NAME_ODOM, 1);
 
 	if (mDoDebug == true) {
@@ -165,28 +164,8 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
 
 	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
 	restartTimer(mTimerAlv);
-	publishAliveResponse();
 
 	mTwistMsgLatest = aTwistMsg;
-}
-
-/**
- * @brief			publish Alive Response.
- *
- * @return			none
- * @exception		none
- */
-void VehicleController::publishAliveResponse() {
-
-	std_msgs::Bool isSts;
-
-	if (mIsActive == true) {
-		isSts.data = true;
-	} else {
-		isSts.data = false;
-	}
-
-	mPubAlvRsp.publish(isSts);
 }
 
 /**
