@@ -197,8 +197,6 @@ void VehicleController::publishOdometry() {
 		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
 		absPosCrnt_rps[0] = diffAbsPosR * radPerSecGain;
 		absPosCrnt_rps[1] = -diffAbsPosL * radPerSecGain;
-		ROS_ERROR_STREAM(
-				"time[sec]:"<< dt << ", diff[0][deg]:" << diffAbsPosR * RAD2DEG << ", diff[1][deg]:" << -diffAbsPosL * RAD2DEG << ", rps[0][deg/s]:" << absPosCrnt_rps[0] * RAD2DEG << ", rps[1][deg/s]:" << absPosCrnt_rps[1] * RAD2DEG);
 		double wheelRadius_m = 0;
 		double treadWidth_m = 0;
 		mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
