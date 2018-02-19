@@ -79,13 +79,11 @@ void Odometry::initOdometry(Odometry::PoseS aInitPose) {
  */
 Odometry::PoseS Odometry::moveMotionModel(double aVel, double aYawRate, double aDt) {
 
-	double a = aVel / aYawRate;
-	double dYaw = adjustPiRange(aYawRate * aDt);
-	double yawNext = adjustPiRange(mPose.yaw + dYaw);
+	double dist = aVel * aDt;
 
-	mPose.x += a * (-sin(mPose.yaw) + sin(yawNext));
-	mPose.y += a * (cos(mPose.yaw) - cos(yawNext));
-	mPose.yaw = yawNext;
+	mPose.x += dist * cos(mPose.yaw);
+	mPose.y += dist * sin(mPose.yaw);
+	mPose.yaw = adjustPiRange(mPose.yaw + aYawRate * aDt);
 
 	mVel = aVel;
 	mYawRate = aYawRate;
