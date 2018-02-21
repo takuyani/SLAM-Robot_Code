@@ -15,11 +15,11 @@
 //Add Install Library
 #include <nav_msgs/Odometry.h>
 #include <tf/tfMessage.h>
+#include <sensor_msgs/JointState.h>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <ros/ros.h>
 //My Library
-
 
 /**
  * @class Odometry
@@ -51,7 +51,7 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	Odometry(const std::string = "odom", const std::string = "/tf");
+	Odometry(const std::string = "odom", const std::string = "joint_states", const std::string = "/tf");
 	virtual ~Odometry();
 
 	//***** Method *****
@@ -73,9 +73,9 @@ private:
 	//***** Member Variable *****
 	ros::NodeHandle mNh;		//!< ROS node handle
 	ros::NodeHandle mNhPrv;		//!< ROS node handle(private)
-    std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > mPubOdom_sptr;
-    std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > mPubTf_sptr;
-
+	std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > mPubOdom_sptr;
+	std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > mPubTf_sptr;
+	std::shared_ptr<realtime_tools::RealtimePublisher<sensor_msgs::JointState> > mPubJoint_sptr;
 
 	double mVel;
 	double mYawRate;

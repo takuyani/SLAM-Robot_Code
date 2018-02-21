@@ -21,7 +21,7 @@ using namespace realtime_tools;
  * @brief		Constructor.
  *
  */
-Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameTf) :
+Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, const string aTopicNameTf) :
 		mNh(), mNhPrv("~") {
 
 	const string BASE_FRAME_ID = "/base_link";
@@ -40,8 +40,9 @@ Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameTf) :
 		mNhPrv.setParam(PARAM_NAME_ENA_ODO_TF, ENA_ODO_TF_DEF);
 	}
 
-	mPubOdom_sptr.reset(new RealtimePublisher<nav_msgs::Odometry>(mNh, aTopicNameOdom, 100));
-	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 100));
+	mPubOdom_sptr.reset(new RealtimePublisher<nav_msgs::Odometry>(mNh, aTopicNameOdom, 1));
+	mPubJoint_sptr.reset(new RealtimePublisher<sensor_msgs::JointState>(mNh, aTopicNameJoint, 2));
+	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 1));
 	mPubTf_sptr->msg_.transforms.resize(1);
 
 	mPose.x = 0.0;
