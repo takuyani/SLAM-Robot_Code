@@ -23,7 +23,7 @@ using namespace sm_42byg011_25;
  * @param[in]		aNh			Ros node handle.
  */
 VehicleController::VehicleController(const uint32_t aWheelNum) :
-		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum) {
+		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum), mOdom(Odometry(aWheelNum)) {
 
 	constexpr double CMD_VEL_TIMEOUT_DEF = 1.0;		// Cmd vel timeout[s]
 	constexpr double POLLING_RATE_DEF = 10.0;		// Polling rate[Hz]

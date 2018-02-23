@@ -51,7 +51,7 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	Odometry(const std::string = "odom", const std::string = "joint_states", const std::string = "/tf");
+	Odometry(const uint32_t, const std::string = "odom", const std::string = "joint_states", const std::string = "/tf");
 	virtual ~Odometry();
 
 	//***** Method *****
@@ -66,6 +66,8 @@ private:
 	const std::string PARAM_NAME_BASE_FRAME_ID = "base_frame_id";
 	const std::string PARAM_NAME_ODOM_FRAME_ID = "odom_frame_id";
 	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
+
+	const uint32_t WHEEL_NUM;	//!< Number of Wheel
 
 	//***** Method *****
 	double adjustPiRange(const double);

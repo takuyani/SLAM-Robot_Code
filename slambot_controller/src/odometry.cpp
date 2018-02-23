@@ -21,8 +21,9 @@ using namespace realtime_tools;
  * @brief		Constructor.
  *
  */
-Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, const string aTopicNameTf) :
-		mNh(), mNhPrv("~") {
+Odometry::Odometry(const uint32_t aWheelNum, const string aTopicNameOdom, const string aTopicNameJoint,
+		const string aTopicNameTf) :
+		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~") {
 
 	const string BASE_FRAME_ID = "/base_link";
 	const string ODOM_FRAME_ID = "/odom";
@@ -41,9 +42,14 @@ Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, co
 	}
 
 	mPubOdom_sptr.reset(new RealtimePublisher<nav_msgs::Odometry>(mNh, aTopicNameOdom, 1));
-	mPubJoint_sptr.reset(new RealtimePublisher<sensor_msgs::JointState>(mNh, aTopicNameJoint, 2));
+	mPubJoint_sptr.reset(new RealtimePublisher<sensor_msgs::JointState>(mNh, aTopicNameJoint, WHEEL_NUM));
 	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 1));
 	mPubTf_sptr->msg_.transforms.resize(1);
+
+	if (WHEEL_NUM == 2) {
+		mPubJoint_sptr->msg_.name[0] = "left_wheel_joint";
+		mPubJoint_sptr->msg_.name[1] = "right_wheel_joint";
+	}
 
 	mPose.x = 0.0;
 	mPose.y = 0.0;
@@ -141,6 +147,18 @@ void Odometry::publishOdom() {
 		odom_frame.transform.translation.z = 0.0;
 		odom_frame.transform.rotation = orient;
 		mPubTf_sptr->unlockAndPublish();
+	}
+
+	// Publish joint state
+	if (mPubJoint_sptr->trylock()) {
+		mPubJoint_sptr->msg_.header.seq = seq;
+		mPubJoint_sptr->msg_.header.stamp = time;
+		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
+			mPubJoint_sptr->msg_.position[i] = 0;
+			mPubJoint_sptr->msg_.velocity[i] = 0;
+			mPubJoint_sptr->msg_.effort[i] = 0.0;
+		}
+		mPubJoint_sptr->unlockAndPublish();
 	}
 
 	seq++;
