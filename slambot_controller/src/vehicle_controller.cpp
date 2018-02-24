@@ -23,12 +23,10 @@ using namespace sm_42byg011_25;
  * @param[in]		aNh			Ros node handle.
  */
 VehicleController::VehicleController(const uint32_t aWheelNum) :
-		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum) {
+		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum), mOdom(Odometry()) {
 
 	constexpr double CMD_VEL_TIMEOUT_DEF = 1.0;		// Cmd vel timeout[s]
 	constexpr double POLLING_RATE_DEF = 10.0;		// Polling rate[Hz]
-	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius[m]
-	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width[m]
 
 	mMotStsVec.resize(WHEEL_NUM);
 
@@ -40,14 +38,6 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 		mNhPrv.setParam(PARAM_NAME_POLLING_RATE, POLLING_RATE_DEF);
 	}
 
-	if (mNhPrv.hasParam(PARAM_NAME_WHE_RAD) == false) {
-		mNhPrv.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
-	}
-
-	if (mNhPrv.hasParam(PARAM_NAME_TRE_WID) == false) {
-		mNhPrv.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
-	}
-
 	mDoDebug = false;
 	if (mNhPrv.hasParam(PARAM_NAME_DEBUG) == false) {
 		mNhPrv.setParam(PARAM_NAME_DEBUG, mDoDebug);
@@ -56,7 +46,7 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
-	mPubAlvRsp = mNh.advertise<std_msgs::Bool>(TOPIC_NAME_ALIVE_RSP, 1);
+	mPubOdom = mNh.advertise<nav_msgs::Odometry>(TOPIC_NAME_ODOM, 1);
 
 	if (mDoDebug == true) {
 		ROS_WARN_STREAM("Node \"Vehicle Controller\":Debug Mode Running!");
@@ -67,6 +57,9 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 
 	restartTimer(mTimerAlv);
 	restartTimer(mTimerPolling);
+	restartTimer(mTimerOdom);
+
+	resetTwistMsg();
 }
 
 /**
@@ -101,6 +94,8 @@ bool VehicleController::init() {
  * @exception		none
  */
 void VehicleController::mainLoop() {
+
+	const ros::Duration LOOP_ODOM = ros::Duration(ODOM_CALC_PERIOD);
 
 	static StateT state = INITIAL_STS;
 	static bool isUvLo = false;
@@ -139,6 +134,13 @@ void VehicleController::mainLoop() {
 		}
 		restartTimer(mTimerPolling);
 	}
+
+	// odom loop
+	if (nowTm - mTimerOdom.mStartTm > LOOP_ODOM) {
+		publishOdometry();
+		restartTimer(mTimerOdom);
+	}
+
 }
 
 /**
@@ -152,7 +154,8 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
 
 	move(aTwistMsg.linear.x, aTwistMsg.angular.z);
 	restartTimer(mTimerAlv);
-	publishAliveResponse();
+
+	mTwistMsgLatest = aTwistMsg;
 }
 
 /**
@@ -161,17 +164,35 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
  * @return			none
  * @exception		none
  */
-void VehicleController::publishAliveResponse() {
+void VehicleController::publishOdometry() {
 
-	std_msgs::Bool isSts;
+	static ros::Time prvTm = ros::Time::now();
+	static std::vector<int32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
 
-	if (mIsActive == true) {
-		isSts.data = true;
-	} else {
-		isSts.data = false;
+	std::vector<int32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	int32_t diffAbsPosR;
+	int32_t diffAbsPosL;
+
+	ros::Time nowTm = ros::Time::now();
+	bool isRet = true;
+	if (mDoDebug == false) {
+		isRet = mWheel.getAbsolutePosition(nowAbsPosVec);
 	}
 
-	mPubAlvRsp.publish(isSts);
+	if (isRet == true) {
+		double dt = (nowTm - prvTm).toSec();
+		double radGain = mWheel.getRadPerMicroStep();
+		diffAbsPosR = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[0], prvAbsPosVec[0]);
+		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
+		double angR_rad = diffAbsPosR * radGain;
+		double angL_rad = -diffAbsPosL * radGain;
+
+		mOdom.moveReverseMotionModel(angL_rad, angR_rad, dt);
+		mOdom.publishOdom();
+
+		prvTm = nowTm;
+		prvAbsPosVec = nowAbsPosVec;
+	}
 }
 
 /**
@@ -190,6 +211,7 @@ void VehicleController::initialMode(StateT &aState, bool &aIsUvLo) {
 		if (initialSeq() == true) {
 			aState = ACTIVE_STS;
 			aIsUvLo = true;
+			resetTwistMsg();
 			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "ACTIVE STATE");
 		} else {
 			aState = RECOVERY_STS;
@@ -241,6 +263,7 @@ void VehicleController::recoveryMode(StateT &aState, bool &aIsUvLo) {
 	if (recoverySeq() == true) {
 		aState = ACTIVE_STS;
 		aIsUvLo = false;
+		resetTwistMsg();
 	}
 }
 
@@ -392,6 +415,7 @@ bool VehicleController::activeSeq() {
 		if (mDoDebug == false) {
 			bool isHoldTrq = true;
 			mWheel.stopSoft(isHoldTrq);
+			resetTwistMsg();
 		}
 		ROS_WARN_STREAM_THROTTLE(STREAM_HZ, "Topics from Host is Timeout.");
 	}
@@ -432,25 +456,8 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 	constexpr double SPEED_RESOL_SPS = 0.015;		// SPEED resolution[step/s]
 	constexpr double SPEED_RESOL_RPS = SPEED_RESOL_SPS * RAD_P_STEP;		//  SPEED resolution[rad/s]
 
-	double wheelRadius_m = 0;
-	double treadWidth_m = 0;
-	mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
-	mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
-
-	//	| ωr | = | 1/R  T/(2*R) || V |
-	//	| ωl |   | 1/R -T/(2*R) || W |
-	//
-	// ωr : angular velocity of right wheel
-	// ωl : angular velocity of left wheel
-	//  R  : left and right wheel radius
-	//  T  : tread width
-	//  V  : vehicle linear velocity
-	//  W  : vehicle angular velocity
-
 	vector<double> spdVec(WHEEL_NUM);	//[0]:right, [1]:left
-	spdVec[0] = (2 * aLinear_mps + treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
-	spdVec[1] = (2 * aLinear_mps - treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
-	spdVec[1] *= -1;
+	mOdom.moveMotionModel(aLinear_mps, aAngular_rps, spdVec);
 
 	bool isRet = false;
 	if (mIsActive == true) {
@@ -460,6 +467,7 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 			} else {
 				bool isHoldTrq = true;
 				isRet = mWheel.stopSoft(isHoldTrq);
+				resetTwistMsg();
 			}
 			ROS_DEBUG_STREAM_THROTTLE(STREAM_HZ, "Stop:");
 		} else {
@@ -478,6 +486,30 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 		isRet = mWheel.stopHard(isHoldTrq);
 		mIsActive = false;
 	}
+}
+
+/**
+ * @brief			get Absolute Position.
+ *
+ * @param[in]		aMaxSpd_rps		Max speed[rad/s].
+ * @return			bool
+ * 					- true: success
+ * 					- false: failure
+ * @exception		none
+ */
+bool VehicleController::getAbsolutePosition() {
+
+	std::vector<int32_t> absPosVec(WHEEL_NUM);
+
+	bool isRet = mWheel.getAbsolutePosition(absPosVec);
+
+	if (isRet == true) {
+		ROS_INFO_STREAM("AbsPos: [0] = " << absPosVec[0] <<", [1] = " << absPosVec[1]);
+	} else {
+		ROS_INFO_STREAM("AbsPos: Error");
+	}
+
+	return (isRet);
 }
 
 /**
@@ -716,4 +748,20 @@ bool VehicleController::setStallDtctTh(const int32_t aStallDtctTh) {
 	displayRosInfo(idealVal, actualVal, isRet, "set Stall Detection Th", "mA");
 
 	return (isRet);
+}
+
+/**
+ * @brief			reset Twist Msg.
+ *
+ * @return			none
+ * @exception		none
+ */
+void VehicleController::resetTwistMsg() {
+
+	mTwistMsgLatest.linear.x = 0;
+	mTwistMsgLatest.linear.y = 0;
+	mTwistMsgLatest.linear.z = 0;
+	mTwistMsgLatest.angular.x = 0;
+	mTwistMsgLatest.angular.y = 0;
+	mTwistMsgLatest.angular.z = 0;
 }
