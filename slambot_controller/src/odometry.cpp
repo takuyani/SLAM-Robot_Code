@@ -156,7 +156,7 @@ Odometry::PoseS Odometry::moveReverseMotionModel(const double aAngL_rad, const d
 	mPose.yaw = adjustPiRange(mPose.yaw + yawrate * aDt);
 
 	mAbsAng[RIGHT_IDX] += aAngL_rad;
-	mAbsAng[LEFT_IDX] += aAngR_rad;
+	mAbsAng[LEFT_IDX] -= aAngR_rad;
 	mAngVel[RIGHT_IDX] = aAngVelL_rps;
 	mAngVel[LEFT_IDX] = aAngVelR_rps;
 	mVel = vel;
