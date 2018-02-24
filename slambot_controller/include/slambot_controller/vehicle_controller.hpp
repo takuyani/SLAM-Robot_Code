@@ -84,17 +84,15 @@ private:
 
 	const std::string PARAM_NAME_CMD_VEL_TIMEOUT = "cmd_vel_timeout";
 	const std::string PARAM_NAME_POLLING_RATE = "polling_rate";
-	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
-	const std::string PARAM_NAME_TRE_WID = "tread_width";
 	const std::string PARAM_NAME_DEBUG = "debug/enable";
 
 	static constexpr double RAD2DEG = 180.0 / M_PI;	//!< Radian to degree gain
 	static constexpr double DEG2RAD = M_PI / 180.0;	//!< Degree to radian gain
 
 	const uint32_t WHEEL_NUM;		//!< Number of Wheel
-	const double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
+	static constexpr double STREAM_HZ = 1.0;	//!< ROS Stream Rate[Hz]
 
-	const double ODOM_CALC_PERIOD = 0.1;	//!< Odom calculate period[s]
+	static constexpr double ODOM_CALC_PERIOD = 0.1;	//!< Odom calculate period[s]
 
 	//***** Method *****
 	void callbackCmdVel(const geometry_msgs::Twist &);

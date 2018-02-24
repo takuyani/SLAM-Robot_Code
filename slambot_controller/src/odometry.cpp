@@ -21,20 +21,29 @@ using namespace realtime_tools;
  * @brief		Constructor.
  *
  */
-Odometry::Odometry(const uint32_t aWheelNum, const string aTopicNameOdom, const string aTopicNameJoint,
-		const string aTopicNameTf) :
-		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~") {
+Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, const string aTopicNameTf) :
+		mNh(), mNhPrv("~") {
 
-	const string BASE_FRAME_ID = "/base_link";
-	const string ODOM_FRAME_ID = "/odom";
+	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius[m]
+	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width[m]
+	const string BASE_FRAME_ID_DEF = "/base_link";
+	const string ODOM_FRAME_ID_DEF = "/odom";
 	constexpr bool ENA_ODO_TF_DEF = false;			// enable_odom_tf
 
+	if (mNhPrv.hasParam(PARAM_NAME_WHE_RAD) == false) {
+		mNhPrv.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
+	}
+
+	if (mNhPrv.hasParam(PARAM_NAME_TRE_WID) == false) {
+		mNhPrv.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
+	}
+
 	if (mNhPrv.hasParam(PARAM_NAME_BASE_FRAME_ID) == false) {
-		mNhPrv.setParam(PARAM_NAME_BASE_FRAME_ID, BASE_FRAME_ID);
+		mNhPrv.setParam(PARAM_NAME_BASE_FRAME_ID, BASE_FRAME_ID_DEF);
 	}
 
 	if (mNhPrv.hasParam(PARAM_NAME_ODOM_FRAME_ID) == false) {
-		mNhPrv.setParam(PARAM_NAME_ODOM_FRAME_ID, ODOM_FRAME_ID);
+		mNhPrv.setParam(PARAM_NAME_ODOM_FRAME_ID, ODOM_FRAME_ID_DEF);
 	}
 
 	if (mNhPrv.hasParam(PARAM_NAME_ENA_ODO_TF) == false) {
@@ -46,15 +55,17 @@ Odometry::Odometry(const uint32_t aWheelNum, const string aTopicNameOdom, const 
 	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 1));
 	mPubTf_sptr->msg_.transforms.resize(1);
 
-	if (WHEEL_NUM == 2) {
-		mPubJoint_sptr->msg_.name[0] = "left_wheel_joint";
-		mPubJoint_sptr->msg_.name[1] = "right_wheel_joint";
-	}
+	mPubJoint_sptr->msg_.name[RIGHT_IDX] = "right_wheel_joint";
+	mPubJoint_sptr->msg_.name[LEFT_IDX] = "left_wheel_joint";
 
 	mPose.x = 0.0;
 	mPose.y = 0.0;
 	mPose.yaw = 0.0;
 
+	for (uint32_t i = 0; i < WHEEL_NUM; i++) {
+		mAbsAng[i] = 0.0;
+		mAngVel[i] = 0.0;
+	}
 	mVel = 0.0;
 	mYawRate = 0.0;
 }
@@ -75,33 +86,87 @@ void Odometry::initOdometry(Odometry::PoseS aInitPose) {
 }
 
 /**
- * @brief		move by Motion Model.
+ * @brief			move by Motion Model.
  *
- * @param[in]	aVel  		velocity[m/s].
- * @param[in]	aYawRate  	yaw rate angle[rad/s].
- * @param[in]	aDt  		delta time[s].
+ * @param[in]		aLinear_mps		Vehicle linear[m/s].
+ * @param[in]		aAngular_rps	Vehicle angular[rad/s].
+ * @param[in,out]	aSpdVec  		Speed Vector.
+ *
+ * @return			none
+ * @exception		none
+ */
+void Odometry::moveMotionModel(const double aLinear_mps, const double aAngular_rps, vector<double> &aSpdVec) {
+
+	double wheelRadius_m = 0.01;
+	double treadWidth_m = 0.01;
+	mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
+	mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
+
+	//	| ωr | = | 1/R  T/(2*R) || V |
+	//	| ωl |   | 1/R -T/(2*R) || W |
+	//
+	// ωr : angular velocity of right wheel
+	// ωl : angular velocity of left wheel
+	//  R  : left and right wheel radius
+	//  T  : tread width
+	//  V  : vehicle linear velocity
+	//  W  : vehicle angular velocity
+
+	double gain = treadWidth_m * aAngular_rps;
+	aSpdVec[RIGHT_IDX] = (2 * aLinear_mps + gain) / (2 * wheelRadius_m);
+	aSpdVec[LEFT_IDX] = -1 * (2 * aLinear_mps - gain) / (2 * wheelRadius_m);
+
+}
+
+/**
+ * @brief		move by Reverse Motion Model.
+ *
+ * @param[in]	aAngVelR_rps  	angular velocity of right wheel[rad/s].
+ * @param[in]	aAngVelL_rps  	angular velocity of left wheel[rad/s].
+ * @param[in]	aDt  			delta time[s].
  *
  * @return		none
  * @exception	none
  */
-Odometry::PoseS Odometry::moveMotionModel(double aVel, double aYawRate, double aDt) {
+Odometry::PoseS Odometry::moveReverseMotionModel(const double aAngL_rad, const double aAngR_rad, const double aDt) {
 
-	double dist = aVel * aDt;
+	double wheelRadius_m = 0.01;
+	double treadWidth_m = 0.01;
+	mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
+	mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
+
+	//	| V | = | R/2  R/2 || ωr |
+	//	| W |   | R/T -R/T || ωl |
+	//
+	//  V  : vehicle linear velocity
+	//  W  : vehicle angular velocity
+	// ωr : angular velocity of right wheel
+	// ωl : angular velocity of left wheel
+	//  R  : left and right wheel radius
+	//  T  : tread width
+
+	double aAngVelL_rps = aAngL_rad / aDt;
+	double aAngVelR_rps = aAngR_rad / aDt;
+	double vel = (wheelRadius_m / 2) * (aAngVelR_rps + aAngVelL_rps);
+	double yawrate = (wheelRadius_m / treadWidth_m) * (aAngVelR_rps - aAngVelL_rps);
+	double dist = vel * aDt;
 
 	mPose.x += dist * cos(mPose.yaw);
 	mPose.y += dist * sin(mPose.yaw);
-	mPose.yaw = adjustPiRange(mPose.yaw + aYawRate * aDt);
+	mPose.yaw = adjustPiRange(mPose.yaw + yawrate * aDt);
 
-	mVel = aVel;
-	mYawRate = aYawRate;
+	mAbsAng[RIGHT_IDX] += aAngL_rad;
+	mAbsAng[LEFT_IDX] += aAngR_rad;
+	mAngVel[RIGHT_IDX] = aAngVelL_rps;
+	mAngVel[LEFT_IDX] = aAngVelR_rps;
+	mVel = vel;
+	mYawRate = yawrate;
 
 	return (mPose);
 }
 
 /**
  * @brief		publish Odometry.
- *
- * @param[in]	aVel  		velocity[m/s].
  *
  * @return		none
  * @exception	none
@@ -154,8 +219,8 @@ void Odometry::publishOdom() {
 		mPubJoint_sptr->msg_.header.seq = seq;
 		mPubJoint_sptr->msg_.header.stamp = time;
 		for (uint32_t i = 0; i < WHEEL_NUM; i++) {
-			mPubJoint_sptr->msg_.position[i] = 0;
-			mPubJoint_sptr->msg_.velocity[i] = 0;
+			mPubJoint_sptr->msg_.position[i] = mAbsAng[i];
+			mPubJoint_sptr->msg_.velocity[i] = mAngVel[i];
 			mPubJoint_sptr->msg_.effort[i] = 0.0;
 		}
 		mPubJoint_sptr->unlockAndPublish();

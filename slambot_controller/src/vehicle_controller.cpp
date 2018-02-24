@@ -23,12 +23,10 @@ using namespace sm_42byg011_25;
  * @param[in]		aNh			Ros node handle.
  */
 VehicleController::VehicleController(const uint32_t aWheelNum) :
-		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum), mOdom(Odometry(aWheelNum)) {
+		WHEEL_NUM(aWheelNum), mNh(), mNhPrv("~"), mWheel(aWheelNum), mOdom(Odometry()) {
 
 	constexpr double CMD_VEL_TIMEOUT_DEF = 1.0;		// Cmd vel timeout[s]
 	constexpr double POLLING_RATE_DEF = 10.0;		// Polling rate[Hz]
-	constexpr double WHEEL_RADIUS_DEF = 0.01;		// Wheel radius[m]
-	constexpr double TREAD_WIDTH_DEF = 0.01;		// Tread width[m]
 
 	mMotStsVec.resize(WHEEL_NUM);
 
@@ -38,14 +36,6 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 
 	if (mNhPrv.hasParam(PARAM_NAME_POLLING_RATE) == false) {
 		mNhPrv.setParam(PARAM_NAME_POLLING_RATE, POLLING_RATE_DEF);
-	}
-
-	if (mNhPrv.hasParam(PARAM_NAME_WHE_RAD) == false) {
-		mNhPrv.setParam(PARAM_NAME_WHE_RAD, WHEEL_RADIUS_DEF);
-	}
-
-	if (mNhPrv.hasParam(PARAM_NAME_TRE_WID) == false) {
-		mNhPrv.setParam(PARAM_NAME_TRE_WID, TREAD_WIDTH_DEF);
 	}
 
 	mDoDebug = false;
@@ -190,32 +180,14 @@ void VehicleController::publishOdometry() {
 	}
 
 	if (isRet == true) {
-		double absPosCrnt_rps[WHEEL_NUM];
 		double dt = (nowTm - prvTm).toSec();
-		double radPerSecGain = mWheel.getRadPerMicroStep() / dt;
+		double radGain = mWheel.getRadPerMicroStep();
 		diffAbsPosR = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[0], prvAbsPosVec[0]);
 		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
-		absPosCrnt_rps[0] = diffAbsPosR * radPerSecGain;
-		absPosCrnt_rps[1] = -diffAbsPosL * radPerSecGain;
-		double wheelRadius_m = 0;
-		double treadWidth_m = 0;
-		mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
-		mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
+		double angR_rad = diffAbsPosR * radGain;
+		double angL_rad = -diffAbsPosL * radGain;
 
-		//	| V | = | R/2  R/2 || ωr |
-		//	| W |   | R/T -R/T || ωl |
-		//
-		//  V  : vehicle linear velocity
-		//  W  : vehicle angular velocity
-		// ωr : angular velocity of right wheel
-		// ωl : angular velocity of left wheel
-		//  R  : left and right wheel radius
-		//  T  : tread width
-
-		double linear_mps = (wheelRadius_m / 2) * (absPosCrnt_rps[0] + absPosCrnt_rps[1]);
-		double angular_rps = (wheelRadius_m / treadWidth_m) * (absPosCrnt_rps[0] - absPosCrnt_rps[1]);
-
-		mOdom.moveMotionModel(linear_mps, angular_rps, dt);
+		mOdom.moveReverseMotionModel(angL_rad, angR_rad, dt);
 		mOdom.publishOdom();
 
 		prvTm = nowTm;
@@ -484,25 +456,8 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 	constexpr double SPEED_RESOL_SPS = 0.015;		// SPEED resolution[step/s]
 	constexpr double SPEED_RESOL_RPS = SPEED_RESOL_SPS * RAD_P_STEP;		//  SPEED resolution[rad/s]
 
-	double wheelRadius_m = 0;
-	double treadWidth_m = 0;
-	mNhPrv.getParam(PARAM_NAME_WHE_RAD, wheelRadius_m);
-	mNhPrv.getParam(PARAM_NAME_TRE_WID, treadWidth_m);
-
-	//	| ωr | = | 1/R  T/(2*R) || V |
-	//	| ωl |   | 1/R -T/(2*R) || W |
-	//
-	// ωr : angular velocity of right wheel
-	// ωl : angular velocity of left wheel
-	//  R  : left and right wheel radius
-	//  T  : tread width
-	//  V  : vehicle linear velocity
-	//  W  : vehicle angular velocity
-
 	vector<double> spdVec(WHEEL_NUM);	//[0]:right, [1]:left
-	spdVec[0] = (2 * aLinear_mps + treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
-	spdVec[1] = (2 * aLinear_mps - treadWidth_m * aAngular_rps) / (2 * wheelRadius_m);
-	spdVec[1] *= -1;
+	mOdom.moveMotionModel(aLinear_mps, aAngular_rps, spdVec);
 
 	bool isRet = false;
 	if (mIsActive == true) {

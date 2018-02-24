@@ -51,23 +51,28 @@ public:
 	//***** Const Value *****
 
 	//***** Constructor, Destructor *****
-	Odometry(const uint32_t, const std::string = "odom", const std::string = "joint_states", const std::string = "/tf");
+	Odometry(const std::string = "odom", const std::string = "joint_states", const std::string = "/tf");
 	virtual ~Odometry();
 
 	//***** Method *****
 	void initOdometry(Odometry::PoseS);
-	PoseS moveMotionModel(double, double, double);
+	void moveMotionModel(const double, const double, std::vector<double> &);
+	PoseS moveReverseMotionModel(const double, const double, const double);
 	void publishOdom();
 
 private:
 	//***** User Define *****
 
 	//***** Const Value *****
+	const std::string PARAM_NAME_WHE_RAD = "wheel_radius";
+	const std::string PARAM_NAME_TRE_WID = "tread_width";
 	const std::string PARAM_NAME_BASE_FRAME_ID = "base_frame_id";
 	const std::string PARAM_NAME_ODOM_FRAME_ID = "odom_frame_id";
 	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
 
-	const uint32_t WHEEL_NUM;	//!< Number of Wheel
+	static constexpr uint32_t WHEEL_NUM = 2;	//!< Number of Wheel
+	static constexpr uint32_t RIGHT_IDX = 0;	//!< Right Wheel Index
+	static constexpr uint32_t LEFT_IDX = 1;		//!< Left Wheel Index
 
 	//***** Method *****
 	double adjustPiRange(const double);
@@ -79,9 +84,11 @@ private:
 	std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > mPubTf_sptr;
 	std::shared_ptr<realtime_tools::RealtimePublisher<sensor_msgs::JointState> > mPubJoint_sptr;
 
-	double mVel;
-	double mYawRate;
-	PoseS mPose;
+	double mAbsAng[WHEEL_NUM]; 		//!< Angular of wheel(L:[0], R:[1])
+	double mAngVel[WHEEL_NUM]; 		//!< Angular velocity of wheel(L:[0], R:[1])
+	double mVel;					//!< Vehicle velocity
+	double mYawRate;				//!< Vehicle yaw rate
+	PoseS mPose;					//!< Vehicle pose
 };
 
 #endif /* ODOMETRY_HPP_ */
