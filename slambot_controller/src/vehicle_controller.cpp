@@ -187,6 +187,12 @@ void VehicleController::publishOdometry() {
 		double angR_rad = diffAbsPosR * radGain;
 		double angL_rad = -diffAbsPosL * radGain;
 
+		if (mDoDebug == true) {
+			// for test mode
+			angR_rad = 10.0 * DEG2RAD;
+			angL_rad = 6.0 * DEG2RAD;
+		}
+
 		mOdom.moveReverseMotionModel(angL_rad, angR_rad, dt);
 		mOdom.publishOdom();
 
