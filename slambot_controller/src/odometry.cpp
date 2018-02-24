@@ -51,21 +51,24 @@ Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, co
 	}
 
 	mPubOdom_sptr.reset(new RealtimePublisher<nav_msgs::Odometry>(mNh, aTopicNameOdom, 1));
-	mPubJoint_sptr.reset(new RealtimePublisher<sensor_msgs::JointState>(mNh, aTopicNameJoint, WHEEL_NUM));
+	mPubJoint_sptr.reset(new RealtimePublisher<sensor_msgs::JointState>(mNh, aTopicNameJoint, 1));
 	mPubTf_sptr.reset(new RealtimePublisher<tf::tfMessage>(mNh, aTopicNameTf, 1));
 	mPubTf_sptr->msg_.transforms.resize(1);
-
-	mPubJoint_sptr->msg_.name[RIGHT_IDX] = "right_wheel_joint";
-	mPubJoint_sptr->msg_.name[LEFT_IDX] = "left_wheel_joint";
 
 	mPose.x = 0.0;
 	mPose.y = 0.0;
 	mPose.yaw = 0.0;
 
+	string joint_names[WHEEL_NUM] = { "right_wheel_joint", "left_wheel_joint" };
 	for (uint32_t i = 0; i < WHEEL_NUM; i++) {
 		mAbsAng[i] = 0.0;
 		mAngVel[i] = 0.0;
+		mPubJoint_sptr->msg_.name.push_back(joint_names[i]);
+		mPubJoint_sptr->msg_.position.push_back(0.0);
+		mPubJoint_sptr->msg_.velocity.push_back(0.0);
+		mPubJoint_sptr->msg_.effort.push_back(0.0);
 	}
+
 	mVel = 0.0;
 	mYawRate = 0.0;
 }
