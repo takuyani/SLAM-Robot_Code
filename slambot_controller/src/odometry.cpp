@@ -59,7 +59,7 @@ Odometry::Odometry(const string aTopicNameOdom, const string aTopicNameJoint, co
 	mPose.y = 0.0;
 	mPose.yaw = 0.0;
 
-	string joint_names[WHEEL_NUM] = { "right_wheel_joint", "left_wheel_joint" };
+	vector<string> joint_names = { "right_wheel_joint", "left_wheel_joint" };
 	for (uint32_t i = 0; i < WHEEL_NUM; i++) {
 		mAbsAng[i] = 0.0;
 		mAngVel[i] = 0.0;
