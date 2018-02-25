@@ -1,9 +1,11 @@
 <launch>
 
+	<!-- arguments -->
 	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
 	<arg name="gui" default="True"/>
 	<arg name="rvizconfig" default="$(find slambot_slam)/config/slam.rviz"/>
 
+	<!-- prameters -->
 	<param name="use_gui" value="$(arg gui)"/>
 
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
