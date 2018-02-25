@@ -1,7 +1,7 @@
 <!-- vehicle_controller.launch -->
 <launch>
 
-	<group ns="slambot_host">
+	<group ns="slambot_hw">
 
 		<!-- Vehicle Controller -->
 		<node respawn="true" pkg="slambot_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">

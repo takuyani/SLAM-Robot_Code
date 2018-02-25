@@ -1,12 +1,16 @@
 <launch>
 
+	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
+
 	<group ns="slambot_host">
+
+		<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
 		<!-- convert joint states to TF transforms for rviz, etc -->
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
 			respawn="false" output="screen">
 				<remap from="joint_states" to="/slambot_hw/joint_states" />
-				<remap from="robot_description" to="/slambot_hw/robot_description" />
+				<remap from="robot_description" to="robot_description" />
 		</node>
 
 		<node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
