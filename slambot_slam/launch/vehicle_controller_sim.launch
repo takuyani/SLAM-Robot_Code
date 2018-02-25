@@ -17,7 +17,7 @@
 		<arg name="headless" value="$(arg headless)"/>
 	</include>
 
-	<group ns="slambot_host">
+	<group ns="slambot_hw">
 		<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"

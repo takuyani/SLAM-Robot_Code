@@ -1,12 +1,12 @@
 <launch>
 
-	<group ns="slambot_host">
+	<group ns="slambot_hw">
 
 		<!-- convert joint states to TF transforms for rviz, etc -->
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
 			respawn="false" output="screen">
-				<remap from="joint_states" to="/slambot_host/joint_states" />
-				<param name="robot_description" value="robot_description" />
+				<remap from="joint_states" to="/slambot_hw/joint_states" />
+				<param name="robot_description" value="/slambot_hw/robot_description" />
 		</node>
 
 		<node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
@@ -22,13 +22,14 @@
 			<remap from="scan" to="sensor_xtion_pro_live/scan"/>
 		</node>
 
+
 		<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
 			args="
 			-configuration_directory $(find slambot_slam)/param/lua
 			-configuration_basename slambot_2d.lua"
 			output="screen">
-				<remap from="scan" to="/slambot_host/sensor_xtion_pro_live/scan" />
-				<remap from="odom" to="/slambot_host/diff_drive_controller/odom" />
+				<remap from="scan" to="/slambot_hw/sensor_xtion_pro_live/scan" />
+				<remap from="odom" to="/slambot_hw/diff_drive_controller/odom" />
 		</node>
 
 		<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"

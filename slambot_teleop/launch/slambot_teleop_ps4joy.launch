@@ -11,7 +11,7 @@
 		<!-- Slambot Teleop Ps4joy -->
 		<node pkg="slambot_teleop" type="slambot_teleop_ps4joy_node" name="slambot_teleop_ps4joy" output="screen" >
 			<remap from="joy" 		to="joy" />
-			<remap from="cmd_vel" 	to="/slambot_host/diff_drive_controller/cmd_vel"/>
+			<remap from="cmd_vel" 	to="/slambot_hw/diff_drive_controller/cmd_vel"/>
 		</node>
 	</group>
 
