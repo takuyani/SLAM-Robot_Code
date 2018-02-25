@@ -1,12 +1,12 @@
 <launch>
 
-	<group ns="slambot_hw">
+	<group ns="slambot_host">
 
 		<!-- convert joint states to TF transforms for rviz, etc -->
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
 			respawn="false" output="screen">
 				<remap from="joint_states" to="/slambot_hw/joint_states" />
-				<param name="robot_description" value="/slambot_hw/robot_description" />
+				<remap from="robot_description" to="/slambot_hw/robot_description" />
 		</node>
 
 		<node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
@@ -17,8 +17,8 @@
 			<param name="output_frame_id" value="sensor_xtion_pro_live_ir_frame"/>
 			<param name="range_min" value="0.45"/>
 
-			<remap from="image" to="sensor_xtion_pro_live/depth_registered/image_raw"/>
-			<remap from="camera_info" to="sensor_xtion_pro_live/depth_registered/camera_info"/>
+			<remap from="image" to="/slambot_hw/sensor_xtion_pro_live/depth_registered/image_raw"/>
+			<remap from="camera_info" to="/slambot_hw/sensor_xtion_pro_live/depth_registered/camera_info"/>
 			<remap from="scan" to="sensor_xtion_pro_live/scan"/>
 		</node>
 
@@ -36,6 +36,5 @@
 			type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
 
 	</group>
-
 
 </launch>
