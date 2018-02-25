@@ -17,7 +17,7 @@ raytrace_range: 6.0
 
 ## ========== layer definitions ==========
 static:
-    map_topic: /map
+    map_topic: /slambot_host/map
     subscribe_to_updates: true
 
 obstacles_laser:

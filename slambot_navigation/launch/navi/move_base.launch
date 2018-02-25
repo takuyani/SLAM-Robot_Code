@@ -1,6 +1,7 @@
 <launch>
 
 	<arg name="no_static_map" default="false"/>
+	<arg name="move_base_simple_goal" default="/move_base_simple/goal" />
 
 	<arg name="cmd_vel_topic" default="/cmd_vel" />
 	<arg name="odom_topic" default="/odom" />
@@ -35,7 +36,7 @@
 		<rosparam file="$(find slambot_navigation)/param/navi/local_planner/dwa_local_planner_params.yaml" command="load" />
 		<rosparam file="$(find slambot_navigation)/param/navi/local_planner/teb_local_planner_params.yaml" command="load" />
 
-
+		<remap from="move_base_simple/goal" to="$(arg move_base_simple_goal)"/>
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
 		<remap from="odom" to="$(arg odom_topic)"/>
 
