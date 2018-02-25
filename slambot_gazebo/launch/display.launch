@@ -2,23 +2,20 @@
 
 	<!-- arguments -->
 	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
-	<arg name="rvizconfig" default="$(find slambot_gazebo)/config/sim.rviz"/>
 	<arg name="gui" default="True"/>
+	<arg name="rvizconfig" default="$(find slambot_gazebo)/config/sim.rviz"/>
 
 	<!-- prameters -->
 	<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 	<param name="use_gui" value="$(arg gui)"/>
 
-	<group ns="slambot_client">
+	<!-- convert joint states to TF transforms for rviz, etc -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+		respawn="false" output="screen">
+			<remap from="joint_states" to="/slambot_hw/joint_states" />
+			<param name="robot_description" value="robot_description" />
+	</node>
 
-		<!-- convert joint states to TF transforms for rviz, etc -->
-		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-			respawn="false" output="screen">
-				<remap from="joint_states" to="/slambot_host/joint_states" />
-				<param name="robot_description" value="robot_description" />
-		</node>
-
-	</group>
 
 	<!-- rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>

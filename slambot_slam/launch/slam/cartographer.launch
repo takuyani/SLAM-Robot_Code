@@ -5,7 +5,7 @@
 
 	<node name="cartographer" pkg="cartographer_ros" type="cartographer_node"
 		args="
-		-configuration_directory $(find slambot_navigation)/param/slam/lua
+		-configuration_directory $(find slambot_slam)/param/lua
 		-configuration_basename slambot_2d.lua"
 		output="screen">
 			<remap from="scan" to="$(arg scan_topic)"/>

@@ -6,7 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
         - /TF1/Frames1
+        - /Image1
       Splitter Ratio: 0.533333361
     Tree Height: 477
   - Class: rviz/Selection
@@ -28,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: Image
 Visualization Manager:
   Class: ""
   Displays:
@@ -222,22 +224,122 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base_body:
+          Value: false
+        base_body_spacer_1:
+          Value: false
+        base_body_spacer_2:
+          Value: false
+        base_body_spacer_3:
+          Value: false
+        base_body_spacer_4:
+          Value: false
+        base_footprint:
+          Value: false
+        front_caster:
+          Value: false
+        front_caster_board:
+          Value: false
+        front_spacer_1:
+          Value: false
+        front_spacer_2:
+          Value: false
+        front_spacer_3:
+          Value: false
+        front_spacer_4:
+          Value: false
+        left_wheel:
+          Value: true
+        odom:
+          Value: true
+        rear_caster:
+          Value: false
+        rear_caster_board:
+          Value: false
+        rear_spacer_1:
+          Value: false
+        rear_spacer_2:
+          Value: false
+        rear_spacer_3:
+          Value: false
+        rear_spacer_4:
+          Value: false
+        right_wheel:
+          Value: true
+        sensor_xtion_pro_live_ir_frame:
+          Value: false
+        sensor_xtion_pro_live_ir_optical_frame:
+          Value: false
+        sensor_xtion_pro_live_link:
+          Value: false
+        sensor_xtion_pro_live_rgb_frame:
+          Value: false
+        sensor_xtion_pro_live_rgb_optical_frame:
+          Value: false
+        upper_board:
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        odom:
+          base_footprint:
+            base_body:
+              base_body_spacer_1:
+                {}
+              base_body_spacer_2:
+                {}
+              base_body_spacer_3:
+                {}
+              base_body_spacer_4:
+                {}
+              front_caster_board:
+                front_caster:
+                  {}
+                front_spacer_1:
+                  {}
+                front_spacer_2:
+                  {}
+                front_spacer_3:
+                  {}
+                front_spacer_4:
+                  {}
+              left_wheel:
+                {}
+              rear_caster_board:
+                rear_caster:
+                  {}
+                rear_spacer_1:
+                  {}
+                rear_spacer_2:
+                  {}
+                rear_spacer_3:
+                  {}
+                rear_spacer_4:
+                  {}
+              right_wheel:
+                {}
+              sensor_xtion_pro_live_rgb_frame:
+                sensor_xtion_pro_live_ir_frame:
+                  sensor_xtion_pro_live_ir_optical_frame:
+                    {}
+                sensor_xtion_pro_live_link:
+                  {}
+                sensor_xtion_pro_live_rgb_optical_frame:
+                  {}
+              upper_board:
+                {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /slambot_host/sensor_xtion_pro_live/rgb/image_raw
+      Image Topic: /slambot_hw/sensor_xtion_pro_live/depth_registered/image_raw
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -250,7 +352,8 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_footprint
+    Default Light: true
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -299,7 +402,7 @@ Window Geometry:
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000396fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000026c000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d006100670065010000029a000001240000001600ffffff000000010000010f00000396fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000002800000396000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004ba0000039600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000396fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000026c000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d006100670065010000029a000001240000001600ffffff000000010000010f00000396fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000002800000396000000ad00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004ba0000039600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

@@ -112,4 +112,3 @@ occ_thresh: 0.25
 # The maximum range of the sensor.
 # If regions with no obstacles within the range of the sensor should appear as free space in the map, set maxUrange < maximum range of the real sensor <= maxRange.
 maxRange: 6.1
-
