@@ -6,15 +6,17 @@
 		<!-- Vehicle Controller -->
 		<node respawn="true" pkg="slambot_controller" type="vehicle_controller_node" name="vehicle_controller" output="screen">
 			<remap from="cmd_vel" 			to="diff_drive_controller/cmd_vel"/>
+			<remap from="odom" 				to="diff_drive_controller/odom"/>
+
 			<param name="cmd_vel_timeout"	type="double"	value="0.5"/>
 			<param name="polling_rate"		type="double"	value="10"/>
 			<param name="wheel_radius"		type="double"	value="0.024"/>
 			<param name="tread_width"		type="double"	value="0.150"/>
-			<param name="base_frame_id"		type="string"	value="/base_footprint"/>
-			<param name="odom_frame_id"		type="string"	value="/odom"/>
+			<param name="base_frame_id"		type="string"	value="base_footprint"/>
+			<param name="odom_frame_id"		type="string"	value="odom"/>
 			<param name="enable_odom_tf"	type="bool"		value="true"/>
-			
-			<param name="debug/enable"		type="bool"		value="false"/>
+
+			<param name="debug/enable"		type="bool"		value="true"/>
 		</node>
 
 	</group>
