@@ -16,7 +16,7 @@
 			<param name="odom_frame_id"		type="string"	value="odom"/>
 			<param name="enable_odom_tf"	type="bool"		value="true"/>
 
-			<param name="debug/enable"		type="bool"		value="true"/>
+			<param name="debug/enable"		type="bool"		value="false"/>
 		</node>
 
 	</group>
