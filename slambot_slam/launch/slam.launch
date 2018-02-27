@@ -21,7 +21,7 @@
 			args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager"
 			respawn="true">
 			<param name="scan_height" value="10"/>
-			<param name="output_frame_id" value="xtion_pro_live_ir_frame"/>
+			<param name="output_frame_id" value="xtion_pro_live_depth_frame"/>
 			<param name="range_min" value="0.45"/>
 
 			<remap from="image" to="/slambot_hw/xtion_pro_live/depth_registered/image_raw"/>

@@ -6,7 +6,7 @@
 
   <!-- Xacro properties -->
   <xacro:property name="M_SCALE" value="0.001"/>
-  <xacro:property name="xtion_pro_live_ir_rel_rgb_py" value="0.0270" />
+  <xacro:property name="xtion_pro_live_dep_rel_rgb_py" value="0.0270" />
   <xacro:property name="xtion_pro_live_cam_rel_rgb_py"   value="-0.0220" />
 
   <!-- Parameterised in part by the values in slambot_properties.urdf.xacro -->
@@ -47,7 +47,7 @@
 
     <!-- Xtion RGB sensor physical attachment -->
     <joint name="${prefix}_joint" type="fixed">
-      <origin xyz="0 ${xtion_pro_live_cam_rel_rgb_py} 0" 
+      <origin xyz="0 ${xtion_pro_live_cam_rel_rgb_py} 0"
               rpy="0 0 0"/>
       <parent link="${prefix}_rgb_frame"/>
       <child link="${prefix}_link"/>
@@ -62,23 +62,23 @@
     </joint>
     <link name="${prefix}_rgb_optical_frame"/>
 
-    <!-- Xtion IR sensor physical attachment -->
-    <joint name="${prefix}_ir_joint" type="fixed">
-      <origin xyz="0 ${xtion_pro_live_ir_rel_rgb_py} 0"
+    <!-- Xtion Depth sensor physical attachment -->
+    <joint name="${prefix}_depth_joint" type="fixed">
+      <origin xyz="0 ${xtion_pro_live_dep_rel_rgb_py} 0"
               rpy="0 0 0" />
       <parent link="${prefix}_rgb_frame" />
-      <child link="${prefix}_ir_frame" />
+      <child link="${prefix}_depth_frame" />
     </joint>
-    <link name="${prefix}_ir_frame"/>
+    <link name="${prefix}_depth_frame"/>
 
-    <!-- Xtion IR sensor frame -->
-    <joint name="${prefix}_ir_optical_joint" type="fixed">
+    <!-- Xtion Depth sensor frame -->
+    <joint name="${prefix}_depth_optical_joint" type="fixed">
       <origin xyz="0 0 0"
               rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-      <parent link="${prefix}_ir_frame" />
-      <child link="${prefix}_ir_optical_frame" />
+      <parent link="${prefix}_depth_frame" />
+      <child link="${prefix}_depth_optical_frame" />
     </joint>
-    <link name="${prefix}_ir_optical_frame"/>
+    <link name="${prefix}_depth_optical_frame"/>
 
     <!-- RGBD sensor for simulation, same as Kinect -->
     <slambot_sim_3dsensor/>
@@ -90,14 +90,14 @@
       <origin xyz="-0.1024 0.0 0.272" rpy="0 0 0"/>
       <parent link="${parent}"/>
       <child link="mount_xtion_pro_live_link"/>
-    </joint>  
+    </joint>
     <link name="mount_xtion_pro_live_link">
       <visual>
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 0"/>
         <geometry>
           <mesh filename="package://slambot_description/meshes/sensors/xtion_pro_stack.dae"/>
         </geometry>
-      </visual>  
+      </visual>
       <collision>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <geometry>
