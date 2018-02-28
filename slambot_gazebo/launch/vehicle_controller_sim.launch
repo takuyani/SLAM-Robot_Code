@@ -23,6 +23,19 @@
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
 			args="-urdf -model slambot -param robot_description"/>
 
+		<!-- depthimage_to_laserscan -->
+		<node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+		<node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+			args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager"
+			respawn="true">
+
+			<rosparam file="$(find slambot_sensing)/param/depthimage_to_laserscan.yaml" command="load" />
+
+			<remap from="image" to="xtion_pro_live/depth_registered/image_raw"/>
+			<remap from="camera_info" to="xtion_pro_live/depth_registered/camera_info"/>
+			<remap from="scan" to="xtion_pro_live/scan"/>
+		</node>
+
 		<!-- Load joint controller configurations from YAML file to parameter server -->
 		<rosparam file="$(find slambot_gazebo)/param/controller.yaml" command="load"/>
 		<!-- load the controllers -->

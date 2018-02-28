@@ -1,0 +1,25 @@
+## ~scan_height (int, default: 1 pixel)
+## The number of pixel rows to use to generate the laserscan.
+## For each column, the scan will return the minimum value for those pixels centered vertically in the image.
+scan_height: 10
+
+## ~scan_time (double, default: 1/30.0Hz (0.033s))
+## Time between scans (seconds).
+## Typically, 1.0/frame_rate.
+## This value is not easily calculated from consecutive messages, and is thus left to the user to set correctly.
+#scan_time:
+
+## ~range_min (double, default: 0.45m)
+## The minimum ranges to return in meters.
+## Ranges less than this will be output as -Inf.
+range_min: 0.45
+
+## ~range_max (double, default: 10.0m)
+## The maximum ranges to return in meters.
+## Ranges greater than this will be output as +Inf.
+range_max: 10.0
+
+## ~output_frame_id (str, default: camera_depth_frame)
+## The frame id of the laser scan.
+## For point clouds coming from an "optical" frame with Z forward, this value should be set to the corresponding frame with X forward and Z up.
+output_frame_id: "xtion_pro_live_depth_frame"
