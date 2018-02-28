@@ -159,32 +159,32 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        sensor_xtion_pro_live_ir_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        sensor_xtion_pro_live_ir_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        sensor_xtion_pro_live_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sensor_xtion_pro_live_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        sensor_xtion_pro_live_rgb_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         upper_board:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        xtion_pro_live_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        xtion_pro_live_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        xtion_pro_live_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        xtion_pro_live_rgb_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        xtion_pro_live_rgb_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       Robot Description: /slambot_host/robot_description
       TF Prefix: ""
@@ -236,9 +236,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 0; 255; 0
-      Max Intensity: 9.04566669
+      Max Intensity: 5.40553856
       Min Color: 0; 255; 0
-      Min Intensity: 5.01106977
+      Min Intensity: 2.37842083
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -246,7 +246,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.0500000007
       Style: Flat Squares
-      Topic: /slambot_host/sensor_xtion_pro_live/scan
+      Topic: /slambot_hw/xtion_pro_live/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
@@ -313,7 +313,7 @@ Visualization Manager:
         left_wheel:
           Value: true
         map:
-          Value: true
+          Value: false
         odom:
           Value: true
         rear_caster:
@@ -330,17 +330,17 @@ Visualization Manager:
           Value: false
         right_wheel:
           Value: true
-        sensor_xtion_pro_live_ir_frame:
-          Value: false
-        sensor_xtion_pro_live_ir_optical_frame:
-          Value: false
-        sensor_xtion_pro_live_link:
-          Value: false
-        sensor_xtion_pro_live_rgb_frame:
-          Value: false
-        sensor_xtion_pro_live_rgb_optical_frame:
-          Value: false
         upper_board:
+          Value: false
+        xtion_pro_live_depth_frame:
+          Value: false
+        xtion_pro_live_depth_optical_frame:
+          Value: false
+        xtion_pro_live_link:
+          Value: false
+        xtion_pro_live_rgb_frame:
+          Value: false
+        xtion_pro_live_rgb_optical_frame:
           Value: false
       Marker Scale: 1
       Name: TF
@@ -349,52 +349,53 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          odom:
-            base_footprint:
-              base_body:
-                base_body_spacer_1:
+          {}
+        odom:
+          base_footprint:
+            base_body:
+              base_body_spacer_1:
+                {}
+              base_body_spacer_2:
+                {}
+              base_body_spacer_3:
+                {}
+              base_body_spacer_4:
+                {}
+              front_caster_board:
+                front_caster:
                   {}
-                base_body_spacer_2:
+                front_spacer_1:
                   {}
-                base_body_spacer_3:
+                front_spacer_2:
                   {}
-                base_body_spacer_4:
+                front_spacer_3:
                   {}
-                front_caster_board:
-                  front_caster:
-                    {}
-                  front_spacer_1:
-                    {}
-                  front_spacer_2:
-                    {}
-                  front_spacer_3:
-                    {}
-                  front_spacer_4:
-                    {}
-                left_wheel:
+                front_spacer_4:
                   {}
-                rear_caster_board:
-                  rear_caster:
-                    {}
-                  rear_spacer_1:
-                    {}
-                  rear_spacer_2:
-                    {}
-                  rear_spacer_3:
-                    {}
-                  rear_spacer_4:
-                    {}
-                right_wheel:
+              left_wheel:
+                {}
+              rear_caster_board:
+                rear_caster:
                   {}
-                sensor_xtion_pro_live_rgb_frame:
-                  sensor_xtion_pro_live_ir_frame:
-                    sensor_xtion_pro_live_ir_optical_frame:
-                      {}
-                  sensor_xtion_pro_live_link:
+                rear_spacer_1:
+                  {}
+                rear_spacer_2:
+                  {}
+                rear_spacer_3:
+                  {}
+                rear_spacer_4:
+                  {}
+              right_wheel:
+                {}
+              upper_board:
+                {}
+              xtion_pro_live_rgb_frame:
+                xtion_pro_live_depth_frame:
+                  xtion_pro_live_depth_optical_frame:
                     {}
-                  sensor_xtion_pro_live_rgb_optical_frame:
-                    {}
-                upper_board:
+                xtion_pro_live_link:
+                  {}
+                xtion_pro_live_rgb_optical_frame:
                   {}
       Update Interval: 0
       Value: true

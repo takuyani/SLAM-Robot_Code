@@ -235,9 +235,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 0; 255; 0
-      Max Intensity: 2.49961829
+      Max Intensity: 2.50107169
       Min Color: 0; 255; 0
-      Min Intensity: 2.49678946
+      Min Intensity: 2.49826097
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -245,7 +245,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.0500000007
       Style: Flat Squares
-      Topic: /slambot_host/xtion_pro_live/scan
+      Topic: /slambot_hw/xtion_pro_live/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
@@ -458,5 +458,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1433
-  X: 487
-  Y: 25
+  X: 479
+  Y: 24
