@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- Microsoft Kinect / ASUS Xtion PRO Live for simulation -->
-  <xacro:macro name="xtion_pro_live_gazebo" params="camera_name">
+  <xacro:macro name="xtion_pro_live_gazebo" params="camera_name name_space">
     <gazebo reference="${camera_name}_depth_frame">
       <sensor type="depth" name="${camera_name}">
         <always_on>true</always_on>
@@ -19,6 +19,7 @@
           </clip>
         </camera>
         <plugin name="kinect_${camera_name}_controller" filename="libgazebo_ros_openni_kinect.so">
+          <robotNamespace>${name_space}</robotNamespace>
           <cameraName>${camera_name}</cameraName>
           <alwaysOn>true</alwaysOn>
           <updateRate>10</updateRate>

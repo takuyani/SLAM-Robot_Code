@@ -68,6 +68,6 @@
   <xacro:wheel_gazebo prefix="left"/>
 
   <!-- Sensors -->
-  <xacro:xtion_pro_live_gazebo camera_name="xtion_pro_live"/>
+  <xacro:xtion_pro_live_gazebo camera_name="xtion_pro_live" name_space="slambot_sensor"/>
 
 </robot>
