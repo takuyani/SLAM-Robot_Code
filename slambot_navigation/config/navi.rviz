@@ -4,8 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
         - /TF1/Frames1
       Splitter Ratio: 0.636507928
     Tree Height: 503
@@ -216,7 +214,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Flat Squares
-      Topic: /slambot_host/sensor_xtion_pro_live/depth_registered/points
+      Topic: /slambot_sensor/xtion_pro_live/depth_registered/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -236,9 +234,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 0; 255; 0
-      Max Intensity: 2.49985337
+      Max Intensity: -0.749603152
       Min Color: 0; 255; 0
-      Min Intensity: 2.49701619
+      Min Intensity: -1.10967898
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -491,7 +489,7 @@ Visualization Manager:
       Shaft Length: 1
       Shaft Radius: 0.0500000007
       Shape: Arrow
-      Topic: /move_base/current_goal
+      Topic: /slambot_host/move_base/current_goal
       Unreliable: false
       Value: true
     - Alpha: 1
@@ -499,7 +497,7 @@ Visualization Manager:
       Color: 25; 255; 0
       Enabled: true
       Name: Polygon
-      Topic: /move_base/local_costmap/footprint
+      Topic: /slambot_host/move_base/local_costmap/footprint
       Unreliable: false
       Value: true
   Enabled: true
@@ -527,7 +525,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.4693127
+      Distance: 9.16321754
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
