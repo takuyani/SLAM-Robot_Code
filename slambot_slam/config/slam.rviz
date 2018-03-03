@@ -4,9 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
-        - /Map1/Status1
         - /TF1/Frames1
       Splitter Ratio: 0.628640771
     Tree Height: 435
@@ -236,9 +233,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 0; 255; 0
-      Max Intensity: 2.50443435
+      Max Intensity: 3.56848216
       Min Color: 0; 255; 0
-      Min Intensity: 2.49643254
+      Min Intensity: 2.43573046
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -270,15 +267,19 @@ Visualization Manager:
       Submaps:
         All: true
       Topic: ""
-      Tracking frame: base_link
+      Tracking frame: base_footprint
       Unreliable: false
       Value: true
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /trajectory_node_list
+      Marker Topic: /slambot_host/trajectory_node_list
       Name: MarkerArray
       Namespaces:
-        {}
+        Inter constraints: true
+        Inter residuals: true
+        Intra constraints: true
+        Intra residuals: true
+        Trajectory 0: true
       Queue Size: 100
       Value: true
     - Class: rviz/TF
@@ -349,53 +350,54 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          odom:
-            base_footprint:
-              base_body:
-                base_body_spacer_1:
+          {}
+        odom:
+          base_footprint:
+            base_body:
+              base_body_spacer_1:
+                {}
+              base_body_spacer_2:
+                {}
+              base_body_spacer_3:
+                {}
+              base_body_spacer_4:
+                {}
+              front_caster_board:
+                front_caster:
                   {}
-                base_body_spacer_2:
+                front_spacer_1:
                   {}
-                base_body_spacer_3:
+                front_spacer_2:
                   {}
-                base_body_spacer_4:
+                front_spacer_3:
                   {}
-                front_caster_board:
-                  front_caster:
-                    {}
-                  front_spacer_1:
-                    {}
-                  front_spacer_2:
-                    {}
-                  front_spacer_3:
-                    {}
-                  front_spacer_4:
-                    {}
-                left_wheel:
+                front_spacer_4:
                   {}
-                rear_caster_board:
-                  rear_caster:
-                    {}
-                  rear_spacer_1:
-                    {}
-                  rear_spacer_2:
-                    {}
-                  rear_spacer_3:
-                    {}
-                  rear_spacer_4:
-                    {}
-                right_wheel:
+              left_wheel:
+                {}
+              rear_caster_board:
+                rear_caster:
                   {}
-                upper_board:
+                rear_spacer_1:
                   {}
-                xtion_pro_live_rgb_frame:
-                  xtion_pro_live_depth_frame:
-                    xtion_pro_live_depth_optical_frame:
-                      {}
-                  xtion_pro_live_link:
+                rear_spacer_2:
+                  {}
+                rear_spacer_3:
+                  {}
+                rear_spacer_4:
+                  {}
+              right_wheel:
+                {}
+              upper_board:
+                {}
+              xtion_pro_live_rgb_frame:
+                xtion_pro_live_depth_frame:
+                  xtion_pro_live_depth_optical_frame:
                     {}
-                  xtion_pro_live_rgb_optical_frame:
-                    {}
+                xtion_pro_live_link:
+                  {}
+                xtion_pro_live_rgb_optical_frame:
+                  {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -459,5 +461,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1366
-  X: 0
-  Y: 24
+  X: 510
+  Y: 40
