@@ -12,7 +12,7 @@ scan_height: 10
 ## ~range_min (double, default: 0.45m)
 ## The minimum ranges to return in meters.
 ## Ranges less than this will be output as -Inf.
-range_min: 0.45
+range_min: 0.10
 
 ## ~range_max (double, default: 10.0m)
 ## The maximum ranges to return in meters.

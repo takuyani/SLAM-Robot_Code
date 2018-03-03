@@ -9,7 +9,7 @@ max_obstacle_height: 0.60
 
 ## obstacle_range [m] (double, default: 2.5)
 ## ロボットとの距離がobstacle_range以下のオブジェクトは障害物としてみなし，コストマップに反映する．
-obstacle_range: 5.0
+obstacle_range: 1.0
 
 ## raytrace_range [m] (double, default: 3.0)
 ## センサの値のうち、この距離値以上のデータは無視される。
