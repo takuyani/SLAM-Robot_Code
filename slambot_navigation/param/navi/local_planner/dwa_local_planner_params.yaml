@@ -45,7 +45,7 @@ DWAPlannerROS:
 
   ## max_rot_vel (double, default: 1.0)
   ## The absolute value of the maximum rotational velocity for the robot in rad/s
-  max_rot_vel: 0.5
+  max_rot_vel: 0.2618
 
   ## min_rot_vel (double, default: 0.4)
   ## The absolute value of the minimum rotational velocity for the robot in rad/s
