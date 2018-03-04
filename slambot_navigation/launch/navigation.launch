@@ -37,8 +37,8 @@
 			<!-- <arg name="global_planner_type" default="carrot_planner/CarrotPlanner"/> -->
 
 			<!-- ***** Select "local_planner" plugins *****  -->
-			<!-- <arg name="local_planner_type" default="dwa_local_planner/DWAPlannerROS"/> -->
-			<arg name="local_planner_type" default="base_local_planner/TrajectoryPlannerROS"/>
+			<arg name="local_planner_type" default="dwa_local_planner/DWAPlannerROS"/>
+			<!-- <arg name="local_planner_type" default="base_local_planner/TrajectoryPlannerROS"/> -->
 			<!-- <arg name="local_planner_type" default="teb_local_planner/TebLocalPlannerROS"/> -->
 
 		</include>
