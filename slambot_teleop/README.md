@@ -70,7 +70,9 @@ Slambot vehicle teleoperation package
 
 ## 3. Launches
 ### 3.1. slambot_teleop_ps4joy.launch
-本launchファイルはPS4のコントローラ(DUALSHOCK 4)を無線で使用することを想定しています。  
+本launchファイルはPS4のコントローラ(DUALSHOCK 4)をワイヤレスで使用することを想定しています。  
+![DUALSHOCK 4](https://c1.staticflickr.com/5/4781/26799634898_7015d5e08e.jpg)
+
 そのため、ds4drvを事前にインストールし、実行しておく必要がある。
 
 #### 1. pipのインストール
