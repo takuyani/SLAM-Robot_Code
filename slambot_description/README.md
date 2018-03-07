@@ -3,7 +3,7 @@ Slambot description package
 
 ## 目次  
 - 1.&nbsp;[Overview](#1-overview)  
-- 2.&nbsp;[Nodes](#2-launches)  
+- 2.&nbsp;[Launches](#2-launches)  
   - 2.1.&nbsp;[display.launch](#21-displaylaunch)  
         
 ## 1. Overview
@@ -13,9 +13,7 @@ Slambot description package
 
 
 <Rvizでの可視化例>  
-
-※※※※※※　画像貼り付け　※※※※※※
-
+![rviz](https://c1.staticflickr.com/5/4699/39777667715_6ed6b56d34.jpg)
 
 ## 2. Launches
 ### 2.1. display.launch
