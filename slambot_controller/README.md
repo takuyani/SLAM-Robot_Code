@@ -62,10 +62,15 @@ T  : 車輪幅(tread width)[m]
   - angular.z: 回転速度[rad/s]（+：左, -：右）
 
 #### 2.1.2. Published Topics
-- **alive_resp**([geometry_msgs/Bool](http://docs.ros.org/api/std_msgs/html/msg/Bool.html))  
-  Subscribed Topic "**cmd_vel**"の受信応答。車体の状態を送信する。  
-  ・ true: 車体制御可能状態  
-  ・ false: 車体制御不可能状態  
+- **odom**([nav_msgs/Odometry](http://docs.ros.org/api/nav_msgs/html/msg/Odometry.html))  
+  ホイール回転角より算出されたオドメトリ。  
+
+- **/tf**([tf/tfMessage](http://docs.ros.org/api/tf/html/msg/tfMessage.html))  
+  odom_frame_idフレームからbase_frame_idへの座標変換。  
+
+- **joint_states**([sensor_msgs/JointState](http://docs.ros.org/api/sensor_msgs/html/msg/JointState.html))  
+  現在のホイールの状態。  
+  
 
 #### 2.1.3. Parameters
 - **~cmd_vel_timeout**(double, default: 1.0)  
@@ -77,10 +82,21 @@ T  : 車輪幅(tread width)[m]
   車体に異常等が発生した場合のリカバリーモードはこの周期で実行される。
 
 - **~wheel_radius**(double, default: 0.01)  
-  車輪半径[m]
+  車輪半径[m]。
 
 - **~tread_width**(double, default: 0.01)  
-  車輪幅[m]
+  車輪幅[m]。
+
+- **~base_frame_id**(string, default: "/base_link")  
+  オドメトリmessagesとTFの子フレームとなるベースフレーム名。
+
+- **~odom_frame_id**(string, default: "/odom")  
+  publishされるオドメトリのフレーム名。  
+
+- **~enable_odom_tf**(bool, default: true)  
+  オドメトリTFの発行許可フラグ。
+  　・true：発行許可
+  　・false：発行禁止
 
 - **~debug/enable**(bool, default: false)  
   デバッグモード有効フラグ。trueの場合、デバッグモードとなり、本ノードのデバッグを行うことが可能。  
