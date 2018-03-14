@@ -87,16 +87,16 @@ T  : 車輪幅(tread width)[m]
 - **~tread_width**(double, default: 0.01)  
   車輪幅[m]。
 
-- **~base_frame_id**(string, default: "/base_link")  
-  オドメトリmessagesとTFの子フレームとなるベースフレーム名。
+- **~base_frame_id**(string, default: "/base_link")  
+  オドメトリmessagesとTFの子フレームとなるベースフレーム名。  
 
 - **~odom_frame_id**(string, default: "/odom")  
   publishされるオドメトリのフレーム名。  
 
 - **~enable_odom_tf**(bool, default: true)  
-  オドメトリTFの発行許可フラグ。
-  　・true：発行許可
-  　・false：発行禁止
+  オドメトリTFの発行許可フラグ。  
+  　・true：発行許可  
+  　・false：発行禁止  
 
 - **~debug/enable**(bool, default: false)  
   デバッグモード有効フラグ。trueの場合、デバッグモードとなり、本ノードのデバッグを行うことが可能。  
