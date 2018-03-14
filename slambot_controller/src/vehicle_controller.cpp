@@ -46,7 +46,6 @@ VehicleController::VehicleController(const uint32_t aWheelNum) :
 	}
 
 	mSubCmdVel = mNh.subscribe(TOPIC_NAME_CMD_VEL, 1, &VehicleController::callbackCmdVel, this);
-	mPubOdom = mNh.advertise<nav_msgs::Odometry>(TOPIC_NAME_ODOM, 1);
 
 	if (mDoDebug == true) {
 		ROS_WARN_STREAM("Node \"Vehicle Controller\":Debug Mode Running!");
