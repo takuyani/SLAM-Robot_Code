@@ -1,114 +1,213 @@
+# ========== 基本的なgmappingのパラメータ ==========
+
+# throttle_scans (int, default: 1)
 # Process 1 out of every this many scans (set it to a higher number to skip more scans)
+# どれだけスキャンデータをスキップ（無視）するか。
+# この数値を増やせば、その分だけスキップする。
+# たとえば、数値を3に設定すると、3回に1回処理を実行する。
 throttle_scans: 1
 
+# base_frame (string, default: "base_link")
 # The frame attached to the mobile base.
+# ロボットのベースリンク座標系の指定。
 base_frame: "base_footprint"
 
+# map_frame (string, default: "map")
 # The frame attached to the map.
+# マップ座標系の指定。
 map_frame: "map"
 
+# odom_frame (string, default: "odom")
 # The frame attached to the odometry system.
+# オドメトリ座標系の指定。
 odom_frame: "odom"
 
+# map_update_interval (float, default: 5.0)
 # How long (in seconds) between updates to the map.
 # Lowering this number updates the occupancy grid more often, at the expense of greater computational load.
+# マップをアップデートする頻度[sec]。
 map_update_interval: 2.0
 
+# transform_publish_period (float, default: 0.05)
+# How long (in seconds) between transform publications.
+# tfを発行する頻度[sec]。
+# 自己位置推定を行いながら地図生成を行なうため，gmappingは map -> odom フレームのtfを発行する。
+transform_publish_period: 0.05
+
+
+# ========== LiDARのパラメータ ==========
+
+# maxUrange (float, default: 80.0)
 # The maximum usable range of the laser. A beam is cropped to this value.
+# mappingを行なうのに使われるscanの最大検出距離。
 maxUrange: 5.0
 
+# maxRange (float)
+# The maximum range of the sensor.
+# If regions with no obstacles within the range of the sensor should appear as free space in the map, set maxUrange < maximum range of the real sensor <= maxRange.
+# LiDARの最大検出距離。
+# maxUrange < センサの最大検出距離 <= maxRange となるように設定する。
+maxRange: 6.1
+
+# sigma (float, default: 0.05)
 # The sigma used by the greedy endpoint matching
+# マッチングを行なう際の標準偏差(sell)。
 sigma: 0.05
 
+# kernelSize (int, default: 1)
 # The kernel in which to look for a correspondence
+# マッチングを見る範囲の大きさみたいな？
+# マッチングの範囲が小さければ、マッチングは合う可能性が高いが、マッチングの範囲が広ければ、マッチングが合わなくなる可能性が高い。
 kernelSize: 1
 
+# lstep (float, default: 0.05)
 # The optimization step in translation
+# 平行移動におけるズレ。
 lstep: 0.05
 
+# astep (float, default: 0.05)
 # The optimization step in rotation
+# 回転におけるズレ。
 astep: 0.05
 
+# iterations (int, default: 5)
 # The number of iterations of the scanmatcher
+# スキャンマッチャーの対応の回数。マッチングを何回繰り返すか？
+# マッチング回数が多ければ正確になるが、処理は重くなる。
 iterations: 5
 
+# lsigma (float, default: 0.075)
 # The sigma of a beam used for likelihood computation
+# スキャンマッチングを行なう際のレーザ1本の標準偏差
 lsigma: 0.075
 
+# ogain (float, default: 3.0)
 # Gain to be used while evaluating the likelihood, for smoothing the resampling effects
+# 尤度の評価中に再サンプリングの効果を平滑化するために使用するゲイン。
 ogain: 3.0
 
+# lskip (int, default: 0)
 # Number of beams to skip in each scan.
+# scanの点を読み飛ばすことができる。(処理の低減か?)
+# 0にセットすると，すべてのscanを使用する。
 lskip: 0
 
+# minimumScore (float, default: 0.0)
 # Minimum score for considering the outcome of the scan matching good.
 # Can avoid jumping pose estimates in large open spaces when using laser scanners with limited range (e.g. 5m).
 # Scores go up to 600+, try 50 for example when experiencing jumping estimate issues.
+# スキャンマッチング結果の評価に用いる最小値。
 minimumScore: 100.0
 
+
+# ========== ロボットの動作モデルのパラメータ ==========
+
+# srr (float, default: 0.1)
 # Odometry error in translation as a function of translation (rho/rho)
+# 平行移動に起因する平行移動のオドメトリ誤差。
 srr: 0.01
 
+# srt (float, default: 0.2)
 # Odometry error in translation as a function of rotation (rho/theta)
+# 回転移動に起因する平行移動のオドメトリ誤差。
 srt: 0.02
 
+# str (float, default: 0.1)
 # Odometry error in rotation as a function of translation (theta/rho)
+# 平行移動に起因する回転移動のオドメトリ誤差。
 str: 0.01
 
+# stt (float, default: 0.2)
 # Odometry error in rotation as a function of rotation (theta/theta)
+# 回転移動に起因する回転移動のオドメトリ誤差。
 stt: 0.02
 
+
+# ========== パーティクルフィルタのパラメータ ==========
+
+# linearUpdate (float, default: 1.0)
 # Process a scan each time the robot translates this far
+# 並行移動での観測の間隔[m]。
+# 同一箇所で何度も観測を行なうと，パーティクルの尤度に偏りが生じてしまうため，一定距離以上移動した後に次の観測を行なう。
 linearUpdate: 0.2
 
+# angularUpdate (float, default: 0.5)
 # Process a scan each time the robot rotates this far
+# 角度方向の観測の間隔[rad]。
 angularUpdate: 0.5
 
+# temporalUpdate (float, default: -1.0)
 # Process a scan if the last scan processed is older than the update time in seconds.
 # A value less than zero will turn time based updates off.
+# 観測の時間の間隔[sec]。
+# 上記のlinearUpdate，angularUpdate分ロボットが動いていなくとも，この時間経過したら観測を行なう。
+# マイナスにセットすると，時間基準での観測は行わない。
 temporalUpdate: -1.0
 
+# resampleThreshold (float, default: 0.5)
 # The Neff based resampling threshold
+# パーティクルフィルタのリサンプリングの閾値。
 resampleThreshold: 0.5
 
+# particles (int, default: 30)
 # Number of particles in the filter
+# パーティクルの数。
 particles: 100
 
-# Initial map size
+
+# ========== mapのパラメータ ==========
+
+# xmin (float, default: -100.0)
+# Initial map size.
+# x方向の下限マップサイズ[m]。
 xmin: -10.0
 
+# ymin (float, default: -100.0)
 # Initial map size
+# y方向の下限マップサイズ[m]。
 ymin: -10.0
 
+# xmax (float, default: 100.0)
 # Initial map size
+# x方向の上限マップサイズ[m]。
 xmax: 10.0
 
+# ymax (float, default: 100.0)
 # Initial map size
+# y方向の上限マップサイズ[m]。
 ymax: 10.0
 
+# delta (float, default: 0.05)
 # Resolution of the map
+# マップの分解能。グリッドの一辺の長さ[m]。
 delta: 0.05
 
-# Translational sampling range for the likelihood
-llsamplerange: 0.01
-
-# Translational sampling step for the likelihood
-llsamplestep: 0.01
-
-# Angular sampling range for the likelihood
-lasamplerange: 0.005
-
-# Angular sampling step for the likelihood
-lasamplestep: 0.005
-
-# How long (in seconds) between transform publications.
-transform_publish_period: 0.05
-
+# occ_thresh (float, default: 0.25)
 # Threshold on gmapping's occupancy values.
 # Cells with greater occupancy are considered occupied (i.e., set to 100 in the resulting sensor_msgs/LaserScan).
-# New in 1.1.0.
+# セルが障害物かそうでないかを決定する閾値。
+# グリッドセルで表現された各セルの値がこの値以上であれば障害物であると判断する。
 occ_thresh: 0.25
 
-# The maximum range of the sensor.
-# If regions with no obstacles within the range of the sensor should appear as free space in the map, set maxUrange < maximum range of the real sensor <= maxRange.
-maxRange: 6.1
+
+# ========== 尤度場の計算のパラメータ ==========
+
+# llsamplerange (float, default: 0.01)
+# Translational sampling range for the likelihood.
+# 尤度計算の範囲（移動）。
+llsamplerange: 0.01
+
+# llsamplestep (float, default: 0.01)
+# Translational sampling step for the likelihood.
+# 尤度計算のステップ幅（移動）。
+llsamplestep: 0.01
+
+# lasamplerange (float, default: 0.005)
+# Angular sampling range for the likelihood.
+# 尤度計算の範囲（範囲）。
+lasamplerange: 0.005
+
+# lasamplestep (float, default: 0.005)
+# Angular sampling step for the likelihood.
+# 尤度計算のステップ幅（範囲）。
+lasamplestep: 0.005
