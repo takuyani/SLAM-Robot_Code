@@ -1,9 +1,0 @@
-<launch>
-
-	<node name="RGBD" pkg="ORB_SLAM2" type="RGBD" output="screen"
-		args="/home/takuya/catkin_ws/src/ORB_SLAM2/Vocabulary/ORBvoc.txt  /home/takuya/catkin_ws/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml">
-		<remap from="camera/depth_registered/image_raw"		to="/slambot_sensor/xtion_pro_live/depth_registered/image_raw" />
-		<remap from="camera/rgb/image_raw"					to="/slambot_sensor/xtion_pro_live/rgb/image_raw" />
-	</node>
-
-</launch>
