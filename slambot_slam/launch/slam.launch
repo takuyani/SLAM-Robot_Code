@@ -1,8 +1,8 @@
 <launch>
 
 	<!-- select SLAM -->
-	<!--	<arg name="slam_mode" default="cartographer"/> -->
-	<arg name="slam_mode" default="gmapping"/>
+	<arg name="slam_mode" default="cartographer"/>
+	<!--	<arg name="slam_mode" default="gmapping"/> -->
 
 	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
 
