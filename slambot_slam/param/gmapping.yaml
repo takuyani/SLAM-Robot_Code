@@ -10,17 +10,17 @@ throttle_scans: 1
 # base_frame (string, default: "base_link")
 # The frame attached to the mobile base.
 # ロボットのベースリンク座標系の指定。
-base_frame: "base_footprint"
+base_frame: base_footprint
 
 # map_frame (string, default: "map")
 # The frame attached to the map.
 # マップ座標系の指定。
-map_frame: "map"
+map_frame: map
 
 # odom_frame (string, default: "odom")
 # The frame attached to the odometry system.
 # オドメトリ座標系の指定。
-odom_frame: "odom"
+odom_frame: odom
 
 # map_update_interval (float, default: 5.0)
 # How long (in seconds) between updates to the map.
@@ -40,14 +40,14 @@ transform_publish_period: 0.05
 # maxUrange (float, default: 80.0)
 # The maximum usable range of the laser. A beam is cropped to this value.
 # mappingを行なうのに使われるscanの最大検出距離。
-maxUrange: 5.0
+maxUrange: 10.0
 
 # maxRange (float)
 # The maximum range of the sensor.
 # If regions with no obstacles within the range of the sensor should appear as free space in the map, set maxUrange < maximum range of the real sensor <= maxRange.
 # LiDARの最大検出距離。
 # maxUrange < センサの最大検出距離 <= maxRange となるように設定する。
-maxRange: 6.1
+maxRange: 10.0
 
 # sigma (float, default: 0.05)
 # The sigma used by the greedy endpoint matching
@@ -97,7 +97,7 @@ lskip: 0
 # Can avoid jumping pose estimates in large open spaces when using laser scanners with limited range (e.g. 5m).
 # Scores go up to 600+, try 50 for example when experiencing jumping estimate issues.
 # スキャンマッチング結果の評価に用いる最小値。
-minimumScore: 100.0
+minimumScore: 0.0
 
 
 # ========== ロボットの動作モデルのパラメータ ==========
@@ -160,22 +160,22 @@ particles: 100
 # xmin (float, default: -100.0)
 # Initial map size.
 # x方向の下限マップサイズ[m]。
-xmin: -10.0
+xmin: -100.0
 
 # ymin (float, default: -100.0)
 # Initial map size
 # y方向の下限マップサイズ[m]。
-ymin: -10.0
+ymin: -100.0
 
 # xmax (float, default: 100.0)
 # Initial map size
 # x方向の上限マップサイズ[m]。
-xmax: 10.0
+xmax: 100.0
 
 # ymax (float, default: 100.0)
 # Initial map size
 # y方向の上限マップサイズ[m]。
-ymax: 10.0
+ymax: 100.0
 
 # delta (float, default: 0.05)
 # Resolution of the map

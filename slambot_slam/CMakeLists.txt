@@ -203,6 +203,12 @@ install(DIRECTORY param/
   PATTERN ".svn" EXCLUDE
 )
 
+## Mark parameters files for installation
+install(DIRECTORY maps/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/maps
+  PATTERN ".svn" EXCLUDE
+)
+
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1

@@ -1,0 +1,7 @@
+<launch>
+
+	<node pkg="map_server" type="map_saver" name="map_saver"
+		args="-f /home/takuya/catkin_ws/src/SLAM-Robot_Code/slambot_slam/maps/map01" output="screen">
+		<remap from="map" to="/slambot_host/map"/>
+	</node>
+</launch>

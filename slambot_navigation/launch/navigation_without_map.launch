@@ -1,0 +1,48 @@
+<launch>
+
+	<!-- select SLAM -->
+	<arg name="slam_mode" default="cartographer"/> -->
+	<!--	<arg name="slam_mode" default="gmapping"/> -->
+
+	<arg name="model" default="$(find slambot_description)/urdf/slambot.urdf.xacro"/>
+
+	<group ns="slambot_host">
+
+		<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
+
+		<!-- convert joint states to TF transforms for rviz, etc -->
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+			respawn="false" output="screen">
+				<remap from="joint_states" to="/slambot_hw/joint_states" />
+				<remap from="robot_description" to="robot_description" />
+		</node>
+
+		<!-- SLAM -->
+		<include file="$(find slambot_slam)/launch/slam/$(arg slam_mode).launch">
+			<arg name="scan_topic" value="/slambot_sensor/xtion_pro_live/scan" />
+			<arg name="odom_topic" value="/slambot_hw/diff_drive_controller/odom" />
+		</include>
+
+		<!-- move_base -->
+		<include file="$(find slambot_navigation)/launch/navi/move_base.launch">
+
+			<arg name="cmd_vel_topic" value="/slambot_hw/diff_drive_controller/cmd_vel"/>
+			<arg name="odom_topic" value="/slambot_hw/diff_drive_controller/odom"/>
+			<arg name="no_static_map" value="true"/>
+			<arg name="move_base_simple_goal" value="/move_base_simple/goal" />
+
+			<!-- ***** Select "global_planner" plugins ***** -->
+			<!-- <arg name="global_planner_type" default="global_planner/GlobalPlanner"/> -->
+			<arg name="global_planner_type" default="navfn/NavfnROS"/>
+			<!-- <arg name="global_planner_type" default="carrot_planner/CarrotPlanner"/> -->
+
+			<!-- ***** Select "local_planner" plugins *****  -->
+			<arg name="local_planner_type" default="dwa_local_planner/DWAPlannerROS"/>
+			<!-- <arg name="local_planner_type" default="base_local_planner/TrajectoryPlannerROS"/> -->
+			<!-- <arg name="local_planner_type" default="teb_local_planner/TebLocalPlannerROS"/> -->
+
+		</include>
+
+	</group>
+
+</launch>
