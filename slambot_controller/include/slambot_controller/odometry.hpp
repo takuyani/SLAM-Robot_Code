@@ -71,8 +71,8 @@ private:
 	const std::string PARAM_NAME_ENA_ODO_TF = "enable_odom_tf";
 
 	static constexpr uint32_t WHEEL_NUM = 2;	//!< Number of Wheel
-	static constexpr uint32_t RIGHT_IDX = 0;	//!< Right Wheel Index
-	static constexpr uint32_t LEFT_IDX = 1;		//!< Left Wheel Index
+	static constexpr uint32_t LEFT_IDX = 0;		//!< Left Wheel Index
+	static constexpr uint32_t RIGHT_IDX = 1;	//!< Right Wheel Index
 
 	//***** Method *****
 	double adjustPiRange(const double);

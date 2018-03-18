@@ -116,8 +116,8 @@ void Odometry::moveMotionModel(const double aLinear_mps, const double aAngular_r
 	//  W  : vehicle angular velocity
 
 	double gain = treadWidth_m * aAngular_rps;
-	aSpdVec[RIGHT_IDX] = (2 * aLinear_mps + gain) / (2 * wheelRadius_m);
 	aSpdVec[LEFT_IDX] = -1 * (2 * aLinear_mps - gain) / (2 * wheelRadius_m);
+	aSpdVec[RIGHT_IDX] = (2 * aLinear_mps + gain) / (2 * wheelRadius_m);
 
 }
 
@@ -158,10 +158,10 @@ Odometry::PoseS Odometry::moveReverseMotionModel(const double aAngL_rad, const d
 	mPose.y += dist * sin(mPose.yaw);
 	mPose.yaw = adjustPiRange(mPose.yaw + yawrate * aDt);
 
-	mAbsAng[RIGHT_IDX] += aAngR_rad;
 	mAbsAng[LEFT_IDX] += aAngL_rad;
-	mAngVel[RIGHT_IDX] = aAngVelR_rps;
+	mAbsAng[RIGHT_IDX] += aAngR_rad;
 	mAngVel[LEFT_IDX] = aAngVelL_rps;
+	mAngVel[RIGHT_IDX] = aAngVelR_rps;
 	mVel = vel;
 	mYawRate = yawrate;
 

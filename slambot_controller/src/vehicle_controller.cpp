@@ -166,9 +166,9 @@ void VehicleController::callbackCmdVel(const geometry_msgs::Twist &aTwistMsg) {
 void VehicleController::publishOdometry() {
 
 	static ros::Time prvTm = ros::Time::now();
-	static std::vector<int32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	static std::vector<int32_t> prvAbsPosVec(WHEEL_NUM);	//[0]:left, [1]:right
 
-	std::vector<int32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:right, [1]:left
+	std::vector<int32_t> nowAbsPosVec(WHEEL_NUM);	//[0]:left, [1]:right
 	int32_t diffAbsPosR;
 	int32_t diffAbsPosL;
 
@@ -181,10 +181,10 @@ void VehicleController::publishOdometry() {
 	if (isRet == true) {
 		double dt = (nowTm - prvTm).toSec();
 		double radGain = mWheel.getRadPerMicroStep();
-		diffAbsPosR = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[0], prvAbsPosVec[0]);
-		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
-		double angR_rad = diffAbsPosR * radGain;
+		diffAbsPosL = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[0], prvAbsPosVec[0]);
+		diffAbsPosR = mWheel.calcDiffAbsolutePosition(nowAbsPosVec[1], prvAbsPosVec[1]);
 		double angL_rad = -diffAbsPosL * radGain;
+		double angR_rad = diffAbsPosR * radGain;
 
 		if (mDoDebug == true) {
 			// for test mode
@@ -461,7 +461,7 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 	constexpr double SPEED_RESOL_SPS = 0.015;		// SPEED resolution[step/s]
 	constexpr double SPEED_RESOL_RPS = SPEED_RESOL_SPS * RAD_P_STEP;		//  SPEED resolution[rad/s]
 
-	vector<double> spdVec(WHEEL_NUM);	//[0]:right, [1]:left
+	vector<double> spdVec(WHEEL_NUM);	//[0]:left, [1]:right
 	mOdom.moveMotionModel(aLinear_mps, aAngular_rps, spdVec);
 
 	bool isRet = false;
@@ -482,7 +482,7 @@ void VehicleController::move(const double aLinear_mps, const double aAngular_rps
 				isRet = mWheel.run(spdVec);
 			}
 			ROS_DEBUG_STREAM(
-					"Run: <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]> <Left Angle = " << spdVec[1]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[0]*RAD2DEG << "[deg/s]>");
+					"Run: <Linear = " << aLinear_mps <<"[m/s], Angular = " << aAngular_rps*RAD2DEG << "[deg/s]> <Left Angle = " << spdVec[0]*RAD2DEG <<"[deg/s], Right Angle = " << spdVec[1]*RAD2DEG << "[deg/s]>");
 		}
 	}
 
