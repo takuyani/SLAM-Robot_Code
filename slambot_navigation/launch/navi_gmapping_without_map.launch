@@ -18,7 +18,7 @@
 		</node>
 
 		<!-- SLAM -->
-		<include file="$(find slambot_slam)/launch/slam/$(arg slam_mode).launch">
+		<include file="$(find slambot_slam)/launch/slam/gmapping.launch">
 			<arg name="scan_topic" value="/slambot_sensor/xtion_pro_live/scan" />
 			<arg name="odom_topic" value="/slambot_hw/diff_drive_controller/odom" />
 		</include>
